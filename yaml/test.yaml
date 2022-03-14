@@ -1,0 +1,4 @@
+map_file_name: 'map'
+act_file_name: 'actor'
+base_world_name: 'base'
+save_world_name: 'save'
