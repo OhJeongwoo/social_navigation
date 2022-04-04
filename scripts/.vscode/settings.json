@@ -1,0 +1,18 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/jeongwoooh/catkin_social/devel/lib/python2.7/dist-packages",
+        "/home/jeongwoooh/catkin_ta/devel/lib/python2.7/dist-packages",
+        "/home/jeongwoooh/catkin_obj/devel/lib/python2.7/dist-packages",
+        "/home/jeongwoooh/catkin_rccar/devel/lib/python2.7/dist-packages",
+        "/home/jeongwoooh/catkin_ws/devel/lib/python2.7/dist-packages",
+        "/opt/ros/melodic/lib/python2.7/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/jeongwoooh/catkin_social/devel/lib/python2.7/dist-packages",
+        "/home/jeongwoooh/catkin_ta/devel/lib/python2.7/dist-packages",
+        "/home/jeongwoooh/catkin_obj/devel/lib/python2.7/dist-packages",
+        "/home/jeongwoooh/catkin_rccar/devel/lib/python2.7/dist-packages",
+        "/home/jeongwoooh/catkin_ws/devel/lib/python2.7/dist-packages",
+        "/opt/ros/melodic/lib/python2.7/dist-packages"
+    ]
+}

@@ -1,0 +1,5 @@
+bool request
+float64 accel
+float64 omega
+---
+bool success

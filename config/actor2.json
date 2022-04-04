@@ -1,0 +1,6 @@
+{
+    "init_position": [[37.5,2.5], [37.5,-2.5], [42.5,-2.5], [42.5,2.5]],
+    "target_weight": 1.15,
+    "obstacle_weight": 1.8,
+    "animation_factor": 5.1
+}

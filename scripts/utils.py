@@ -2,10 +2,21 @@ from matplotlib.pyplot import get
 from lxml import etree
 from lxml.etree import Element
 import math
+from geometry_msgs.msg import Pose, Point, Quaternion
 
 WAIT = 0
 INIT = 1
 MOVE = 2
+
+EPS = 1e-6
+
+def y2q(yaw):
+  cy = math.cos(0.5 * yaw)
+  sy = math.sin(0.5 * yaw)
+  return Quaternion(0.0, 0.0, sy, cy)
+
+def L2dist(A, B):
+    return math.sqrt((A.x - B.x) ** 2 + (A.y - B.y) ** 2)
 
 def get_length(A, B):
     return math.sqrt((A[0] - B[0]) ** 2 + (A[1] - B[1]) ** 2)
@@ -151,3 +162,6 @@ def get_actor(actor_info):
 
     return actor
     
+
+def interpolate(A,B,alpha):
+    return [A[0] * (1-alpha) + B[0] * alpha, A[1] * (1-alpha) + B[1] * alpha]

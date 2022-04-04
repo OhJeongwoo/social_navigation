@@ -7,6 +7,10 @@ endif()
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  rospy
+  roslib
+  rosbag
   std_msgs
   ackermann_msgs
   message_generation
@@ -14,30 +18,52 @@ find_package(catkin REQUIRED COMPONENTS
   gazebo_ros
   geometry_msgs
   nav_msgs
+  sensor_msgs
+  cv_bridge
+  tf
+  tf2
 )
 find_package(gazebo 9 REQUIRED)
 find_package(ignition-msgs1 REQUIRED)
+find_package(OpenCV 3 REQUIRED)
+find_package(Eigen3)
+find_package(PCL 1.8 REQUIRED)
 
 add_message_files(
   DIRECTORY msg
   FILES
   Status.msg
   Command.msg
+  InstanceImage.msg
+  InstanceArray.msg
+  PedestrianArray.msg
 )
 
-generate_messages(DEPENDENCIES std_msgs geometry_msgs)
+add_service_files(
+  DIRECTORY srv
+  FILES
+  Step.srv
+  Reset.srv
+  State.srv
+  Jackal.srv
+)
+
+generate_messages(DEPENDENCIES std_msgs geometry_msgs sensor_msgs)
 
 catkin_package(
   CATKIN_DEPENDS message_runtime
   gazebo_msgs
   std_msgs
   geometry_msgs
+  sensor_msgs
   nav_msgs
+  DEPENDS Eigen
+	opencv_highgui opencv_imgproc
 )
 
 
 
-include_directories(include ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} ${SDFormat_INCLUDE_DIRS})
+include_directories(include ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} ${SDFormat_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS})
 
 add_library(HumanPlugin SHARED plugins/HumanPlugin.cc)
 target_link_libraries(HumanPlugin ${GAZEBO_LIBRARIES} ${IGNITION-MSGS_LIBRARIES})
@@ -54,7 +80,12 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+add_executable(depth2pc src/depth2pc.cpp ${HEADERS} ${SOURCES})
+target_link_libraries(depth2pc ${catkin_LIBRARIES} ${CV_LIBRARIES} ${OpenCV_LIBS} ${PCL_LIBRARIES} ${EIGEN_LIBRARIES})
+add_dependencies(depth2pc ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
 catkin_install_python(PROGRAMS
   scripts/actor_scheduler.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+

@@ -14,7 +14,7 @@ from utils import *
 if __name__=="__main__":
     init_time_ = time.time()
     
-    parser = argparse.ArgumentParser(description='Soft Actor-Critic (SAC)')
+    parser = argparse.ArgumentParser(description='World Generator')
     parser.add_argument('--yaml', default='test', type=str)
     args = parser.parse_args()
 

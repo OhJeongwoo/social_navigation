@@ -1,0 +1,27 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/jeongwoooh/catkin_social/devel/include/**",
+        "/home/jeongwoooh/catkin_ta/devel/include/**",
+        "/home/jeongwoooh/catkin_obj/devel/include/**",
+        "/home/jeongwoooh/catkin_rccar/devel/include/**",
+        "/home/jeongwoooh/catkin_ws/devel/include/**",
+        "/opt/ros/melodic/include/**",
+        "/home/jeongwoooh/catkin_ta/src/Intelligent-Systems-TA/ackermann_cmd_mux/include/**",
+        "/home/jeongwoooh/catkin_ws/src/convex_object_detection/include/**",
+        "/home/jeongwoooh/catkin_obj/src/polyhedron_object_detection/include/**",
+        "/home/jeongwoooh/catkin_rccar/src/sim2real_rccar/project2/include/**",
+        "/home/jeongwoooh/catkin_social/src/realsense-ros/realsense2_camera/include/**",
+        "/home/jeongwoooh/catkin_ws/src/nrf_project/sensor_decoder/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS"
+    }
+  ],
+  "version": 4
+}
