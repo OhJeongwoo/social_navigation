@@ -38,7 +38,7 @@ double depth(double x, double y, double z){
 
 
 typedef pair<double,double> pdd;
-typedef pair<pdd, geometry_msgs::Point> pxdep;
+typedef pair<pdd, geometry_msgs::Point> pxdep; // {pixel, point}
 
 class Depth2PC{
   private:
@@ -46,20 +46,22 @@ class Depth2PC{
   ros::Publisher pub_ped_;
   ros::Publisher pub_img_;
   ros::Subscriber sub_;
-  ros::Subscriber sub_info_;
   ros::Subscriber sub_img_;
   ros::Subscriber sub_sig_;
-  string data_name_;
-  stringstream result_path_;
-  bool calibrated;
+  
+  pcl::PointCloud<pcl::PointXYZ> cloud_;
   vector<pxdep> depth_map_;
+  vector<geometry_msgs::Point> peds_;
+  
+  double outlier_threshold_ = 1.0;
+  int k_ = 10;
+
   double fx = 642.303466796875;
   double fy = 641.542236328125;
   double cx = 643.4588012695312;
   double cy = 374.88818359375;
   double tx = -0.05911977216601372;
   double ty = -2.3358141334028915e-05;
-  vector<geometry_msgs::Point> peds_;
   double min_x = -2.0;
   double max_x = 2.0;
   double min_z = -1.0;
@@ -67,35 +69,37 @@ class Depth2PC{
   double resolution = 0.02;
   int W_ = int((max_x-min_x) / resolution);
   int H_ = int((max_z-min_z) / resolution);
+  
   int seq_ = 0;
-  cv_bridge::CvImagePtr cv_ptr;
-  pcl::PointCloud<pcl::PointXYZ> cloud_;
-  double outlier_threshold_;
-  int k_;
+  bool debug_ = true;
 
   public:
   Depth2PC(){
-    calibrated = false;
-    outlier_threshold_ = 1.0;
-    k_ = 10;
+    // define topic communicator
     pub_ped_ = nh_.advertise<social_navigation::PedestrianArray>("/ped", 1000);
+    pub_img_ = nh_.advertise<sensor_msgs::Image>("/local_map", 1000);
     sub_ = nh_.subscribe("/camera/depth/color/points", 1, &Depth2PC::callback, this);
     sub_sig_ = nh_.subscribe("/signal", 1, &Depth2PC::callback_signal, this);
     sub_img_ = nh_.subscribe("/instances", 1, &Depth2PC::callback_img, this);
-    pub_img_ = nh_.advertise<sensor_msgs::Image>("/local_map", 1000);
   }
 
   void callback_signal(const std_msgs::Int32ConstPtr& msg){
     seq_ = msg->data;
+    
     vector<pxdep> depth_map;
     for(const auto& p: cloud_){
       double x = p.x;
       double y = p.y;
       double z = p.z;
+
       if(isnan(x) || isnan(y) || isnan(z)) continue;
+
+      // project point to image
       double u = (fx * x + cx * z + tx) / z;
       double v = (fy * y + cy * z + ty) / z; 
+      
       if(u < 0 || u >= W || v < 0 || v >= H) continue;
+      
       pxdep tmp;
       geometry_msgs::Point pt;
       pt.x = x;
@@ -115,13 +119,15 @@ class Depth2PC{
 
   void callback_img(const social_navigation::InstanceArrayConstPtr& msg){
     clock_t start = clock();
-    if(msg->seq != seq_) cout << "[WARN] there is some problems in time synchronization!" << endl;
+    if(msg->seq != seq_) cout << "[WARN] There is some problems in time synchronization!" << endl;
+    
     vector<pxdep> depth_map = depth_map_;
+    vector<social_navigation::InstanceImage> instances = msg->instances;
     int w = msg->width;
     int h = msg->height;
-    vector<social_navigation::InstanceImage> instances = msg->instances;
     social_navigation::PedestrianArray rt;
     vector<geometry_msgs::Point> peds;
+
     int K = (2*k_+1)*(2*k_+1);
 
     for(int i = 0; i < instances.size(); i++){
@@ -130,15 +136,6 @@ class Depth2PC{
       double y = 0;
       double z = 0;
       
-      //////////////////////////////////
-      // vector<vector<int>> instance_map;
-      // for(int px=0;px<w;px++){
-      //   vector<int> instance_line;
-      //   for(int py =0;py<h;py++){
-      //     instance_line.push_back(instances[i].data[py * w + px]);
-      //   }
-      // }
-
       vector<vector<int>> dp;
       vector<int> dp_sub;
 
@@ -166,31 +163,6 @@ class Depth2PC{
           if(px+k_+1<w) dp_sub[py] += instances[i].data[py * w + px + k_ + 1];
         }
       }
-
-      ////////////////////////////////////////////
-      // vector<int> dp;
-      // vector<int> dp_sub;
-      // for(int py=0;py<h;py++){
-      //   int s = 0;
-      //   for(int px=0;px<=k_;px++) s+= instances[i].data[py * w + px];
-      //   dp_sub.push_back(s);
-      // }
-      // for(int px = 0; px < w; px++){
-      //   int o = 0;
-      //   for(int j=0;j<=k_;j++) o += dp_sub[j];
-      //   dp.push_back(o);
-      //   for(int j=1;j<h;j++){
-      //     int m = dp.back();
-      //     if(j>=k_+1) m -= dp_sub[j-k_-1];
-      //     if(j+k_<h) m+= dp_sub[j+k_];
-      //     dp.push_back(m);
-      //   }
-      //   for(int j=0;j<h;j++){
-      //     if(px>=k_) dp_sub[j] -=instances[i].data[j*w + px-k_];
-      //     if(px<w-k_-1) dp_sub[j] += instances[i].data[j*w+px+k_+1];
-      //   }
-      // }
-      ////////////////////////////////////////////
       
       for(pxdep p : depth_map){
         int px = p.first.first;
@@ -199,7 +171,6 @@ class Depth2PC{
 
         if(idx < 0 || idx >= w * h) continue;
         if(dp[px][py] == K) {
-        // if(instances[i].data[idx]){
           x += p.second.x;
           y += p.second.y;
           z += p.second.z;
@@ -221,7 +192,7 @@ class Depth2PC{
     rt.pedestrians = peds;
     pub_ped_.publish(rt);
     
-    draw_result();
+    if(debug_) draw_result();
     clock_t end = clock();
     cout << "elapsed time: " << double(end-start) / CLOCKS_PER_SEC << endl;
 
@@ -265,7 +236,6 @@ class Depth2PC{
  
 int main(int argc,char** argv){
   ros::init(argc, argv, "depth2pc");
-  
   Depth2PC depth2pc;
   ros::spin();
 }

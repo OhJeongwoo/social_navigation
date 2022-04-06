@@ -6,7 +6,7 @@ import random
 import time
 
 from social_navigation.msg import Status, Command
-from social_navigation.srv import Step, State, Jackal, Reset, StepResponse, StateResponse, JackalResponse, ResetResponse
+from social_navigation.srv import Step, State, Jackal, Reset, StepResponse, StateResponse, JackalResponse, StepRequest, StateRequest, JackalRequest, ResetRequest, ResetResponse
 from gazebo_msgs.srv import SetModelState, SetModelStateRequest
 from std_srvs.srv import Empty
 from rosgraph_msgs.msg import Clock
@@ -25,11 +25,11 @@ class GazeboMaster:
         self.time_ = 0.0
         self.target_time_ = -1.0
         self.last_published_time_ = 0.0
-        self.pub_interval_ = 0.1
+        self.pub_interval_ = 0.02
 
         # parameter for gazebo
         self.is_pause_ = False
-        self.reset_ = True
+        self.reset_ = False
         self.dt_ = 0.1
         self.spawn_threshold_ = 3.0
         self.lookahead_time_ = 1.0
@@ -62,6 +62,25 @@ class GazeboMaster:
         with open(self.traj_file_, 'r') as jf:
             self.traj_ = json.load(jf)
         self.n_traj_ = len(self.traj_)
+
+        self.adj_mat_ = []
+        for i in range(self.n_traj_):
+            adj_row = []
+            for j in range(self.n_traj_):
+                check = False
+                n = len(self.traj_[i]['waypoints'])
+                m = len(self.traj_[j]['waypoints'])
+                for seq1 in range(n):
+                    for seq2 in range(m):
+                        if get_length(self.traj_[i]['waypoints'][seq1], self.traj_[j]['waypoints'][seq2]) < 1.0:
+                            check = True
+                            break
+                    if check:
+                        break
+                adj_row.append(check)
+            self.adj_mat_.append(adj_row)
+        
+
 
         for seq in range(self.n_actor_):
             name = 'actor_'+str(seq).zfill(3)
@@ -104,8 +123,10 @@ class GazeboMaster:
 
     def callback_clock(self, msg):
         self.time_ = msg.clock.secs + msg.clock.nsecs * 1e-9
+        print("%.3f %.3f " %(self.time_, self.target_time_))
         if not self.reset_ and self.time_ > self.target_time_ :
-            self.client_pause_(Empty())
+            self.is_pause_ = True
+            self.client_pause_()
 
     
     def callback_scan(self, msg):
@@ -119,9 +140,9 @@ class GazeboMaster:
 
     def service_step(self, req):
         rt = StepResponse()
-        self.target_time_ += self.time_ + self.dt_
+        self.target_time_ = self.time_ + self.dt_
         self.is_pause_ = False
-        self.client_unpause_(Empty())
+        self.client_unpause_()
         while not self.is_pause_:
             continue
         rt.success = True
@@ -146,10 +167,12 @@ class GazeboMaster:
 
     
     def service_reset(self, req):
+        print("start reset")
         self.reset_ = True
         # check valid starting point
         candidates = []
         for pos in self.spawn_:
+            check = True
             for name in self.actor_name_:
                 if self.status_[name] != MOVE:
                     continue
@@ -165,13 +188,13 @@ class GazeboMaster:
 
         # unpause gazebo
         self.is_pause_ = False
-        self.client_unpause_(Empty())
+        self.client_unpause_()
 
         # replace jackal
         self.replace_jackal(candidate['spawn'])
 
         # pause gazebo
-        self.client_pause_(Empty())
+        self.client_pause_()
         self.reset_ = False
         self.target_time_ = self.time_
 
@@ -207,14 +230,10 @@ class GazeboMaster:
         while True:
             if self.time_ - self.last_published_time_ < self.pub_interval_:
                 continue
-            print("start loop")
             # control pedestrian
             for name in self.actor_name_:
                 if self.status_[name] == MOVE:
                     traj_num = self.traj_idx_[name]
-                    print(self.time_ - self.status_time_[name])
-                    print(self.traj_[traj_num]['interval'])
-                    print(self.traj_[traj_num]['time'])
                     if self.time_ - self.status_time_[name] > self.traj_[traj_num]['time']:
                         self.traj_idx_[name] = -1
                         self.status_[name] = WAIT
@@ -229,7 +248,6 @@ class GazeboMaster:
                     rt.status = MOVE
                     rt.goal = Pose(position=self.goal_[name])
                     rt.velocity = L2dist(self.pose_[name], self.goal_[name]) / self.lookahead_time_
-                    print(rt)
                     self.pub_[name].publish(rt)
                 
                 elif self.status_[name] == WAIT:
@@ -238,25 +256,30 @@ class GazeboMaster:
                         continue
                     
                     # select possible trajectory
-                    while True:
-                        traj_num = random.randint(0, self.n_traj_-1)
-                        loop_out = True
-                        for name2 in self.actor_name_:
-                            if self.traj_idx_[name2] == traj_num:
-                                loop_out = False
-                                break
-                        if loop_out:
-                            break
-                    self.traj_idx_[name] = traj_num
-                    print(self.traj_[traj_num])
+                    traj_cand = [True for i in range(self.n_traj_)]
+                    for name2 in self.actor_name_:
+                        if self.traj_idx_[name2] == -1:
+                            continue
+                        for i in range(self.n_traj_):
+                            if self.adj_mat_[self.traj_idx_[name2]][i]:
+                                traj_cand[i] = False
+                    s=0
+                    for i in range(self.n_traj_):
+                        if traj_cand[i]:
+                            s += 1
+                    if s != 0:
+                        while True:
+                            traj_num = random.randint(0, self.n_traj_-1)
+                            if traj_cand[traj_num]:
+                                 break
+                        self.traj_idx_[name] = traj_num
 
-                    # INIT actor
-                    rt = Command()
-                    rt.name = name
-                    rt.status = INIT
-                    rt.goal = Pose(position=Point(self.traj_[traj_num]['waypoints'][0][0], self.traj_[traj_num]['waypoints'][0][1], 0.0))
-                    print(rt)
-                    self.pub_[name].publish(rt)
+                        # INIT actor
+                        rt = Command()
+                        rt.name = name
+                        rt.status = INIT
+                        rt.goal = Pose(position=Point(self.traj_[traj_num]['waypoints'][0][0], self.traj_[traj_num]['waypoints'][0][1], 0.0))
+                        self.pub_[name].publish(rt)
             # control jackal
             cmd = Twist()
             cmd.linear.x = self.accel_
@@ -268,6 +291,6 @@ class GazeboMaster:
 
 
 if __name__ == "__main__":
-    rospy.init_node("Gazebo Master")
+    rospy.init_node("Gazebo_Master")
     gazebo_master = GazeboMaster()
     rospy.spin()
