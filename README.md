@@ -65,4 +65,24 @@ and open another terminal
 rosrun social_navigation depth2pc
 ```
 
+## Reinforcement Learning in GAZEBO
+
+Terminal 1
+```
+roslaunch social_navigation default.launch
+```
+
+Terminal 2
+```
+roscd social_navigation
+cd scripts
+python2 gazebo_master.py
+```
+
+Terminal 3
+```
+roscd social_navigation
+cd scripts
+python {YOUR_CODE}.py
+```
 
