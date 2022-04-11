@@ -1,4 +1,4 @@
 bool request
 ---
 bool success
-float64[] state
+social_navigation/StateInfo[] state

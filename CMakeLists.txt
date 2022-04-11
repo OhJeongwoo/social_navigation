@@ -37,6 +37,7 @@ add_message_files(
   InstanceImage.msg
   InstanceArray.msg
   PedestrianArray.msg
+  StateInfo.msg
 )
 
 add_service_files(

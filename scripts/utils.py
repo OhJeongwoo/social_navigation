@@ -18,6 +18,9 @@ def y2q(yaw):
 def L2dist(A, B):
     return math.sqrt((A.x - B.x) ** 2 + (A.y - B.y) ** 2)
 
+def norm_2d(p):
+    return (p.x ** 2 + p.y ** 2) ** 0.5
+
 def get_length(A, B):
     return math.sqrt((A[0] - B[0]) ** 2 + (A[1] - B[1]) ** 2)
 
@@ -165,3 +168,9 @@ def get_actor(actor_info):
 
 def interpolate(A,B,alpha):
     return [A[0] * (1-alpha) + B[0] * alpha, A[1] * (1-alpha) + B[1] * alpha]
+
+def transform_coordinate(x, y, ct, st):
+    return x * ct + y * st, -x * st + y * ct
+
+def collision_cost(d):
+    return 1.0 / (1.0 + math.exp((d-2.0)))

@@ -5,13 +5,14 @@ import json
 import random
 import time
 
-from social_navigation.msg import Status, Command
+from social_navigation.msg import Status, Command, StateInfo
 from social_navigation.srv import Step, State, Jackal, Reset, StepResponse, StateResponse, JackalResponse, StepRequest, StateRequest, JackalRequest, ResetRequest, ResetResponse
 from gazebo_msgs.srv import SetModelState, SetModelStateRequest
 from std_srvs.srv import Empty
 from rosgraph_msgs.msg import Clock
 from geometry_msgs.msg import Twist, PoseStamped
 from sensor_msgs.msg import LaserScan
+from nav_msgs.msg import Odometry
 
 from utils import *
 
@@ -30,12 +31,18 @@ class GazeboMaster:
         # parameter for gazebo
         self.is_pause_ = False
         self.reset_ = False
+        self.step_ = False
+        self.pause_time_ = time.time()
         self.dt_ = 0.1
         self.spawn_threshold_ = 3.0
         self.lookahead_time_ = 1.0
         self.actor_prob_ = 1.0
+        self.history_rollout_ = 5
+        self.history_queue_ = []
 
         # parameter for jackal
+        self.jackal_pose_ = Pose()
+        self.jackal_twist_ = Twist()
         self.accel_ = 0.0
         self.omega_ = 0.0
         with open(self.spawn_file_, 'r') as jf:
@@ -46,7 +53,7 @@ class GazeboMaster:
         self.scan_dim_ = 10
 
         # parameter for actor
-        self.n_actor_ = 4
+        self.n_actor_ = 8
         self.actor_name_ = []
         self.status_ = {}
         self.status_time_ = {}
@@ -61,9 +68,10 @@ class GazeboMaster:
         # paramter for trajectory
         with open(self.traj_file_, 'r') as jf:
             self.traj_ = json.load(jf)
-        self.n_traj_ = len(self.traj_)
 
+        self.n_traj_ = len(self.traj_)
         self.adj_mat_ = []
+
         for i in range(self.n_traj_):
             adj_row = []
             for j in range(self.n_traj_):
@@ -81,7 +89,7 @@ class GazeboMaster:
             self.adj_mat_.append(adj_row)
         
 
-
+        # set actor parameters
         for seq in range(self.n_actor_):
             name = 'actor_'+str(seq).zfill(3)
             self.actor_name_.append(name)
@@ -92,6 +100,7 @@ class GazeboMaster:
             self.sub_status_[name] = rospy.Subscriber('/' + name + '/status', Status, self.callback_status)
             self.sub_pose_[name] = rospy.Subscriber('/' + name + '/pose', PoseStamped, self.callback_pose)
 
+        # define ROS communicator
         self.server_step_ = rospy.Service('step', Step, self.service_step)
         self.server_jackal_ = rospy.Service('jackal', Jackal, self.service_jackal)
         self.server_state_ = rospy.Service('state', State, self.service_state)
@@ -101,10 +110,11 @@ class GazeboMaster:
         self.set_model_ = rospy.ServiceProxy(gazebo_ns + '/set_model_state', SetModelState)
         self.sub_clock_ = rospy.Subscriber('/clock', Clock, self.callback_clock)
         # self.sub_scan_ = rospy.Subscriber('/front/scan', LaserScan, self.callback_scan)
-        
+        self.sub_jackal_ = rospy.Subscriber('/jackal_veocity_controller/odom', Odometry, self.callback_jackal)
         self.pub_jackal_ = rospy.Publisher('/jackal_velocity_controller/cmd_vel', Twist, queue_size=10)
 
         time.sleep(1.0)
+
         self.loop()
     
     
@@ -123,6 +133,7 @@ class GazeboMaster:
 
     def callback_clock(self, msg):
         self.time_ = msg.clock.secs + msg.clock.nsecs * 1e-9
+        self.pause_time_ = time.time()
         print("%.3f %.3f " %(self.time_, self.target_time_))
         if not self.reset_ and self.time_ > self.target_time_ :
             self.is_pause_ = True
@@ -135,16 +146,23 @@ class GazeboMaster:
         for i in range(self.scan_dim_):
             lidar_state.append(np.mean(ranges[int(i*self.scan_size_/self.scan_dim_):int((i+1)*self.scan_size_/self.scan_dim_)]))
         self.lidar_state_ = lidar_state
-        
 
+
+    def callback_jackal(self, msg):
+        self.jackal_pose_ = msg.pose.pose
+        self.jackal_twist_ = msg.pose.twist
+        
 
     def service_step(self, req):
         rt = StepResponse()
         self.target_time_ = self.time_ + self.dt_
         self.is_pause_ = False
+        self.step_ = True
         self.client_unpause_()
         while not self.is_pause_:
             continue
+        self.update_state()
+        self.step_ = False
         rt.success = True
         return rt
 
@@ -160,7 +178,14 @@ class GazeboMaster:
 
     def service_state(self, req):
         rt = StateResponse()
-        state = [1]
+        
+        state = []
+        L = len(self.history_queue_)
+        for i in range(L):
+            state.append(self.history_queue_[L-1-i])
+        for _ in range(self.history_rollout_ - len(self.history_queue_)):
+            state.append(self.history_queue_[0])
+
         rt.state = state
         rt.success = True
         return rt
@@ -197,6 +222,8 @@ class GazeboMaster:
         self.client_pause_()
         self.reset_ = False
         self.target_time_ = self.time_
+        self.history_queue_ = []
+        self.update_state()
 
         rt = ResetResponse()
         rt.success = True
@@ -215,6 +242,7 @@ class GazeboMaster:
         except:
             pass
 
+
     def get_goal(self, name):
         traj = self.traj_[self.traj_idx_[name]]
         time = min(self.time_ - self.status_time_[name] + self.lookahead_time_, traj['time'] - EPS)
@@ -226,10 +254,48 @@ class GazeboMaster:
         goal = interpolate(A,B,alpha)
         return Point(goal[0], goal[1], 2.0)
 
+    def update_state(self):
+        state = StateInfo()
+        jx = self.jackal_pose_.position.x
+        jy = self.jackal_pose_.position.y
+        q = self.jackal_pose_.orientation
+        qx = 1 - 2 * (q.z ** 2 + q.w ** 2)
+        qy = 2 * (q.x * q.w + q.y * q.z)
+        ct = qx / (qx ** 2 + qy ** 2) ** 0.5
+        st = qy / (qx ** 2 + qy ** 2) ** 0.5
+
+        # goal state
+        gx, gy = transform_coordinate(self.jackal_goal_[0] - jx, self.jackal_goal_[1] - jy, ct, st)
+        state.goal = Point(gx, gy, 0)
+
+        # jackal state
+        state.lin_vel = self.jackal_twist_.linear.x
+        state.ang_vel = self.jackal_twist_.angular.z
+        state.accel = self.accel_
+
+        # lidar state
+        # state.lidar = self.lidar_state_
+
+        # pedestrian state
+        peds = []
+        for name in self.actor_name_:
+            px, py = transform_coordinate(self.pose_[name].x - jx, self.pose_[name].y - jy, ct, st)
+            peds.append(Point(px, py, 0.0))
+        state.pedestrians = sorted(peds, key=norm_2d)
+        
+        self.history_queue_.append(state)
+        if len(self.history_queue_) > self.history_rollout_:
+            self.history_queue_.pop(0)
+
+
     def loop(self):
         while True:
+            # wait for publish interval
+            if time.time() - self.pause_time_ > 0.1 and self.step_:
+                self.client_unpause_()
             if self.time_ - self.last_published_time_ < self.pub_interval_:
                 continue
+            
             # control pedestrian
             for name in self.actor_name_:
                 if self.status_[name] == MOVE:
@@ -280,6 +346,7 @@ class GazeboMaster:
                         rt.status = INIT
                         rt.goal = Pose(position=Point(self.traj_[traj_num]['waypoints'][0][0], self.traj_[traj_num]['waypoints'][0][1], 0.0))
                         self.pub_[name].publish(rt)
+            
             # control jackal
             cmd = Twist()
             cmd.linear.x = self.accel_
@@ -287,7 +354,6 @@ class GazeboMaster:
             self.pub_jackal_.publish(cmd)
 
             self.last_published_time_ = self.time_
-
 
 
 if __name__ == "__main__":

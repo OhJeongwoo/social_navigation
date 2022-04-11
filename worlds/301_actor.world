@@ -11505,7 +11505,7 @@
       <static>1</static>
     </model>
     <actor name="actor_000">
-      <pose>5 5 1.25 0 0 0 </pose>
+      <pose>-20 -20 1.25 0 0 0 </pose>
       <skin>
         <filename>walk.dae</filename>
         <scale>1.0</scale>
@@ -11517,8 +11517,8 @@
       </animation>
       <plugin name="actor_000" filename="libHumanPlugin.so">
         <model_name>actor_000</model_name>
-        <x>5</x>
-        <y>5</y>
+        <x>-20</x>
+        <y>-20</y>
         <target_weight>1.15</target_weight>
         <obstacle_weight>1.8</obstacle_weight>
         <animation_factor>5.1</animation_factor>
@@ -11528,7 +11528,7 @@
       </plugin>
     </actor>
     <actor name="actor_001">
-      <pose>5 -5 1.25 0 0 0 </pose>
+      <pose>-20 -20 1.25 0 0 0 </pose>
       <skin>
         <filename>walk.dae</filename>
         <scale>1.0</scale>
@@ -11540,8 +11540,8 @@
       </animation>
       <plugin name="actor_001" filename="libHumanPlugin.so">
         <model_name>actor_001</model_name>
-        <x>5</x>
-        <y>-5</y>
+        <x>-20</x>
+        <y>-20</y>
         <target_weight>1.15</target_weight>
         <obstacle_weight>1.8</obstacle_weight>
         <animation_factor>5.1</animation_factor>
@@ -11551,7 +11551,7 @@
       </plugin>
     </actor>
     <actor name="actor_002">
-      <pose>-5 -5 1.25 0 0 0 </pose>
+      <pose>-20 -20 1.25 0 0 0 </pose>
       <skin>
         <filename>walk.dae</filename>
         <scale>1.0</scale>
@@ -11563,8 +11563,8 @@
       </animation>
       <plugin name="actor_002" filename="libHumanPlugin.so">
         <model_name>actor_002</model_name>
-        <x>-5</x>
-        <y>-5</y>
+        <x>-20</x>
+        <y>-20</y>
         <target_weight>1.15</target_weight>
         <obstacle_weight>1.8</obstacle_weight>
         <animation_factor>5.1</animation_factor>
@@ -11574,7 +11574,7 @@
       </plugin>
     </actor>
     <actor name="actor_003">
-      <pose>-5 5 1.25 0 0 0 </pose>
+      <pose>-20 -20 1.25 0 0 0 </pose>
       <skin>
         <filename>walk.dae</filename>
         <scale>1.0</scale>
@@ -11586,8 +11586,100 @@
       </animation>
       <plugin name="actor_003" filename="libHumanPlugin.so">
         <model_name>actor_003</model_name>
-        <x>-5</x>
-        <y>5</y>
+        <x>-20</x>
+        <y>-20</y>
+        <target_weight>1.15</target_weight>
+        <obstacle_weight>1.8</obstacle_weight>
+        <animation_factor>5.1</animation_factor>
+        <ignore_obstacles>
+          <model>ground_plane</model>
+        </ignore_obstacles>
+      </plugin>
+    </actor>
+    <actor name="actor_004">
+      <pose>-20 -20 1.25 0 0 0 </pose>
+      <skin>
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walking">
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      <plugin name="actor_004" filename="libHumanPlugin.so">
+        <model_name>actor_004</model_name>
+        <x>-20</x>
+        <y>-20</y>
+        <target_weight>1.15</target_weight>
+        <obstacle_weight>1.8</obstacle_weight>
+        <animation_factor>5.1</animation_factor>
+        <ignore_obstacles>
+          <model>ground_plane</model>
+        </ignore_obstacles>
+      </plugin>
+    </actor>
+    <actor name="actor_005">
+      <pose>-20 -20 1.25 0 0 0 </pose>
+      <skin>
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walking">
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      <plugin name="actor_005" filename="libHumanPlugin.so">
+        <model_name>actor_005</model_name>
+        <x>-20</x>
+        <y>-20</y>
+        <target_weight>1.15</target_weight>
+        <obstacle_weight>1.8</obstacle_weight>
+        <animation_factor>5.1</animation_factor>
+        <ignore_obstacles>
+          <model>ground_plane</model>
+        </ignore_obstacles>
+      </plugin>
+    </actor>
+    <actor name="actor_006">
+      <pose>-20 -20 1.25 0 0 0 </pose>
+      <skin>
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walking">
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      <plugin name="actor_006" filename="libHumanPlugin.so">
+        <model_name>actor_006</model_name>
+        <x>-20</x>
+        <y>-20</y>
+        <target_weight>1.15</target_weight>
+        <obstacle_weight>1.8</obstacle_weight>
+        <animation_factor>5.1</animation_factor>
+        <ignore_obstacles>
+          <model>ground_plane</model>
+        </ignore_obstacles>
+      </plugin>
+    </actor>
+    <actor name="actor_007">
+      <pose>-20 -20 1.25 0 0 0 </pose>
+      <skin>
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walking">
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      <plugin name="actor_007" filename="libHumanPlugin.so">
+        <model_name>actor_007</model_name>
+        <x>-20</x>
+        <y>-20</y>
         <target_weight>1.15</target_weight>
         <obstacle_weight>1.8</obstacle_weight>
         <animation_factor>5.1</animation_factor>
