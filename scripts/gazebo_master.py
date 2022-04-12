@@ -40,6 +40,15 @@ class GazeboMaster:
         self.history_rollout_ = 5
         self.history_queue_ = []
 
+        # parameter for env
+        self.goal_reward_coeff_ = 1.0
+        self.control_cost_coeff_ = 1.0
+        self.map_cost_coeff_ = 1.0
+        self.ped_cost_coeff_ = 1.0
+        self.ped_collision_threshold_ = 0.1
+        self.map_collision_threshold_ = 0.1
+        self.goal_threshold_ = 0.1
+
         # parameter for jackal
         self.jackal_pose_ = Pose()
         self.jackal_twist_ = Twist()
@@ -101,27 +110,27 @@ class GazeboMaster:
             self.sub_pose_[name] = rospy.Subscriber('/' + name + '/pose', PoseStamped, self.callback_pose)
 
         # define ROS communicator
-        self.server_step_ = rospy.Service('step', Step, self.service_step)
-        self.server_jackal_ = rospy.Service('jackal', Jackal, self.service_jackal)
-        self.server_state_ = rospy.Service('state', State, self.service_state)
-        self.server_reset_ = rospy.Service('reset', Reset, self.service_reset)
+        # self.server_step_ = rospy.Service('step', Step, self.service_step)
+        # self.server_jackal_ = rospy.Service('jackal', Jackal, self.service_jackal)
+        # self.server_state_ = rospy.Service('state', State, self.service_state)
+        # self.server_reset_ = rospy.Service('reset', Reset, self.service_reset)
         self.client_pause_ = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.client_unpause_ = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
-        self.set_model_ = rospy.ServiceProxy(gazebo_ns + '/set_model_state', SetModelState)
-        self.sub_clock_ = rospy.Subscriber('/clock', Clock, self.callback_clock)
-        # self.sub_scan_ = rospy.Subscriber('/front/scan', LaserScan, self.callback_scan)
-        self.sub_jackal_ = rospy.Subscriber('/jackal_veocity_controller/odom', Odometry, self.callback_jackal)
         self.pub_jackal_ = rospy.Publisher('/jackal_velocity_controller/cmd_vel', Twist, queue_size=10)
-
+        self.set_model_ = rospy.ServiceProxy(gazebo_ns + '/set_model_state', SetModelState)
+        self.sub_scan_ = rospy.Subscriber('/front/scan', LaserScan, self.callback_scan)
+        self.sub_jackal_ = rospy.Subscriber('/jackal_velocity_controller/odom', Odometry, self.callback_jackal)
+        
         time.sleep(1.0)
-
-        self.loop()
     
+        self.sub_clock_ = rospy.Subscriber('/clock', Clock, self.callback_clock)
+
+
+        
     
     def callback_status(self, msg):
         name = msg.name
         if self.status_[name] != msg.status:
-            print(msg)
             self.status_[name] = msg.status
             self.status_time_[name] = self.time_
 
@@ -134,10 +143,11 @@ class GazeboMaster:
     def callback_clock(self, msg):
         self.time_ = msg.clock.secs + msg.clock.nsecs * 1e-9
         self.pause_time_ = time.time()
-        print("%.3f %.3f " %(self.time_, self.target_time_))
+        self.loop()
         if not self.reset_ and self.time_ > self.target_time_ :
             self.is_pause_ = True
             self.client_pause_()
+        
 
     
     def callback_scan(self, msg):
@@ -150,35 +160,35 @@ class GazeboMaster:
 
     def callback_jackal(self, msg):
         self.jackal_pose_ = msg.pose.pose
-        self.jackal_twist_ = msg.pose.twist
+        self.jackal_twist_ = msg.twist.twist
         
 
-    def service_step(self, req):
-        rt = StepResponse()
+    def simulation(self):
         self.target_time_ = self.time_ + self.dt_
         self.is_pause_ = False
         self.step_ = True
         self.client_unpause_()
-        while not self.is_pause_:
-            continue
+        while True:
+            if self.time_ < self.target_time_:
+                if time.time() - self.pause_time_ > 0.1:
+                    try:
+                        self.client_unpause_()
+                    except:
+                        pass
+            else:
+                break
         self.update_state()
         self.step_ = False
-        rt.success = True
-        return rt
+        return
 
 
-    def service_jackal(self, req):
-        rt = JackalResponse()
-        self.accel_ = req.accel
-        self.omega_ = req.omega
-
-        rt.success = True
-        return rt
+    def jackal_cmd(self, a):
+        self.accel_ = a[0]
+        self.omega_ = a[1]
+        return
 
 
-    def service_state(self, req):
-        rt = StateResponse()
-        
+    def get_obs(self):
         state = []
         L = len(self.history_queue_)
         for i in range(L):
@@ -186,13 +196,10 @@ class GazeboMaster:
         for _ in range(self.history_rollout_ - len(self.history_queue_)):
             state.append(self.history_queue_[0])
 
-        rt.state = state
-        rt.success = True
-        return rt
+        return state
 
     
-    def service_reset(self, req):
-        print("start reset")
+    def reset(self):
         self.reset_ = True
         # check valid starting point
         candidates = []
@@ -225,9 +232,7 @@ class GazeboMaster:
         self.history_queue_ = []
         self.update_state()
 
-        rt = ResetResponse()
-        rt.success = True
-        return rt
+        return self.get_obs()
     
 
     def replace_jackal(self, pose):
@@ -254,13 +259,14 @@ class GazeboMaster:
         goal = interpolate(A,B,alpha)
         return Point(goal[0], goal[1], 2.0)
 
+
     def update_state(self):
         state = StateInfo()
         jx = self.jackal_pose_.position.x
         jy = self.jackal_pose_.position.y
         q = self.jackal_pose_.orientation
-        qx = 1 - 2 * (q.z ** 2 + q.w ** 2)
-        qy = 2 * (q.x * q.w + q.y * q.z)
+        qx = 1 - 2 * (q.y ** 2 + q.z ** 2)
+        qy = 2 * (q.w * q.z + q.x * q.y)
         ct = qx / (qx ** 2 + qy ** 2) ** 0.5
         st = qy / (qx ** 2 + qy ** 2) ** 0.5
 
@@ -274,7 +280,7 @@ class GazeboMaster:
         state.accel = self.accel_
 
         # lidar state
-        # state.lidar = self.lidar_state_
+        state.lidar = self.lidar_state_
 
         # pedestrian state
         peds = []
@@ -288,72 +294,114 @@ class GazeboMaster:
             self.history_queue_.pop(0)
 
 
+    def step(self, a):
+        s = self.get_obs()
+        self.jackal_cmd(a)
+        self.simulation()
+        ns = self.get_obs()
+
+        reward = 0.0
+        done = False
+
+        # goal reward
+        g = s[0].goal
+        ng = ns[0].goal
+        dg = (g.x ** 2 + g.y ** 2) ** 0.5
+        dng = (ng.x ** 2 + ng.y ** 2) ** 0.5
+        goal_reward = self.goal_reward_coeff_ * (dng - dg) / self.dt_
+        if dng < self.goal_threshold_:
+            done = True
+
+        # jackal cost
+        control_cost = self.control_cost_coeff_ * (abs(ns[0].accel) + abs(ns[0].ang_vel - s[0].ang_vel))
+
+        # map cost
+        map_cost = self.map_cost_coeff_ * collision_cost(min(ns[0].lidar))
+        if min(ns[0].lidar) < self.map_collision_threshold_:
+            done = True
+
+        # peds cost
+        ped_cost = 0.0
+        P = len(ns[0].pedestrians)
+        for i in range(P):
+            p = ns[0].pedestrians[i]
+            d = (p.x ** 2 + p.y ** 2) ** 0.5
+            if d < self.ped_collision_threshold_:
+                done = True
+            ped_cost += collision_cost(d)
+        ped_cost = self.ped_cost_coeff_ * ped_cost
+
+        reward = goal_reward
+        cost = control_cost + map_cost + ped_cost
+
+        info = {'reward':{'total': reward, 'goal': goal_reward}, 'cost': {'total': cost, 'control':control_cost, 'map': map_cost, 'ped': ped_cost}, 'done': done}
+
+        return ns, reward, done, info
+
+
     def loop(self):
-        while True:
-            # wait for publish interval
-            if time.time() - self.pause_time_ > 0.1 and self.step_:
-                self.client_unpause_()
-            if self.time_ - self.last_published_time_ < self.pub_interval_:
-                continue
-            
-            # control pedestrian
-            for name in self.actor_name_:
-                if self.status_[name] == MOVE:
-                    traj_num = self.traj_idx_[name]
-                    if self.time_ - self.status_time_[name] > self.traj_[traj_num]['time']:
-                        self.traj_idx_[name] = -1
-                        self.status_[name] = WAIT
-                        rt = Command()
-                        rt.name = name
-                        rt.status = WAIT
-                        self.pub_[name].publish(rt)
-                        continue
-                    self.goal_[name] = self.get_goal(name)
+        # wait for publish interval
+        if self.time_ - self.last_published_time_ < self.pub_interval_:
+            return
+        
+        # control pedestrian
+        for name in self.actor_name_:
+            if self.status_[name] == MOVE:
+                traj_num = self.traj_idx_[name]
+                if self.time_ - self.status_time_[name] > self.traj_[traj_num]['time']:
+                    self.traj_idx_[name] = -1
+                    self.status_[name] = WAIT
                     rt = Command()
                     rt.name = name
-                    rt.status = MOVE
-                    rt.goal = Pose(position=self.goal_[name])
-                    rt.velocity = L2dist(self.pose_[name], self.goal_[name]) / self.lookahead_time_
+                    rt.status = WAIT
                     self.pub_[name].publish(rt)
-                
-                elif self.status_[name] == WAIT:
-                    p = random.uniform(0.0, 1.0)
-                    if p > self.actor_prob_:
-                        continue
-                    
-                    # select possible trajectory
-                    traj_cand = [True for i in range(self.n_traj_)]
-                    for name2 in self.actor_name_:
-                        if self.traj_idx_[name2] == -1:
-                            continue
-                        for i in range(self.n_traj_):
-                            if self.adj_mat_[self.traj_idx_[name2]][i]:
-                                traj_cand[i] = False
-                    s=0
-                    for i in range(self.n_traj_):
-                        if traj_cand[i]:
-                            s += 1
-                    if s != 0:
-                        while True:
-                            traj_num = random.randint(0, self.n_traj_-1)
-                            if traj_cand[traj_num]:
-                                 break
-                        self.traj_idx_[name] = traj_num
-
-                        # INIT actor
-                        rt = Command()
-                        rt.name = name
-                        rt.status = INIT
-                        rt.goal = Pose(position=Point(self.traj_[traj_num]['waypoints'][0][0], self.traj_[traj_num]['waypoints'][0][1], 0.0))
-                        self.pub_[name].publish(rt)
+                    continue
+                self.goal_[name] = self.get_goal(name)
+                rt = Command()
+                rt.name = name
+                rt.status = MOVE
+                rt.goal = Pose(position=self.goal_[name])
+                rt.velocity = L2dist(self.pose_[name], self.goal_[name]) / self.lookahead_time_
+                self.pub_[name].publish(rt)
             
-            # control jackal
-            cmd = Twist()
-            cmd.linear.x = self.accel_
-            cmd.angular.z = self.omega_
-            self.pub_jackal_.publish(cmd)
+            elif self.status_[name] == WAIT:
+                p = random.uniform(0.0, 1.0)
+                if p > self.actor_prob_:
+                    continue
+                
+                # select possible trajectory
+                traj_cand = [True for i in range(self.n_traj_)]
+                for name2 in self.actor_name_:
+                    if self.traj_idx_[name2] == -1:
+                        continue
+                    for i in range(self.n_traj_):
+                        if self.adj_mat_[self.traj_idx_[name2]][i]:
+                            traj_cand[i] = False
+                s=0
+                for i in range(self.n_traj_):
+                    if traj_cand[i]:
+                        s += 1
+                if s != 0:
+                    while True:
+                        traj_num = random.randint(0, self.n_traj_-1)
+                        if traj_cand[traj_num]:
+                                break
+                    self.traj_idx_[name] = traj_num
 
-            self.last_published_time_ = self.time_
+                    # INIT actor
+                    rt = Command()
+                    rt.name = name
+                    rt.status = INIT
+                    rt.goal = Pose(position=Point(self.traj_[traj_num]['waypoints'][0][0], self.traj_[traj_num]['waypoints'][0][1], 0.0))
+                    self.pub_[name].publish(rt)
+        
+        # control jackal
+        cmd = Twist()
+        cmd.linear.x = self.accel_
+        cmd.angular.z = self.omega_
+        self.pub_jackal_.publish(cmd)
+
+        self.last_published_time_ = self.time_
 
 
 if __name__ == "__main__":

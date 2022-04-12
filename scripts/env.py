@@ -49,9 +49,9 @@ class PedSimEnv:
         control_cost = self.control_cost_coeff_ * (abs(ns[0].accel) + abs(ns[0].ang_vel - s[0].ang_vel))
 
         # map cost
-        # map_cost = self.map_cost_coeff_ * collision_cost(min(ns[0].lidar))
-        # if min(ns[0].lidar) < self.map_collision_threshold_:
-        #     done = True
+        map_cost = self.map_cost_coeff_ * collision_cost(min(ns[0].lidar))
+        if min(ns[0].lidar) < self.map_collision_threshold_:
+            done = True
         map_cost =0
 
         # peds cost

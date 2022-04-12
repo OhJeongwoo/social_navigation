@@ -2,14 +2,16 @@ import numpy as np
 import rospy
 import time
 
-from env import PedSimEnv
+# from env import PedSimEnv
+from gazebo_master import GazeboMaster
 
 rospy.init_node("demo")
-ped_sim = PedSimEnv()
+ped_sim = GazeboMaster()
+time.sleep(3.0)
 max_step=1000
 while True:
     print("reset")
-    s = ped_sim.reset_model()
+    s = ped_sim.reset()
     print("Waiting to start")
     step = 0
     print("start")
@@ -19,9 +21,6 @@ while True:
         s, r, d, info = ped_sim.step(a)
         step += 1
         print(info)
-        # if d or step == max_step:
-        #     break
-        if step % 100 == 0:
-            print("take a rest")
-            time.sleep(10.0)
-    
+        d = d or step == max_step
+        if d:
+            break
