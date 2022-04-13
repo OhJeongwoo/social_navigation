@@ -3,11 +3,11 @@ import rospy
 import time
 
 # from env import PedSimEnv
-from gazebo_master import GazeboMaster
+from gazebo_master import PedSim
 
 rospy.init_node("demo")
-ped_sim = GazeboMaster()
-time.sleep(3.0)
+ped_sim = PedSim()
+# time.sleep(3.0)
 max_step=1000
 while True:
     print("reset")

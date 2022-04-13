@@ -8,6 +8,7 @@ import time
 from social_navigation.msg import Status, Command, StateInfo
 from social_navigation.srv import Step, State, Jackal, Reset, StepResponse, StateResponse, JackalResponse, StepRequest, StateRequest, JackalRequest, ResetRequest, ResetResponse
 from gazebo_msgs.srv import SetModelState, SetModelStateRequest
+from gazebo_msgs.msg import ModelStates
 from std_srvs.srv import Empty
 from rosgraph_msgs.msg import Clock
 from geometry_msgs.msg import Twist, PoseStamped
@@ -16,11 +17,11 @@ from nav_msgs.msg import Odometry
 
 from utils import *
 
-class GazeboMaster:
-    def __init__(self, gazebo_ns='/gazebo'):
+class PedSim:
+    def __init__(self, mode='safeRL', gazebo_ns='/gazebo'):
         # parater for file
         self.traj_file_ = "traj.json"
-        self.spawn_file_ = "spawn.json"
+        self.spawn_file_ = "goal.json"
 
         # parameter for time
         self.time_ = 0.0
@@ -45,9 +46,11 @@ class GazeboMaster:
         self.control_cost_coeff_ = 1.0
         self.map_cost_coeff_ = 1.0
         self.ped_cost_coeff_ = 1.0
-        self.ped_collision_threshold_ = 0.1
-        self.map_collision_threshold_ = 0.1
+        self.ped_collision_threshold_ = 0.5
+        self.map_collision_threshold_ = 0.5
         self.goal_threshold_ = 0.1
+        self.action_limit_ = 1.0
+        self.mode_ = mode
 
         # parameter for jackal
         self.jackal_pose_ = Pose()
@@ -78,6 +81,7 @@ class GazeboMaster:
         with open(self.traj_file_, 'r') as jf:
             self.traj_ = json.load(jf)
 
+
         self.n_traj_ = len(self.traj_)
         self.adj_mat_ = []
 
@@ -89,7 +93,7 @@ class GazeboMaster:
                 m = len(self.traj_[j]['waypoints'])
                 for seq1 in range(n):
                     for seq2 in range(m):
-                        if get_length(self.traj_[i]['waypoints'][seq1], self.traj_[j]['waypoints'][seq2]) < 1.0:
+                        if get_length(self.traj_[i]['waypoints'][seq1], self.traj_[j]['waypoints'][seq2]) < 3.0:
                             check = True
                             break
                     if check:
@@ -107,27 +111,24 @@ class GazeboMaster:
             self.traj_idx_[name] = -1
             self.pub_[name] = rospy.Publisher('/' + name + '/cmd', Command, queue_size=10)
             self.sub_status_[name] = rospy.Subscriber('/' + name + '/status', Status, self.callback_status)
-            self.sub_pose_[name] = rospy.Subscriber('/' + name + '/pose', PoseStamped, self.callback_pose)
+            # self.sub_pose_[name] = rospy.Subscriber('/' + name + '/pose', PoseStamped, self.callback_pose)
 
         # define ROS communicator
-        # self.server_step_ = rospy.Service('step', Step, self.service_step)
-        # self.server_jackal_ = rospy.Service('jackal', Jackal, self.service_jackal)
-        # self.server_state_ = rospy.Service('state', State, self.service_state)
-        # self.server_reset_ = rospy.Service('reset', Reset, self.service_reset)
-        self.client_pause_ = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
-        self.client_unpause_ = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
+        self.sub_pose_ = rospy.Subscriber('/gazebo/model_states', ModelStates, self.callback_pose)
         self.pub_jackal_ = rospy.Publisher('/jackal_velocity_controller/cmd_vel', Twist, queue_size=10)
         self.set_model_ = rospy.ServiceProxy(gazebo_ns + '/set_model_state', SetModelState)
         self.sub_scan_ = rospy.Subscriber('/front/scan', LaserScan, self.callback_scan)
         self.sub_jackal_ = rospy.Subscriber('/jackal_velocity_controller/odom', Odometry, self.callback_jackal)
+        self.client_pause_ = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
+        self.client_unpause_ = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         
         time.sleep(1.0)
     
         self.sub_clock_ = rospy.Subscriber('/clock', Clock, self.callback_clock)
 
+        time.sleep(1.0)
 
-        
-    
+
     def callback_status(self, msg):
         name = msg.name
         if self.status_[name] != msg.status:
@@ -136,8 +137,23 @@ class GazeboMaster:
 
 
     def callback_pose(self, msg):
-        name = msg.header.frame_id
-        self.pose_[name] = msg.pose.position
+        name_list = msg.name
+        for name in self.actor_name_:
+            try:
+                idx = name_list.index(name)
+                self.pose_[name] = msg.pose[idx].position
+            except:
+                print("no name")
+        try:
+            idx = name_list.index('jackal')
+            self.jackal_pose_ = msg.pose[idx]
+            self.jackal_twist_ = msg.twist[idx]
+        
+        except:
+            print("no jackal")
+
+        # name = msg.header.frame_id
+        # self.pose_[name] = msg.pose.position
 
 
     def callback_clock(self, msg):
@@ -148,11 +164,11 @@ class GazeboMaster:
             self.is_pause_ = True
             self.client_pause_()
         
-
     
     def callback_scan(self, msg):
         ranges = np.nan_to_num(np.array(msg.ranges), copy=True, posinf=30.0, neginf=-30.0)
         lidar_state = []
+
         for i in range(self.scan_dim_):
             lidar_state.append(np.mean(ranges[int(i*self.scan_size_/self.scan_dim_):int((i+1)*self.scan_size_/self.scan_dim_)]))
         self.lidar_state_ = lidar_state
@@ -188,17 +204,6 @@ class GazeboMaster:
         return
 
 
-    def get_obs(self):
-        state = []
-        L = len(self.history_queue_)
-        for i in range(L):
-            state.append(self.history_queue_[L-1-i])
-        for _ in range(self.history_rollout_ - len(self.history_queue_)):
-            state.append(self.history_queue_[0])
-
-        return state
-
-    
     def reset(self):
         self.reset_ = True
         # check valid starting point
@@ -221,6 +226,7 @@ class GazeboMaster:
         # unpause gazebo
         self.is_pause_ = False
         self.client_unpause_()
+        time.sleep(0.1)
 
         # replace jackal
         self.replace_jackal(candidate['spawn'])
@@ -232,8 +238,93 @@ class GazeboMaster:
         self.history_queue_ = []
         self.update_state()
 
-        return self.get_obs()
+        return self.obs2list(self.get_obs())
     
+
+    def step(self, a):
+        s = self.get_obs()
+        self.jackal_cmd(a)
+        self.simulation()
+        ns = self.get_obs()
+
+        reward = 0.0
+        done = False
+
+        # goal reward
+        g = s[0].goal
+        ng = ns[0].goal
+        dg = (g.x ** 2 + g.y ** 2) ** 0.5
+        dng = (ng.x ** 2 + ng.y ** 2) ** 0.5
+        goal_reward = self.goal_reward_coeff_ * (dg - dng) / self.dt_
+        if dng < self.goal_threshold_:
+            done = True
+
+        # jackal cost
+        control_cost = self.control_cost_coeff_ * (abs(ns[0].accel) + abs(ns[0].ang_vel - s[0].ang_vel))
+
+        # map cost
+        map_cost = self.map_cost_coeff_ * collision_cost(min(ns[0].lidar))
+        if min(ns[0].lidar) < self.map_collision_threshold_:
+            done = True
+
+        # peds cost
+        ped_cost = 0.0
+        P = len(ns[0].pedestrians)
+        for i in range(P):
+            p = ns[0].pedestrians[i]
+            d = (p.x ** 2 + p.y ** 2) ** 0.5
+            if d < self.ped_collision_threshold_:
+                done = True
+            ped_cost += collision_cost(d)
+        ped_cost = self.ped_cost_coeff_ * ped_cost
+
+        reward = goal_reward
+        cost = control_cost + map_cost + ped_cost
+
+        info = {'reward':{'total': reward, 'goal': goal_reward}, 'cost': {'total': cost, 'control':control_cost, 'map': map_cost, 'ped': ped_cost}, 'done': done, 'dist': dng}
+        
+        if self.mode_ == 'RL':
+            reward = reward - cost
+        
+        return self.obs2list(ns), reward, done, info
+
+
+    def get_obs(self):
+        state = []
+        L = len(self.history_queue_)
+        for i in range(L):
+            state.append(self.history_queue_[L-1-i])
+        for _ in range(self.history_rollout_ - len(self.history_queue_)):
+            state.append(self.history_queue_[0])
+
+        return state
+
+
+    def get_dim(self):
+        o = self.reset()
+        return o.shape[0], 2
+
+
+    def get_random_action(self):
+        return 2 * self.action_limit_ * (np.random.rand(2) - 0.5)
+
+
+    def obs2list(self, obs):
+        rt = []
+        for i in range(len(obs)):
+            state = []
+            state.append(obs[i].lin_vel)
+            state.append(obs[i].ang_vel)
+            state.append(obs[i].accel)
+            state.append(obs[i].goal.x)
+            state.append(obs[i].goal.y)
+            state += obs[i].lidar
+            for ped in obs[i].pedestrians:
+                state.append(ped.x)
+                state.append(ped.y)
+            rt += state
+        return np.array(rt)
+
 
     def replace_jackal(self, pose):
         req = SetModelStateRequest()
@@ -286,57 +377,13 @@ class GazeboMaster:
         peds = []
         for name in self.actor_name_:
             px, py = transform_coordinate(self.pose_[name].x - jx, self.pose_[name].y - jy, ct, st)
+            # print("px: %.2f, py: %.2f, jx: %.2f, jy: %.2f, x: %.2f, y: %.2f, ct: %.2f, st: %.2f" %(px, py, jx, jy, self.pose_[name].x, self.pose_[name].y, ct, st))
             peds.append(Point(px, py, 0.0))
         state.pedestrians = sorted(peds, key=norm_2d)
         
         self.history_queue_.append(state)
         if len(self.history_queue_) > self.history_rollout_:
             self.history_queue_.pop(0)
-
-
-    def step(self, a):
-        s = self.get_obs()
-        self.jackal_cmd(a)
-        self.simulation()
-        ns = self.get_obs()
-
-        reward = 0.0
-        done = False
-
-        # goal reward
-        g = s[0].goal
-        ng = ns[0].goal
-        dg = (g.x ** 2 + g.y ** 2) ** 0.5
-        dng = (ng.x ** 2 + ng.y ** 2) ** 0.5
-        goal_reward = self.goal_reward_coeff_ * (dng - dg) / self.dt_
-        if dng < self.goal_threshold_:
-            done = True
-
-        # jackal cost
-        control_cost = self.control_cost_coeff_ * (abs(ns[0].accel) + abs(ns[0].ang_vel - s[0].ang_vel))
-
-        # map cost
-        map_cost = self.map_cost_coeff_ * collision_cost(min(ns[0].lidar))
-        if min(ns[0].lidar) < self.map_collision_threshold_:
-            done = True
-
-        # peds cost
-        ped_cost = 0.0
-        P = len(ns[0].pedestrians)
-        for i in range(P):
-            p = ns[0].pedestrians[i]
-            d = (p.x ** 2 + p.y ** 2) ** 0.5
-            if d < self.ped_collision_threshold_:
-                done = True
-            ped_cost += collision_cost(d)
-        ped_cost = self.ped_cost_coeff_ * ped_cost
-
-        reward = goal_reward
-        cost = control_cost + map_cost + ped_cost
-
-        info = {'reward':{'total': reward, 'goal': goal_reward}, 'cost': {'total': cost, 'control':control_cost, 'map': map_cost, 'ped': ped_cost}, 'done': done}
-
-        return ns, reward, done, info
 
 
     def loop(self):
@@ -402,9 +449,3 @@ class GazeboMaster:
         self.pub_jackal_.publish(cmd)
 
         self.last_published_time_ = self.time_
-
-
-if __name__ == "__main__":
-    rospy.init_node("Gazebo_Master")
-    gazebo_master = GazeboMaster()
-    rospy.spin()

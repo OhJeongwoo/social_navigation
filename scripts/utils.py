@@ -1,3 +1,5 @@
+import os
+
 from matplotlib.pyplot import get
 from lxml import etree
 from lxml.etree import Element
@@ -9,6 +11,10 @@ INIT = 1
 MOVE = 2
 
 EPS = 1e-6
+
+def check_path(path_name):
+    if not os.path.exists(path_name):
+        os.mkdir(path_name)
 
 def y2q(yaw):
   cy = math.cos(0.5 * yaw)
