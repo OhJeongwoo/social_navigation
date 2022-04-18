@@ -40,6 +40,11 @@ double depth(double x, double y, double z){
 typedef pair<double,double> pdd;
 typedef pair<pdd, geometry_msgs::Point> pxdep; // {pixel, point}
 
+
+bool compare(const geometry_msgs::Point &p, const geometry_msgs::Point &q){
+  return depth(p.x, p.y, p.z) < depth(q.x, q.y, q.z);
+}
+
 class Depth2PC{
   private:
   ros::NodeHandle nh_;
@@ -163,7 +168,7 @@ class Depth2PC{
           if(px+k_+1<w) dp_sub[py] += instances[i].data[py * w + px + k_ + 1];
         }
       }
-      
+      vector<geometry_msgs::Point> pv;
       for(pxdep p : depth_map){
         int px = p.first.first;
         int py = p.first.second;
@@ -171,16 +176,26 @@ class Depth2PC{
 
         if(idx < 0 || idx >= w * h) continue;
         if(dp[px][py] == K) {
-          x += p.second.x;
-          y += p.second.y;
-          z += p.second.z;
+          pv.push_back(p.second);
+          // x += p.second.x;
+          // y += p.second.y;
+          // z += p.second.z;
           n++;
         }
       }
+      sort(pv.begin(), pv.end(), compare);
       if(n==0) continue;
-      x /= n;
-      y /= n;
-      z /= n;
+      for(int t = int(n/10); t<int(9*n/10);t++){
+        x += pv[t].x;
+        y += pv[t].y;
+        z += pv[t].z;
+      }
+      x /= (int(9*n/10) - int(n/10));
+      y /= (int(9*n/10) - int(n/10));
+      z /= (int(9*n/10) - int(n/10));
+      // x /= n;
+      // y /= n;
+      // z /= n;
       if(isnan(x) || isnan(y) || isnan(z)) continue;
       geometry_msgs::Point ped;
       ped.x = x;
