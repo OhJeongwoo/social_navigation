@@ -24,8 +24,8 @@
 
 #include "image_transport/image_transport.h"
 #include "cv_bridge/cv_bridge.h"
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
+//#include <opencv/cv.h>
+//#include <opencv/highgui.h>
 
 using namespace std;
 
