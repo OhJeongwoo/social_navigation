@@ -16,7 +16,7 @@
     <!-- For hokuyo -->
     <arg name="hokuyo_laser" default="true" />
     <arg name="default_config" value="front_laser" if="$(arg hokuyo_laser)" />
-    <arg name="default_config" value="base" unless="$(arg hokuyo_laser)" />
+    <!-- <arg name="default_config" value="base" unless="$(arg hokuyo_laser)" /> -->
 
     <!-- Configuration of Jackal which you would like to simulate.
         See jackal_description for details. -->
@@ -35,12 +35,16 @@
     </include>
 
     <!-- Spawn Jackal -->
-    <include file="$(find jackal_gazebo)/launch/spawn_jackal.launch">
+    <!-- <include file="$(find jackal_gazebo)/launch/spawn_jackal.launch">
         <arg name="x" value="$(arg robot_x)" />
         <arg name="y" value="$(arg robot_y)" />
         <arg name="z" value="$(arg robot_z)" />
         <arg name="yaw" value="$(arg robot_yaw)" />
         <arg name="config" value="$(arg config)" />
         <arg name="joystick" value="$(arg joystick)" />
-    </include>
+    </include> -->
+    <param name="robot_description" command="cat $(find social_navigation)/config/jackal.urdf"/>
+
+    <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model jackal -x $(arg robot_x) -y $(arg robot_y) -z $(arg robot_z) -R 0 -P 0 -Y $(arg robot_yaw)" />
+    <include file="$(find jackal_control)/launch/control.launch" />
 </launch>
