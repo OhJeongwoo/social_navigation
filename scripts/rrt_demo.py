@@ -33,14 +33,14 @@ class Demo:
             rt.root = self.ped_sim_.jackal_pose_.position
             rt.goal = self.global_goal_
             print(rt)
-            if step % 30 == 0:
-                self.pub_.publish(rt)
-                t = time.time()
-                while not self.valid:
-                    if time.time() - t > 1.0:
-                        break
-                    time.sleep(0.001)
+            self.pub_.publish(rt)
+            t = time.time()
+            while not self.valid:
+                if time.time() - t > 1.0:
+                    break
+                time.sleep(0.001)
             a = purepursuit(self.ped_sim_.jackal_pose_, self.local_goal_, 1.0)
+            a = get_similar_action(a)
             self.ped_sim_.step(a)
             self.valid = False
             step += 1

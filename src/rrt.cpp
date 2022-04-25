@@ -25,6 +25,8 @@
 using namespace std;
 using namespace cv;
 
+const double INF = 1e9;
+
 typedef pair<double,double> point;
 typedef pair<int, int> pixel;
 
@@ -57,6 +59,22 @@ int find_nearest(point p, vector<node>& nodes){
     return rt;
 }
 
+int find_constraint_nearest(point p, vector<node>& nodes, double min_d){
+    if(nodes.size() == 0) return -1;
+    int rt = -1;
+    double min_dist = INF;
+    for(int i = 0; i < nodes.size(); i++){
+        double d = get_dist(p, nodes[i].p);
+        if(d < min_d) continue;
+        if(d < min_dist){
+            min_dist = d;
+            rt = i;
+        }
+    }
+    if(rt == -1) cout << "error" << endl;
+    return rt;
+}
+
 point get_candidate(point p, point q, double t){
     // return (q - p) * t / ||q-p|| + p
     double d = get_dist(p, q);
@@ -77,6 +95,8 @@ class RRT{
     int lookahead_;
     double distance_threshold_;
     double tau_;
+    vector<node> local_path_;
+    int path_length_;
 
     double x_min_;
     double x_max_;
@@ -112,10 +132,14 @@ class RRT{
         local_map_ = imread(image_file_, CV_8UC1);
         load_collision_map();
         
-        sy_ = -2.517*0.02;
-        sx_ = 2.494*0.02;
-        cy_ = 30.199;
-        cx_ = -59.361;
+        // sy_ = -2.517*0.02;
+        // sx_ = 2.494*0.02;
+        // cy_ = 30.199;
+        // cx_ = -59.361;
+        sy_ = -0.05;
+        sx_ = 0.05;
+        cy_ = 30.0;
+        cx_ = -59.4;
         root_ = point(35, 30);
         goal_ = point(12, 88);
 
@@ -124,6 +148,7 @@ class RRT{
         distance_threshold_ = 1.0;
         tau_ = 0.2;
         lookahead_ = 10;
+        path_length_ = 50;
 
         draw_ = true;
         cout << "complete to initialize" << endl;
@@ -190,23 +215,45 @@ class RRT{
         return false;
     }
 
+    vector<node> init_rrt(point root){
+        vector<node> rt;
+        if(local_path_.size() == 0){
+            node r;
+            r.p = root;
+            r.parent = -1;
+            rt.push_back(r);
+            return rt;
+        }
+        int idx = find_constraint_nearest(root, local_path_, tau_);
+        node r;
+        r.p = root;
+        r.parent = -1;
+        rt.push_back(r);
+        for(int i = idx; i < local_path_.size(); i++){
+            node r;
+            r.p = local_path_[i].p;
+            r.parent = i - idx;
+            rt.push_back(r);
+        }
+        return rt;
+    }
+
     point rrt(){
         clock_t start = clock();
-        vector<node> pts;
         point goal = goal_;
         point root = root_;
+        vector<node> pts = init_rrt(root);
         x_min_ = min<double>(goal.first, root.first) - 5.0;
         x_max_ = max<double>(goal.first, root.first) + 5.0;
         y_min_ = min<double>(goal.second, root.second) - 5.0;
         y_max_ = max<double>(goal.second, root.second) + 5.0;
-        pts.push_back(node(root));
-        int n_sample = 1;
-        int nearest_index = 0;
-        double dist = get_dist(root, goal);
-        int i = 0;
+        // pts.push_back(node(root));
+        int n_sample = pts.size();
+        // int nearest_index = 0;
+        // double dist = get_dist(root, goal);
+        int nearest_index = find_nearest(goal, pts);
+        double dist = get_dist(pts[nearest_index].p, goal);
         while(true){
-            i ++;
-            if(i>10000) break;
             double x = x_min_ + (x_max_ - x_min_) * ((double)rand() / (double) RAND_MAX);
             double y = y_min_ + (y_max_ - y_min_) * ((double)rand() / (double) RAND_MAX);
             point p = point(x,y);
@@ -236,6 +283,16 @@ class RRT{
         cout << "drawing" << endl;
         if(draw_){
             draw(pts, goal);
+        }
+        if(path.size() < path_length_) {
+            vector<node> ntree;
+            for(int i = path.size() - 1; i >= 0 ; i --) ntree.push_back(node(pts[path[i]].p));
+            local_path_ = ntree;
+        }
+        else{
+            vector<node> ntree;
+            for(int i = path.size() - 1; i > path.size() - path_length_ ; i --) ntree.push_back(node(pts[path[i]].p));
+            local_path_ = ntree;
         }
         if(path.size() < lookahead_) return pts[path[0]].p;
         return pts[path[path.size() - lookahead_]].p;
