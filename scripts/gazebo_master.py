@@ -4,6 +4,7 @@ import numpy as np
 import json
 import random
 import time
+from string import Template
 
 from social_navigation.msg import Status, Command, StateInfo
 from social_navigation.srv import Step, State, Jackal, Reset, StepResponse, StateResponse, JackalResponse, StepRequest, StateRequest, JackalRequest, ResetRequest, ResetResponse
@@ -16,6 +17,7 @@ from sensor_msgs.msg import LaserScan
 from nav_msgs.msg import Odometry
 
 from utils import *
+
 
 class PedSim:
     def __init__(self, mode='safeRL', gazebo_ns='/gazebo'):
@@ -65,7 +67,7 @@ class PedSim:
         self.scan_dim_ = 20
 
         # parameter for actor
-        self.n_actor_ = 1
+        self.n_actor_ = 0
         self.actor_name_ = []
         self.status_ = {}
         self.status_time_ = {}
@@ -122,7 +124,6 @@ class PedSim:
         self.pub_jackal_ = rospy.Publisher('/jackal_velocity_controller/cmd_vel', Twist, queue_size=10)
         self.set_model_ = rospy.ServiceProxy(gazebo_ns + '/set_model_state', SetModelState)
         self.sub_scan_ = rospy.Subscriber('/front/scan', LaserScan, self.callback_scan)
-        #self.sub_jackal_ = rospy.Subscriber('/jackal_velocity_controller/odom', Odometry, self.callback_jackal)
         self.client_pause_ = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.client_unpause_ = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         
@@ -157,9 +158,6 @@ class PedSim:
         except:
             print("no jackal")
 
-        # name = msg.header.frame_id
-        # self.pose_[name] = msg.pose.position
-
 
     def callback_clock(self, msg):
         self.time_ = msg.clock.secs + msg.clock.nsecs * 1e-9
@@ -178,11 +176,6 @@ class PedSim:
         for i in range(self.scan_dim_):
             lidar_state.append(np.mean(ranges[int(i*self.scan_size_/self.scan_dim_):int((i+1)*self.scan_size_/self.scan_dim_)]))
         self.lidar_state_ = lidar_state
-
-
-    def callback_jackal(self, msg):
-        self.jackal_pose_ = msg.pose.pose
-        self.jackal_twist_ = msg.twist.twist
         
 
     def simulation(self):
@@ -222,23 +215,22 @@ class PedSim:
         self.recent_action = [0,0]
 
         # check valid starting point
-        candidates = []
-        for pos in self.spawn_:
-            check = True
-            for name in self.actor_name_:
-                if self.status_[name] != MOVE:
-                    continue
-                if get_length(pos['spawn'], [self.pose_[name].x, self.pose_[name].y]) < self.spawn_threshold_:
-                    check = False
-                    break
-            if check:
-                candidates.append(pos)
+        # candidates = []
+        # for pos in self.spawn_:
+        #     check = True
+        #     for name in self.actor_name_:
+        #         if self.status_[name] != MOVE:
+        #             continue
+        #         if get_length(pos['spawn'], [self.pose_[name].x, self.pose_[name].y]) < self.spawn_threshold_:
+        #             check = False
+        #             break
+        #     if check:
+        #         candidates.append(pos)
 
         # randomly choice
         candidate = random.choice(candidates)
-        #print('candidate : ', candidate)
         self.jackal_goal_ = candidate['goal']
-        #print('spawn :', candidate['spawn'], ' goal : ', self.jackal_goal_)
+        self.jackal_goal_ = [28.9,16.7]
 
         # unpause gazebo
         self.is_pause_ = False

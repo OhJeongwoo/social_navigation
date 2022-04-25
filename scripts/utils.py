@@ -1,5 +1,6 @@
 import os
 
+import numpy as np
 from matplotlib.pyplot import get
 from lxml import etree
 from lxml.etree import Element
@@ -11,6 +12,10 @@ INIT = 1
 MOVE = 2
 
 EPS = 1e-6
+acc_kp = 1.0
+acc_kd = 1.0
+str_kp = 1.0
+str_kd = 1.0
 
 def check_path(path_name):
     if not os.path.exists(path_name):
@@ -180,3 +185,37 @@ def transform_coordinate(x, y, ct, st):
 
 def collision_cost(d):
     return 1.0 / (1.0 + math.exp((d-2.0)))
+
+
+def purepursuit(pose, goal, v, prv_acc_err =None, prv_str_err=None):
+    siny_cosp = 2 * (pose.orientation.w * pose.orientation.z + pose.orientation.x * pose.orientation.y)
+    cosy_cosp = 1 - 2 * (pose.orientation.y * pose.orientation.y + pose.orientation.z * pose.orientation.z)
+
+
+    yaw = np.arctan2(siny_cosp, cosy_cosp)
+
+    dt = 0.1
+    dy = goal.y - pose.position.y
+    dx = goal.x - pose.position.x
+    theta = np.arctan2(dy, dx)
+    cur_err = theta - yaw
+    while(cur_err > np.pi):
+        cur_err -= 2 * np.pi
+    while(cur_err < -np.pi):
+        cur_err += 2 * np.pi
+    
+    if prv_str_err is not None:
+        if cur_err - prv_str_err > 0.01:
+            str_val = str_kp * cur_err
+        else:
+            str_val = str_kp * cur_err + str_kd * (cur_err - prv_str_err) / dt
+        # print("sc: %.3f, scd: %.3f" %(cur_err, (cur_err - prv_str_err) / dt))
+    else:
+        str_val = str_kp * cur_err
+    
+    target_str = np.clip(str_val, -1.0, 1.0)
+    target_vel = np.clip(v / (1 + 4.0 * abs(str_val)), 0.0, 1.0)
+
+    cmd = [target_vel, target_str]
+
+    return cmd

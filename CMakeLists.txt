@@ -38,6 +38,7 @@ add_message_files(
   InstanceArray.msg
   PedestrianArray.msg
   StateInfo.msg
+  RRT.msg
 )
 
 add_service_files(
@@ -84,6 +85,10 @@ include_directories(
 add_executable(depth2pc src/depth2pc.cpp ${HEADERS} ${SOURCES})
 target_link_libraries(depth2pc ${catkin_LIBRARIES} ${CV_LIBRARIES} ${OpenCV_LIBS} ${PCL_LIBRARIES} ${EIGEN_LIBRARIES})
 add_dependencies(depth2pc ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+add_executable(rrt src/rrt.cpp ${HEADERS} ${SOURCES})
+target_link_libraries(rrt ${catkin_LIBRARIES} ${CV_LIBRARIES} ${OpenCV_LIBS} ${PCL_LIBRARIES} ${EIGEN_LIBRARIES})
+add_dependencies(rrt ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 catkin_install_python(PROGRAMS
   scripts/actor_scheduler.py

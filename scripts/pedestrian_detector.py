@@ -24,7 +24,7 @@ class PedDetector:
 
         # set hyperparameter
         self.score_threshold_ = 0.8
-        
+        print("start")
         # define topic communicator
         self.pub_ = rospy.Publisher("/instances", InstanceArray, queue_size=10)
         self.pub_sig_ = rospy.Publisher("/signal", Int32, queue_size=10)
@@ -67,5 +67,6 @@ class PedDetector:
 
 if __name__=="__main__":
     rospy.init_node("pedestrian_detector")
+    print("debug")
     ped_detector = PedDetector()
     rospy.spin()
