@@ -8,7 +8,7 @@ from gazebo_master import PedSim
 rospy.init_node("demo")
 ped_sim = PedSim()
 # time.sleep(3.0)
-max_step=1000
+max_step=1000000000
 while True:
     print("reset")
     s = ped_sim.reset()

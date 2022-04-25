@@ -166,10 +166,12 @@ if __name__ == "__main__":
     def test_agent():
         tot_ep_ret = 0.0
         for _ in range(n_log_epi_):
+            #print('eval step : ', _)
             o, d, ep_ret, ep_len = env_.reset(), False, 0, 0
             while not(d or (ep_len == exp_epi_len_)):
                 # Take deterministic actions at test time 
                 o, r, d, _ = env_.step(get_action(o))
+                #print("eval reward : ", r)
                 ep_ret += r
                 ep_len += 1
             tot_ep_ret += ep_ret
@@ -188,13 +190,17 @@ if __name__ == "__main__":
         # Until start_steps have elapsed, randomly sample actions
         # from a uniform distribution for better exploration. Afterwards, 
         # use the learned policy. 
+        #import ipdb;ipdb.set_trace()
         if t > start_steps_:
             a = get_action(o)
         else:
             a = env_.get_random_action()
-
+        #import ipdb;ipdb.set_trace()
         # Step the env
+        
         o2, r, d, info = env_.step(a)
+        #print('reward : ', r, ' timestep : ', t)
+        
         # print("[%.3f] timestep: %d, " %(time.time() - init_time_, t+1))
         # print(info)
         ep_ret += r
@@ -214,7 +220,7 @@ if __name__ == "__main__":
 
         # End of trajectory handling
         if d or (ep_len == exp_epi_len_):
-            print(info['dist'])
+            #print(info['dist'])
             o, ep_ret, ep_len = env_.reset(), 0, 0
 
 
@@ -228,6 +234,8 @@ if __name__ == "__main__":
         if (t+1) % steps_per_epoch_ == 0:
             epoch = (t+1) // steps_per_epoch_
             avg_rt = test_agent()
+
+            
             ts_axis.append(t+1)
             rt_axis.append(avg_rt)
             if epoch % save_interval_ == 0:
@@ -239,3 +247,4 @@ if __name__ == "__main__":
             if plot_rendering_:
                 plt.plot(ts_axis, rt_axis)
                 plt.pause(0.001)
+            o = env_.reset()

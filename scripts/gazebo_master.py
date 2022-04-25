@@ -48,7 +48,7 @@ class PedSim:
         self.ped_cost_coeff_ = 1.0
         self.ped_collision_threshold_ = 0.5
         self.map_collision_threshold_ = 0.5
-        self.goal_threshold_ = 0.1
+        self.goal_threshold_ = 0.25
         self.action_limit_ = 1.0
         self.mode_ = mode
 
@@ -62,10 +62,10 @@ class PedSim:
 
         # parameter for lidar
         self.scan_size_ = 720
-        self.scan_dim_ = 10
+        self.scan_dim_ = 20
 
         # parameter for actor
-        self.n_actor_ = 8
+        self.n_actor_ = 1
         self.actor_name_ = []
         self.status_ = {}
         self.status_time_ = {}
@@ -76,6 +76,10 @@ class PedSim:
         self.pub_ = {}
         self.sub_status_ = {}
         self.sub_pose_ = {}
+
+        # parameter for env
+        self.max_goal_dist = 10.0
+        
 
         # paramter for trajectory
         with open(self.traj_file_, 'r') as jf:
@@ -118,7 +122,7 @@ class PedSim:
         self.pub_jackal_ = rospy.Publisher('/jackal_velocity_controller/cmd_vel', Twist, queue_size=10)
         self.set_model_ = rospy.ServiceProxy(gazebo_ns + '/set_model_state', SetModelState)
         self.sub_scan_ = rospy.Subscriber('/front/scan', LaserScan, self.callback_scan)
-        self.sub_jackal_ = rospy.Subscriber('/jackal_velocity_controller/odom', Odometry, self.callback_jackal)
+        #self.sub_jackal_ = rospy.Subscriber('/jackal_velocity_controller/odom', Odometry, self.callback_jackal)
         self.client_pause_ = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.client_unpause_ = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         
@@ -146,6 +150,7 @@ class PedSim:
                 print("no name")
         try:
             idx = name_list.index('jackal')
+            #prin(msg.twist[idx])
             self.jackal_pose_ = msg.pose[idx]
             self.jackal_twist_ = msg.twist[idx]
         
@@ -166,7 +171,8 @@ class PedSim:
         
     
     def callback_scan(self, msg):
-        ranges = np.nan_to_num(np.array(msg.ranges), copy=True, posinf=30.0, neginf=-30.0)
+        ranges = np.nan_to_num(np.array(msg.ranges), copy=True, posinf=10.0, neginf=-0.0)
+        ranges = np.clip(ranges, 0.0, 10.0)
         lidar_state = []
 
         for i in range(self.scan_dim_):
@@ -206,6 +212,15 @@ class PedSim:
 
     def reset(self):
         self.reset_ = True
+
+        #Initialize prev values
+        self.prev_vel = 0
+        self.prev_ang = 0
+        self.prev_acc = 0
+        self.prev_acc_ang = 0
+
+        self.recent_action = [0,0]
+
         # check valid starting point
         candidates = []
         for pos in self.spawn_:
@@ -221,7 +236,9 @@ class PedSim:
 
         # randomly choice
         candidate = random.choice(candidates)
+        #print('candidate : ', candidate)
         self.jackal_goal_ = candidate['goal']
+        #print('spawn :', candidate['spawn'], ' goal : ', self.jackal_goal_)
 
         # unpause gazebo
         self.is_pause_ = False
@@ -230,8 +247,10 @@ class PedSim:
 
         # replace jackal
         self.replace_jackal(candidate['spawn'])
-
+        self.jackal_cmd([0,0])
+        
         # pause gazebo
+        time.sleep(2) # For stable state initilization
         self.client_pause_()
         self.reset_ = False
         self.target_time_ = self.time_
@@ -243,6 +262,11 @@ class PedSim:
 
     def step(self, a):
         s = self.get_obs()
+
+        weight = 0.6
+        a = [self.recent_action[0] * weight + np.clip(a[0], 0.0, 1.0) * (1-weight), self.recent_action[1] * weight + (1-weight) * np.clip(a[1], -1.0, 1.0)]
+        self.recent_action = a
+
         self.jackal_cmd(a)
         self.simulation()
         ns = self.get_obs()
@@ -254,8 +278,12 @@ class PedSim:
         g = s[0].goal
         ng = ns[0].goal
         dg = (g.x ** 2 + g.y ** 2) ** 0.5
+        #print(dg, g.x, g.y)
         dng = (ng.x ** 2 + ng.y ** 2) ** 0.5
-        goal_reward = self.goal_reward_coeff_ * (dg - dng) / self.dt_
+        #print(dng, ng.x, ng.y)
+        #goal_reward = self.goal_reward_coeff_ * (dg - dng) / self.dt_
+        goal_reward = s[0].goal_distance - ns[0].goal_distance
+        #print('goal reward : ', goal_reward)
         if dng < self.goal_threshold_:
             done = True
 
@@ -264,22 +292,25 @@ class PedSim:
 
         # map cost
         map_cost = self.map_cost_coeff_ * collision_cost(min(ns[0].lidar))
-        if min(ns[0].lidar) < self.map_collision_threshold_:
+        if min(self.lidar_state_) < self.map_collision_threshold_:
             done = True
 
+        
         # peds cost
         ped_cost = 0.0
         P = len(ns[0].pedestrians)
         for i in range(P):
             p = ns[0].pedestrians[i]
             d = (p.x ** 2 + p.y ** 2) ** 0.5
-            if d < self.ped_collision_threshold_:
-                done = True
+            #if d < self.ped_collision_threshold_:
+            #    done = True
             ped_cost += collision_cost(d)
         ped_cost = self.ped_cost_coeff_ * ped_cost
 
         reward = goal_reward
         cost = control_cost + map_cost + ped_cost
+
+        cost = 0
 
         info = {'reward':{'total': reward, 'goal': goal_reward}, 'cost': {'total': cost, 'control':control_cost, 'map': map_cost, 'ped': ped_cost}, 'done': done, 'dist': dng}
         
@@ -318,10 +349,13 @@ class PedSim:
             state.append(obs[i].accel)
             state.append(obs[i].goal.x)
             state.append(obs[i].goal.y)
+            state.append(obs[i].goal_distance)
             state += obs[i].lidar
+            '''
             for ped in obs[i].pedestrians:
                 state.append(ped.x)
                 state.append(ped.y)
+            '''
             rt += state
         return np.array(rt)
 
@@ -329,12 +363,21 @@ class PedSim:
     def replace_jackal(self, pose):
         req = SetModelStateRequest()
         req.model_state.model_name = 'jackal'
-        req.model_state.pose = Pose(position=Point(pose[0],pose[1],1.0), orientation=y2q(random.uniform(0.0,2*np.pi)))
+        yaw = random.uniform(0.0, 2 *np.pi)
+        req.model_state.pose = Pose(position=Point(pose[0],pose[1],1.0), orientation=y2q(yaw))
         try:
             res = self.set_model_(req)
             if not res.success:
                 print("error")
                 rospy.logwarn(res.status_message)
+
+            else:
+                
+                self.jackal_pose_.position.x = pose[0]
+                self.jackal_pose_.position.y = pose[1]
+                self.jackal_pose.orientation = y2q(yaw)
+            
+
         except:
             pass
 
@@ -353,6 +396,7 @@ class PedSim:
 
     def update_state(self):
         state = StateInfo()
+        #import ipdb;ipdb.set_trace
         jx = self.jackal_pose_.position.x
         jy = self.jackal_pose_.position.y
         q = self.jackal_pose_.orientation
@@ -362,16 +406,24 @@ class PedSim:
         st = qy / (qx ** 2 + qy ** 2) ** 0.5
 
         # goal state
+        #print("jx, jy, goal :", jx, jy, self.jackal_goal_)
         gx, gy = transform_coordinate(self.jackal_goal_[0] - jx, self.jackal_goal_[1] - jy, ct, st)
-        state.goal = Point(gx, gy, 0)
+        state.goal_distance = (gx**2 + gy**2)**0.5
+        dir_gx = gx / state.goal_distance
+        dir_gy = gy / state.goal_distance
+        state.goal = Point(dir_gx, dir_gy, 0)
+        
 
         # jackal state
-        state.lin_vel = self.jackal_twist_.linear.x
+        state.lin_vel = self.jackal_twist_.linear.x ** 2 + self.jackal_twist_.linear.y ** 2
         state.ang_vel = self.jackal_twist_.angular.z
-        state.accel = self.accel_
+        state.accel = 0.1 * (state.lin_vel - self.prev_vel)/self.dt_ # 0.1 multiplied for normalization, the actual value is (state.lin_vel - self.prev_vel)/self.dt
+
+        #import ipdb;ipdb.set_trace()
+        
 
         # lidar state
-        state.lidar = self.lidar_state_
+        state.lidar = ((1-np.array(self.lidar_state_)) / 10).tolist()
 
         # pedestrian state
         peds = []
