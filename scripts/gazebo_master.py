@@ -228,8 +228,8 @@ class PedSim:
         #         candidates.append(pos)
 
         # randomly choice
-        # candidate = random.choice(candidates)
-        # self.jackal_goal_ = candidate['goal']
+        candidate = random.choice(candidates)
+        self.jackal_goal_ = candidate['goal']
         self.jackal_goal_ = [28.9,16.7]
 
         # unpause gazebo
@@ -238,8 +238,7 @@ class PedSim:
         time.sleep(0.1)
 
         # replace jackal
-        # self.replace_jackal(candidate['spawn'])
-        self.replace_jackal([-27.0, -6.0])
+        self.replace_jackal(candidate['spawn'])
         self.jackal_cmd([0,0])
         
         # pause gazebo
