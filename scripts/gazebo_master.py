@@ -1,10 +1,11 @@
+from black import T
 import rospy
 import rospkg
 import numpy as np
 import json
 import random
 import time
-from string import Template
+from PIL import Image, ImageOps
 
 from social_navigation.msg import Status, Command, StateInfo
 from social_navigation.srv import Step, State, Jackal, Reset, StepResponse, StateResponse, JackalResponse, StepRequest, StateRequest, JackalRequest, ResetRequest, ResetResponse
@@ -24,6 +25,7 @@ class PedSim:
         # parater for file
         self.traj_file_ = "traj.json"
         self.spawn_file_ = "goal.json"
+        self.collision_file_ = rospkg.RosPack().get_path("social_navigation") + "/config/collision_301_1f.png"
 
         # parameter for time
         self.time_ = 0.0
@@ -53,6 +55,12 @@ class PedSim:
         self.goal_threshold_ = 0.25
         self.action_limit_ = 1.0
         self.mode_ = mode
+        self.collision_map_ = Image.open(self.collision_file_)
+        self.img_w_, self.img_h_ = self.collision_map_.size
+        self.sy_ = -0.05
+        self.sx_ = 0.05
+        self.cy_ = 30.0
+        self.cx_ = -59.4
 
         # parameter for jackal
         self.jackal_pose_ = Pose()
@@ -177,6 +185,18 @@ class PedSim:
             lidar_state.append(np.mean(ranges[int(i*self.scan_size_/self.scan_dim_):int((i+1)*self.scan_size_/self.scan_dim_)]))
         self.lidar_state_ = lidar_state
         
+
+    def is_collision(self):
+        jx = self.jackal_pose_.position.x
+        jy = self.jackal_pose_.position.y
+        px = int((jx - self.cx_) / self.sx_)
+        py = int((jy - self.cy_) / self.sy_)
+        if px < 0 or px >= self.img_w_ or py < 0 or py >= self.img_h_:
+            return True
+        if self.collision_map_.getpixel((px, py)) == 0:
+            return True
+        return False
+
 
     def simulation(self):
         self.target_time_ = self.time_ + self.dt_
