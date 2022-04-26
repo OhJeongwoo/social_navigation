@@ -25,6 +25,8 @@
 using namespace std;
 using namespace cv;
 
+const double INF = 1e9;
+
 typedef pair<double,double> point;
 typedef pair<int, int> pixel;
 
@@ -33,6 +35,7 @@ struct node{
     int parent = -1;
     vector<int> childs;
     bool is_path = false;
+    double cost = 0.0;
     node(): p(point(0,0)) {}
     node(point p): p(p) {}  
 };
@@ -57,6 +60,30 @@ int find_nearest(point p, vector<node>& nodes){
     return rt;
 }
 
+vector<int> find_near(point p, vector<node>& nodes, double d){
+    vector<int> rt;
+    for(int i = 0; i < nodes.size(); i++){
+        if(d > get_dist(p, nodes[i].p)) rt.push_back(i);
+    }
+    return rt;
+}
+
+int find_constraint_nearest(point p, vector<node>& nodes, double min_d){
+    if(nodes.size() == 0) return -1;
+    int rt = -1;
+    double min_dist = INF;
+    for(int i = 0; i < nodes.size(); i++){
+        double d = get_dist(p, nodes[i].p);
+        if(d < min_d) continue;
+        if(d < min_dist){
+            min_dist = d;
+            rt = i;
+        }
+    }
+    if(rt == -1) cout << "error" << endl;
+    return rt;
+}
+
 point get_candidate(point p, point q, double t){
     // return (q - p) * t / ||q-p|| + p
     double d = get_dist(p, q);
@@ -77,6 +104,9 @@ class RRT{
     int lookahead_;
     double distance_threshold_;
     double tau_;
+    double coeff_tau_;
+    vector<node> local_path_;
+    int path_length_;
 
     double x_min_;
     double x_max_;
@@ -112,10 +142,14 @@ class RRT{
         local_map_ = imread(image_file_, CV_8UC1);
         load_collision_map();
         
-        sy_ = -2.517*0.02;
-        sx_ = 2.494*0.02;
-        cy_ = 30.199;
-        cx_ = -59.361;
+        // sy_ = -2.517*0.02;
+        // sx_ = 2.494*0.02;
+        // cy_ = 30.199;
+        // cx_ = -59.361;
+        sy_ = -0.05;
+        sx_ = 0.05;
+        cy_ = 30.0;
+        cx_ = -59.4;
         root_ = point(35, 30);
         goal_ = point(12, 88);
 
@@ -123,7 +157,9 @@ class RRT{
         max_sample_ = 10000;
         distance_threshold_ = 1.0;
         tau_ = 0.2;
+        coeff_tau_ = 5.0;
         lookahead_ = 10;
+        path_length_ = 50;
 
         draw_ = true;
         cout << "complete to initialize" << endl;
@@ -138,7 +174,7 @@ class RRT{
 
         cout << "root: " << root_.first << ", " << root_.second << endl;
         cout << "goal: " << goal_.first << ", " << goal_.second << endl;
-        point local_goal = rrt();
+        point local_goal = rrt(msg->option);
         geometry_msgs::Point rt;
         rt.x = local_goal.first;
         rt.y = local_goal.second;
@@ -190,33 +226,90 @@ class RRT{
         return false;
     }
 
-    point rrt(){
+    vector<node> init_rrt(point root, bool option){
+        // if option is true, remove fixed local path
+        vector<node> rt;
+        if(local_path_.size() == 0 || option){
+            node r;
+            r.p = root;
+            r.parent = -1;
+            rt.push_back(r);
+            return rt;
+        }
+        int idx = find_constraint_nearest(root, local_path_, tau_);
+        node r;
+        r.p = root;
+        r.parent = -1;
+        rt.push_back(r);
+        double d = 0.0;
+        for(int i = idx; i < local_path_.size(); i++){
+            node r;
+            r.p = local_path_[i].p;
+            r.parent = i - idx;
+            d += get_dist(rt[i-idx].p, r.p);
+            r.cost = d;
+            rt.push_back(r);
+        }
+        return rt;
+    }
+
+    point rrt(bool option){
         clock_t start = clock();
-        vector<node> pts;
         point goal = goal_;
         point root = root_;
+        vector<node> pts = init_rrt(root, option);
         x_min_ = min<double>(goal.first, root.first) - 5.0;
         x_max_ = max<double>(goal.first, root.first) + 5.0;
         y_min_ = min<double>(goal.second, root.second) - 5.0;
         y_max_ = max<double>(goal.second, root.second) + 5.0;
-        pts.push_back(node(root));
-        int n_sample = 1;
-        int nearest_index = 0;
-        double dist = get_dist(root, goal);
-        int i = 0;
+        // pts.push_back(node(root));
+        int n_sample = pts.size();
+        // int nearest_index = 0;
+        // double dist = get_dist(root, goal);
+        int nearest_index = find_nearest(goal, pts);
+        double dist = get_dist(pts[nearest_index].p, goal);
+        int tot_step = 0;
         while(true){
-            i ++;
-            if(i>10000) break;
+            if(tot_step > max_sample_ * 2) break;
+            tot_step ++;
             double x = x_min_ + (x_max_ - x_min_) * ((double)rand() / (double) RAND_MAX);
             double y = y_min_ + (y_max_ - y_min_) * ((double)rand() / (double) RAND_MAX);
             point p = point(x,y);
             int idx = find_nearest(p, pts);
             p = get_candidate(pts[idx].p, p, tau_);
             if(is_collision(pts[idx].p, p)) continue;
+            vector<int> near_idx = find_near(p, pts, coeff_tau_ * tau_);
             node nnode = node(p);
             nnode.parent = idx;
+            nnode.cost = pts[idx].cost + get_dist(pts[idx].p, p);
             pts.push_back(nnode);
             pts[idx].childs.push_back(n_sample);
+            for(int i = 0; i < near_idx.size(); i++){
+                int n_idx = near_idx[i];
+                if(n_idx == idx) continue;
+                if(pts[n_idx].cost > pts[n_sample].cost + get_dist(pts[n_idx].p, pts[n_sample].p)){
+                    int par = pts[n_idx].parent;
+                    if(par != -1){
+                        vector<int> n_child;
+                        for(int k : pts[par].childs){
+                            if(k == n_idx) continue;
+                            n_child.push_back(k);
+                        }
+                        pts[par].childs = n_child;
+                    }
+                    pts[n_idx].parent = n_sample;
+                    double delta_cost = pts[n_sample].cost + get_dist(pts[n_idx].p, pts[n_sample].p) - pts[n_idx].cost;
+                    queue<int> q;
+                    q.push(n_idx);
+                    while(!q.empty()){
+                        int k = q.front();
+                        q.pop();
+                        pts[k].cost += delta_cost;
+                        for(int c: pts[k].childs) q.push(c);
+                    }
+                    pts[n_sample].childs.push_back(n_idx);
+                }
+            }
             if(dist > get_dist(p, goal)){
                 dist = get_dist(p, goal);
                 nearest_index = n_sample;
@@ -236,6 +329,16 @@ class RRT{
         cout << "drawing" << endl;
         if(draw_){
             draw(pts, goal);
+        }
+        if(path.size() < path_length_) {
+            vector<node> ntree;
+            for(int i = path.size() - 1; i >= 0 ; i --) ntree.push_back(node(pts[path[i]].p));
+            local_path_ = ntree;
+        }
+        else{
+            vector<node> ntree;
+            for(int i = path.size() - 1; i > path.size() - path_length_ ; i --) ntree.push_back(node(pts[path[i]].p));
+            local_path_ = ntree;
         }
         if(path.size() < lookahead_) return pts[path[0]].p;
         return pts[path[path.size() - lookahead_]].p;
@@ -265,17 +368,6 @@ class RRT{
         cv::imwrite(local_map_save_path, local_map_);
     }
 
-
-
-    void loop(){
-        while(1){
-            if(double(clock() - last_pub_time_) / CLOCKS_PER_SEC < control_interval_){
-                continue;
-            }
-            rrt();
-            last_pub_time_ = clock();
-        }
-    }
 
 };
  

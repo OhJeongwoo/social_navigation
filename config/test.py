@@ -75,8 +75,8 @@ for i in range(w):
             ny = j + dy[k]
             if A[nx][ny] == 255:
                 continue
-            for ki in range(-10, 10):
-                for kj in range(-10, 10):
+            for ki in range(-12, 12):
+                for kj in range(-12, 12):
                     ni = nx + ki
                     nj = ny + kj
                     if ni < 0 or ni >= w or nj < 0 or nj >= h:
