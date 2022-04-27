@@ -1,10 +1,11 @@
+from black import T
 import rospy
 import rospkg
 import numpy as np
 import json
 import random
 import time
-from string import Template
+from PIL import Image, ImageOps
 
 from social_navigation.msg import Status, Command, StateInfo
 from social_navigation.srv import Step, State, Jackal, Reset, StepResponse, StateResponse, JackalResponse, StepRequest, StateRequest, JackalRequest, ResetRequest, ResetResponse
@@ -24,6 +25,7 @@ class PedSim:
         # parater for file
         self.traj_file_ = "traj.json"
         self.spawn_file_ = "goal.json"
+        self.collision_file_ = rospkg.RosPack().get_path("social_navigation") + "/config/collision_301_1f.png"
 
         # parameter for time
         self.time_ = 0.0
@@ -50,9 +52,15 @@ class PedSim:
         self.ped_cost_coeff_ = 1.0
         self.ped_collision_threshold_ = 0.5
         self.map_collision_threshold_ = 0.5
-        self.goal_threshold_ = 0.25
+        self.goal_threshold_ = 0.5
         self.action_limit_ = 1.0
         self.mode_ = mode
+        self.collision_map_ = Image.open(self.collision_file_)
+        self.img_w_, self.img_h_ = self.collision_map_.size
+        self.sy_ = -0.05
+        self.sx_ = 0.05
+        self.cy_ = 30.0
+        self.cx_ = -59.4
 
         # parameter for jackal
         self.jackal_pose_ = Pose()
@@ -151,7 +159,6 @@ class PedSim:
                 print("no name")
         try:
             idx = name_list.index('jackal')
-            #prin(msg.twist[idx])
             self.jackal_pose_ = msg.pose[idx]
             self.jackal_twist_ = msg.twist[idx]
         
@@ -177,6 +184,18 @@ class PedSim:
             lidar_state.append(np.mean(ranges[int(i*self.scan_size_/self.scan_dim_):int((i+1)*self.scan_size_/self.scan_dim_)]))
         self.lidar_state_ = lidar_state
         
+
+    def is_collision(self):
+        jx = self.jackal_pose_.position.x
+        jy = self.jackal_pose_.position.y
+        px = int((jx - self.cx_) / self.sx_)
+        py = int((jy - self.cy_) / self.sy_)
+        if px < 0 or px >= self.img_w_ or py < 0 or py >= self.img_h_:
+            return True
+        if self.collision_map_.getpixel((px, py)) == 0:
+            return True
+        return False
+
 
     def simulation(self):
         self.target_time_ = self.time_ + self.dt_
@@ -215,22 +234,22 @@ class PedSim:
         self.recent_action = [0,0]
 
         # check valid starting point
-        # candidates = []
-        # for pos in self.spawn_:
-        #     check = True
-        #     for name in self.actor_name_:
-        #         if self.status_[name] != MOVE:
-        #             continue
-        #         if get_length(pos['spawn'], [self.pose_[name].x, self.pose_[name].y]) < self.spawn_threshold_:
-        #             check = False
-        #             break
-        #     if check:
-        #         candidates.append(pos)
+        candidates = []
+        for pos in self.spawn_:
+            check = True
+            for name in self.actor_name_:
+                if self.status_[name] != MOVE:
+                    continue
+                if get_length(pos['spawn'], [self.pose_[name].x, self.pose_[name].y]) < self.spawn_threshold_:
+                    check = False
+                    break
+            if check:
+                candidates.append(pos)
 
         # randomly choice
-        # candidate = random.choice(candidates)
-        # self.jackal_goal_ = candidate['goal']
-        self.jackal_goal_ = [28.9,16.7]
+        candidate = random.choice(candidates)
+        self.jackal_goal_ = candidate['goal']
+        #self.jackal_goal_ = [28.9,16.7]
 
         # unpause gazebo
         self.is_pause_ = False
@@ -238,8 +257,7 @@ class PedSim:
         time.sleep(0.1)
 
         # replace jackal
-        # self.replace_jackal(candidate['spawn'])
-        self.replace_jackal([-27.0, -6.0])
+        self.replace_jackal(candidate['spawn'])
         self.jackal_cmd([0,0])
         
         # pause gazebo
@@ -257,6 +275,10 @@ class PedSim:
         s = self.get_obs()
 
         weight = 0.6
+
+        #print(a)
+        a = action_list[a[0]]
+
         a = [self.recent_action[0] * weight + np.clip(a[0], 0.0, 1.0) * (1-weight), self.recent_action[1] * weight + (1-weight) * np.clip(a[1], -1.0, 1.0)]
         self.recent_action = a
 
@@ -268,16 +290,8 @@ class PedSim:
         done = False
 
         # goal reward
-        g = s[0].goal
-        ng = ns[0].goal
-        dg = (g.x ** 2 + g.y ** 2) ** 0.5
-        #print(dg, g.x, g.y)
-        dng = (ng.x ** 2 + ng.y ** 2) ** 0.5
-        #print(dng, ng.x, ng.y)
-        #goal_reward = self.goal_reward_coeff_ * (dg - dng) / self.dt_
         goal_reward = s[0].goal_distance - ns[0].goal_distance
-        #print('goal reward : ', goal_reward)
-        if dng < self.goal_threshold_:
+        if ns[0].goal_distance < self.goal_threshold_:
             done = True
 
         # jackal cost
@@ -295,17 +309,16 @@ class PedSim:
         for i in range(P):
             p = ns[0].pedestrians[i]
             d = (p.x ** 2 + p.y ** 2) ** 0.5
-            #if d < self.ped_collision_threshold_:
-            #    done = True
+
             ped_cost += collision_cost(d)
         ped_cost = self.ped_cost_coeff_ * ped_cost
 
         reward = goal_reward
         cost = control_cost + map_cost + ped_cost
 
-        cost = 0
+        cost = 0 #Temporary
 
-        info = {'reward':{'total': reward, 'goal': goal_reward}, 'cost': {'total': cost, 'control':control_cost, 'map': map_cost, 'ped': ped_cost}, 'done': done, 'dist': dng}
+        info = {'reward':{'total': reward, 'goal': goal_reward}, 'cost': {'total': cost, 'control':control_cost, 'map': map_cost, 'ped': ped_cost}, 'done': done, 'dist': ns[0].goal_distance}
         
         if self.mode_ == 'RL':
             reward = reward - cost
@@ -326,11 +339,12 @@ class PedSim:
 
     def get_dim(self):
         o = self.reset()
-        return o.shape[0], 2
+        return o.shape[0], 15
 
 
     def get_random_action(self):
-        return 2 * self.action_limit_ * (np.random.rand(2) - 0.5)
+        random_action = random.randint(0, 14)
+        return random_action
 
 
     def obs2list(self, obs):
@@ -399,7 +413,6 @@ class PedSim:
         st = qy / (qx ** 2 + qy ** 2) ** 0.5
 
         # goal state
-        #print("jx, jy, goal :", jx, jy, self.jackal_goal_)
         gx, gy = transform_coordinate(self.jackal_goal_[0] - jx, self.jackal_goal_[1] - jy, ct, st)
         state.goal_distance = (gx**2 + gy**2)**0.5
         dir_gx = gx / state.goal_distance
