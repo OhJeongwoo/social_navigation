@@ -282,6 +282,9 @@ class SACCore(nn.Module):
     def act(self, obs):
         a, _ = self.pi(obs)
         return a
+        
+
+
 
 class DDPGCore(nn.Module):
     def __init__(self, obs_dim, act_dim, hidden_layers, learning_rate, act_limit, device, option):
