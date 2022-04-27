@@ -4,6 +4,7 @@ import time
 
 from social_navigation.msg import RRT
 from geometry_msgs.msg import Point
+from std_msgs.msg import Float64MultiArray
 from gazebo_master import PedSim
 from utils import *
 
@@ -13,7 +14,7 @@ class Demo:
         self.ped_sim_ = PedSim()
 
         self.pub_ = rospy.Publisher("/rrt", RRT, queue_size=10)
-        self.sub_ = rospy.Subscriber("/local_goal", Point, self.callback)
+        self.sub_ = rospy.Subscriber("/local_goal", Float64MultiArray, self.callback)
 
         self.valid = False
         self.ped_sim_.reset()
@@ -32,6 +33,10 @@ class Demo:
             rt = RRT()
             rt.root = self.ped_sim_.jackal_pose_.position
             rt.goal = self.global_goal_
+            if step % 50 == 0:
+                rt.option = True
+            else:
+                rt.option = False
             print(rt)
             self.pub_.publish(rt)
             t = time.time()
