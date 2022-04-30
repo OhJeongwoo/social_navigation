@@ -1,0 +1,34 @@
+
+{'exp_name': 'pedsim', 'exp_epi_len': 200, 'pi_hidden_layers': [128, 128], 'pi_options': ['default', 'leaky-relu', 'default'], 'replay_size': 10000, 'gamma': 0.99, 'polyak': 0.995, 'alpha': 0.2, 'learning_rate': 0.001, 'epochs': 1000, 'steps_per_epoch': 1000, 'batch_size': 256, 'n_log_epi': 10, 'start_steps': 1000, 'update_after': 1000, 'update_every': 200, 'save_interval': 10, 'plot_rendering': True, 'seed': 1}
+goal reached!
+lidar collision
+timeout!
+timeout!
+lidar collision
+lidar collision
+lidar collision
+lidar collision
+lidar collision
+lidar collision
+goal reached!
+lidar collision
+lidar collision
+lidar collision
+lidar collision
+lidar collision
+lidar collision
+goal reached!
+lidar collision
+lidar collision
+[184.986] Epoch: 1, Timesteps: 1000, AvgEpReward: -3.518
+lidar collision
+goal reached!
+lidar collision
+lidar collision
+lidar collision
+lidar collision
+lidar collision
+lidar collision
+lidar collision
+lidar collision
+lidar collision

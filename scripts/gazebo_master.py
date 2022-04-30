@@ -18,14 +18,15 @@ from sensor_msgs.msg import LaserScan
 from nav_msgs.msg import Odometry
 
 from utils import *
-
+from numba import njit
 
 class PedSim:
+    
     def __init__(self, mode='safeRL', gazebo_ns='/gazebo'):
         # parater for file
         self.traj_file_ = "traj.json"
         self.spawn_file_ = "goal.json"
-        self.collision_file_ = rospkg.RosPack().get_path("social_navigation") + "/config/collision_301_1f.png"
+        self.collision_file_ = rospkg.RosPack().get_path("social_navigation") + "/config/free_space_301_1f.png"
 
         # parameter for time
         self.time_ = 0.0
@@ -44,6 +45,7 @@ class PedSim:
         self.actor_prob_ = 1.0
         self.history_rollout_ = 5
         self.history_queue_ = []
+        self.timestep = 0
 
         # parameter for env
         self.goal_reward_coeff_ = 1.0
@@ -71,8 +73,29 @@ class PedSim:
             self.spawn_ = json.load(jf)
 
         # parameter for lidar
-        self.scan_size_ = 720
-        self.scan_dim_ = 20
+        self.scan_size_ = 1081
+        self.scan_dim_ = 30
+
+        #Lidar sin, cos, angles
+        self.lidar_angles = np.linspace(-np.pi/4, 5 * np.pi/4, 1081)
+        self.lidar_sin = np.sin(self.lidar_angles)
+        self.lidar_cos = np.cos(self.lidar_angles)
+
+
+        
+
+
+
+        #parameter for grid map
+        self.grid_size = 40
+        self.pixels_per_meter = 8
+
+        #collision map
+        self.col_x_range = np.linspace(-self.grid_size * 0.5 / self.pixels_per_meter, self.grid_size * 0.5 / self.pixels_per_meter, self.grid_size)
+        self.col_y_range = np.linspace(0.8 * self.grid_size / self.pixels_per_meter, -0.2 * self.grid_size / self.pixels_per_meter, self.grid_size)
+        self.col_mesh_x, self.col_mesh_y = np.meshgrid(self.col_x_range, self.col_y_range)
+        self.col_mesh_x = self.col_mesh_x.ravel()
+        self.col_mesh_y = self.col_mesh_y.ravel()
 
         # parameter for actor
         self.n_actor_ = 0
@@ -88,7 +111,7 @@ class PedSim:
         self.sub_pose_ = {}
 
         # parameter for env
-        self.max_goal_dist = 10.0
+        self.max_goal_dist = 5.0
         
 
         # paramter for trajectory
@@ -176,13 +199,15 @@ class PedSim:
         
     
     def callback_scan(self, msg):
-        ranges = np.nan_to_num(np.array(msg.ranges), copy=True, posinf=10.0, neginf=-0.0)
-        ranges = np.clip(ranges, 0.0, 10.0)
+        ranges = np.nan_to_num(np.array(msg.ranges), copy=True, posinf=self.max_goal_dist, neginf=-0.0)
+        ranges = np.clip(ranges, 0.0, self.max_goal_dist)
+        self.lidar_state_raw = ranges
         lidar_state = []
 
         for i in range(self.scan_dim_):
             lidar_state.append(np.mean(ranges[int(i*self.scan_size_/self.scan_dim_):int((i+1)*self.scan_size_/self.scan_dim_)]))
         self.lidar_state_ = lidar_state
+        
         
 
     def is_collision(self):
@@ -230,6 +255,10 @@ class PedSim:
         self.prev_ang = 0
         self.prev_acc = 0
         self.prev_acc_ang = 0
+        
+
+
+        self.timestep = 0
 
         self.recent_action = [0,0]
 
@@ -267,19 +296,21 @@ class PedSim:
         self.target_time_ = self.time_
         self.history_queue_ = []
         self.update_state()
+        self.prev_goal_distance = self.goal_distance
 
         return self.obs2list(self.get_obs())
     
 
     def step(self, a):
+        self.timestep += 1
         s = self.get_obs()
 
-        weight = 0.6
+        #weight = 0.6
 
         #print(a)
         a = action_list[a[0]]
 
-        a = [self.recent_action[0] * weight + np.clip(a[0], 0.0, 1.0) * (1-weight), self.recent_action[1] * weight + (1-weight) * np.clip(a[1], -1.0, 1.0)]
+        #a = [self.recent_action[0] * weight + np.clip(a[0], 0.0, 1.0) * (1-weight), self.recent_action[1] * weight + (1-weight) * np.clip(a[1], -1.0, 1.0)]
         self.recent_action = a
 
         self.jackal_cmd(a)
@@ -287,21 +318,40 @@ class PedSim:
         ns = self.get_obs()
 
         reward = 0.0
+
+        success_reward = 0.0
+        collision_reward = 0.0 # This is actually collision penalty
+        slack_reward = -0.002
+
+
         done = False
 
         # goal reward
-        goal_reward = s[0].goal_distance - ns[0].goal_distance
-        if ns[0].goal_distance < self.goal_threshold_:
+        dist_reward = self.prev_goal_distance - self.goal_distance
+        self.prev_goal_distance = self.goal_distance
+        #print(ns[0].goal_distance, goal_reward)
+        if self.goal_distance < self.goal_threshold_:
             done = True
+            success_reward = 1.0
+            print("goal reached!")
 
         # jackal cost
         control_cost = self.control_cost_coeff_ * (abs(ns[0].accel) + abs(ns[0].ang_vel - s[0].ang_vel))
 
         # map cost
         map_cost = self.map_cost_coeff_ * collision_cost(min(ns[0].lidar))
-        if min(self.lidar_state_) < self.map_collision_threshold_:
+        if min(self.lidar_state_) < self.map_collision_threshold_ or self.is_collision() == True:
             done = True
+            collision_reward = -1
+            if min(self.lidar_state_) < self.map_collision_threshold_:
+                print('lidar collision')
+            if self.is_collision() == True:
+                print("out of bounds")
 
+
+
+        if not done and self.timestep >= 200:
+            print('timeout!')
         
         # peds cost
         ped_cost = 0.0
@@ -313,12 +363,12 @@ class PedSim:
             ped_cost += collision_cost(d)
         ped_cost = self.ped_cost_coeff_ * ped_cost
 
-        reward = goal_reward
+        reward = dist_reward + collision_reward + success_reward + slack_reward
         cost = control_cost + map_cost + ped_cost
 
         cost = 0 #Temporary
 
-        info = {'reward':{'total': reward, 'goal': goal_reward}, 'cost': {'total': cost, 'control':control_cost, 'map': map_cost, 'ped': ped_cost}, 'done': done, 'dist': ns[0].goal_distance}
+        info = {'reward':{'total': reward, 'dist': dist_reward, 'success' : success_reward, 'collision' : collision_reward, 'slack' : slack_reward}, 'cost': {'total': cost, 'control':control_cost, 'map': map_cost, 'ped': ped_cost}, 'done': done, 'dist': ns[0].goal_distance}
         
         if self.mode_ == 'RL':
             reward = reward - cost
@@ -339,7 +389,7 @@ class PedSim:
 
     def get_dim(self):
         o = self.reset()
-        return o.shape[0], 15
+        return o['flat'].shape[0], 15
 
 
     def get_random_action(self):
@@ -348,7 +398,7 @@ class PedSim:
 
 
     def obs2list(self, obs):
-        rt = []
+        rt = {'grid' :[], 'flat': []}
         for i in range(len(obs)):
             state = []
             state.append(obs[i].lin_vel)
@@ -363,8 +413,11 @@ class PedSim:
                 state.append(ped.x)
                 state.append(ped.y)
             '''
-            rt += state
-        return np.array(rt)
+            rt['flat'] += state
+            rt['grid'].append(np.array(obs[i].grid_map).reshape(3, 40, 40))
+        rt['grid'] = np.concatenate(rt['grid'], axis=0)
+        rt['flat'] = np.array(rt['flat'])
+        return rt
 
 
     def replace_jackal(self, pose):
@@ -401,6 +454,7 @@ class PedSim:
         return Point(goal[0], goal[1], 2.0)
 
 
+   
     def update_state(self):
         state = StateInfo()
         #import ipdb;ipdb.set_trace
@@ -412,24 +466,33 @@ class PedSim:
         ct = qx / (qx ** 2 + qy ** 2) ** 0.5
         st = qy / (qx ** 2 + qy ** 2) ** 0.5
 
+
+
+        
+
+
         # goal state
         gx, gy = transform_coordinate(self.jackal_goal_[0] - jx, self.jackal_goal_[1] - jy, ct, st)
         state.goal_distance = (gx**2 + gy**2)**0.5
         dir_gx = gx / state.goal_distance
         dir_gy = gy / state.goal_distance
         state.goal = Point(dir_gx, dir_gy, 0)
+
+        self.goal_distance = state.goal_distance
+
+        state.goal_distance = state.goal_distance if state.goal_distance < self.max_goal_dist else self.max_goal_dist #Clio goal distance going into
         
 
         # jackal state
         state.lin_vel = self.jackal_twist_.linear.x ** 2 + self.jackal_twist_.linear.y ** 2
         state.ang_vel = self.jackal_twist_.angular.z
-        state.accel = 0.1 * (state.lin_vel - self.prev_vel)/self.dt_ # 0.1 multiplied for normalization, the actual value is (state.lin_vel - self.prev_vel)/self.dt
+        state.accel = 0.2 * (state.lin_vel - self.prev_vel) / self.dt_
+        self.prev_vel = state.lin_vel
 
-        #import ipdb;ipdb.set_trace()
-        
+
 
         # lidar state
-        state.lidar = ((1-np.array(self.lidar_state_)) / 10).tolist()
+        state.lidar = (1-np.array(self.lidar_state_) / self.max_goal_dist).tolist()
 
         # pedestrian state
         peds = []
@@ -438,6 +501,85 @@ class PedSim:
             # print("px: %.2f, py: %.2f, jx: %.2f, jy: %.2f, x: %.2f, y: %.2f, ct: %.2f, st: %.2f" %(px, py, jx, jy, self.pose_[name].x, self.pose_[name].y, ct, st))
             peds.append(Point(px, py, 0.0))
         state.pedestrians = sorted(peds, key=norm_2d)
+
+        cur_time = time.time()
+
+        #lidar grid
+        
+        lidar_x = self.lidar_state_raw * self.lidar_cos
+        lidar_y = self.lidar_state_raw * self.lidar_sin
+        #print(time.time() - cur_time)
+        cur_time = time.time()
+
+        transformed_lidar_x = ((self.grid_size + 1) / 2 + self.pixels_per_meter * lidar_x).astype(int)
+        transformed_lidar_y = (0.8 * self.grid_size - self.pixels_per_meter * lidar_y).astype(int)
+        #print(time.time() - cur_time)
+        cur_time = time.time()
+
+
+        valid_lidar = np.array([transformed_lidar_x >= 0, transformed_lidar_x < self.grid_size, transformed_lidar_y >= 0, transformed_lidar_y < self.grid_size])
+        valid_lidar = np.all(valid_lidar, axis=0)
+        #print(time.time() - cur_time)
+        cur_time = time.time()
+
+        lidar_x_valid = transformed_lidar_x[valid_lidar]
+        lidar_y_valid = transformed_lidar_y[valid_lidar]
+        #print(time.time() - cur_time)
+        cur_time = time.time()
+
+        lidar_indices = self.grid_size * lidar_y_valid + lidar_x_valid
+        #print(time.time() - cur_time)
+        cur_time = time.time()
+
+        lidar_grid_map = np.bincount(lidar_indices, minlength = self.grid_size * self.grid_size)
+        lidar_grid_map = lidar_grid_map.reshape((self.grid_size, self.grid_size))
+        #print(time.time() - cur_time)
+        cur_time = time.time()
+
+        lidar_grid_map = np.expand_dims(lidar_grid_map, axis=0)
+        #print('hi1' ,time.time() - cur_time)
+        cur_time = time.time()
+
+
+
+        #collision map grid
+        
+
+
+        col_jackal_x = self.col_mesh_y
+        col_jackal_y = -self.col_mesh_x
+
+        col_gazebo_x = jx + col_jackal_x * ct - col_jackal_y * st
+        col_gazebo_y = jy + col_jackal_x * st + col_jackal_y * ct
+        
+        col_map_x = ((col_gazebo_x - self.cx_) / self.sx_).astype(int)
+        col_map_y = ((col_gazebo_y - self.cy_) / self.sy_).astype(int)
+
+        
+        col_map_valid = col_map_y * self.img_w_ + col_map_x
+
+        np_collision_map = np.array(self.collision_map_).ravel()
+        np_collision_map_valid = np_collision_map[col_map_valid]
+
+        col_map = (np_collision_map_valid==0)
+        col_map = np.expand_dims(col_map.reshape((self.grid_size, self.grid_size)), axis=0)
+
+
+
+        
+        
+        
+
+
+        #pedestrian grid
+        pedestrian_grid = np.zeros_like(lidar_grid_map)
+
+        grid_map = np.concatenate([lidar_grid_map, col_map, pedestrian_grid], axis=0)
+
+        state.grid_map = (grid_map>0).astype(float).ravel().tolist()
+
+
+
         
         self.history_queue_.append(state)
         if len(self.history_queue_) > self.history_rollout_:

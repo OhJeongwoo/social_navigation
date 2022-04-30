@@ -8,6 +8,7 @@ import time
 import matplotlib.pyplot as plt
 import argparse
 import rospy
+import wandb
 
 from model_discrete import SACCoreDiscrete
 import torch.nn
@@ -18,6 +19,9 @@ from gazebo_master import PedSim
 PROJECT_PATH = os.path.abspath("..")
 POLICY_PATH = PROJECT_PATH + "/policy/"
 YAML_PATH = PROJECT_PATH + "/yaml/"
+
+wandb.init(project='starlab')
+wandb.run.name = 'sac'
 
 if __name__ == "__main__":
     rospy.init_node("sac")
@@ -74,8 +78,8 @@ if __name__ == "__main__":
 
     # create model and replay buffer
     ac_ = SACCoreDiscrete(exp_obs_dim_, exp_act_dim_, hidden_layers_, learning_rate_, device_, options_).to(device_)
-    #ac_weights = torch.load(POLICY_PATH + exp_name_ + "/ac_best.pt")
-    #ac_.load_state_dict(ac_weights.state_dict())
+    ac_weights = torch.load(POLICY_PATH + exp_name_ + "/ac_219.pt")
+    ac_.load_state_dict(ac_weights.state_dict())
     ac_tar_ = deepcopy(ac_)
     replay_buffer_ = ReplayBuffer(exp_obs_dim_, 1, replay_size_, device_)
 
@@ -86,8 +90,9 @@ if __name__ == "__main__":
     # define q loss function
     def compute_loss_q(data):
         o, a, r, o2, d = data['obs'], data['act'], data['rew'], data['obs2'], data['done']
-        q1 = ac_.q1(o)
-        q2 = ac_.q2(o)
+        encoded_o = ac_.encoder(o['grid'])
+        q1 = ac_.q1(o['flat'], encoded_o)
+        q2 = ac_.q2(o['flat'], encoded_o)
         q1_current = q1.gather(1, a.long()).squeeze(-1)
         q2_current = q2.gather(1, a.long()).squeeze(-1)
         # Bellman backup for Q functions
@@ -95,11 +100,11 @@ if __name__ == "__main__":
             # Target actions come from *current* policy
             
 
-
-            a2_probs = ac_.pi(o2) + 1e-8
+            encoded_o2 = ac_.encoder(o2['grid'])
+            a2_probs = ac_.pi(o2['flat'], encoded_o2) + 1e-8
             a2_log_probs = torch.log(a2_probs)
-            q1_tar = ac_tar_.q1(o2)
-            q2_tar = ac_tar_.q2(o2)
+            q1_tar = ac_tar_.q1(o2['flat'], encoded_o2)
+            q2_tar = ac_tar_.q2(o2['flat'], encoded_o2)
             q_tar = torch.min(q1_tar, q2_tar)
 
             backup = r + gamma_ * (1-d) * torch.sum(a2_probs * (q_tar - alpha_ * a2_log_probs), dim=-1)
@@ -120,10 +125,11 @@ if __name__ == "__main__":
     # define pi loss function
     def compute_loss_pi(data):
         o = data['obs']
-        probs = ac_.pi(o) + 1e-8
+        encoded_o = ac_.encoder(o['grid']).detach()
+        probs = ac_.pi(o['flat'], encoded_o) + 1e-8
         log_probs = torch.log(probs)
-        q1_pi = ac_.q1(o)
-        q2_pi = ac_.q2(o)
+        q1_pi = ac_.q1(o['flat'], encoded_o)
+        q2_pi = ac_.q2(o['flat'], encoded_o)
         q_pi = torch.min(q1_pi, q2_pi)
         # Entropy-regularized policy loss
         loss_pi = torch.sum(probs *(alpha_ * log_probs - q_pi), dim=-1).mean()
@@ -133,12 +139,30 @@ if __name__ == "__main__":
 
         return loss_pi
 
+    def compute_entropy(data):
+        o = data['obs']
+        encoded_o = ac_.encoder(o['grid']).detach()
+        probs = ac_.pi(o['flat'], encoded_o) + 1e-8
+        log_probs = torch.log(probs)
+        
+        # Entropy-regularized policy loss
+        entropy = torch.sum(-probs *log_probs, dim=-1).mean()
+
+        # Useful info for logging
+        #pi_info = dict(LogPi=log_probs.detach().cpu().numpy())
+
+        return entropy
+
+
+
     # define update function
     def update(data):
         ac_.q1.optimizer.zero_grad()
         ac_.q2.optimizer.zero_grad()
+        ac_.encoder.optimizer.zero_grad()
         loss_q = compute_loss_q(data)
         loss_q.backward()
+        ac_.encoder.optimizer.step()
         ac_.q1.optimizer.step()
         ac_.q2.optimizer.step()
         
@@ -146,15 +170,22 @@ if __name__ == "__main__":
             p.requires_grad = False
         for p in ac_.q2.parameters():
             p.requires_grad = False
+        for p in ac_.encoder.parameters():
+            p.requires_grad = False
+        
 
         ac_.pi.optimizer.zero_grad()
         loss_pi = compute_loss_pi(data)
         loss_pi.backward()
         ac_.pi.optimizer.step()
 
+        entropy = compute_entropy(data)
+
         for p in ac_.q1.parameters():
             p.requires_grad = True
         for p in ac_.q2.parameters():
+            p.requires_grad = True
+        for p in ac_.encoder.parameters():
             p.requires_grad = True
 
         with torch.no_grad():
@@ -164,8 +195,12 @@ if __name__ == "__main__":
                 p_targ.data.mul_(polyak_)
                 p_targ.data.add_((1 - polyak_) * p.data)
 
+        return {'value loss' : loss_q.detach().cpu().item(), 'policy loss' : loss_pi.detach().cpu().item(), 'entropy' : entropy.detach().cpu().item()}
+
     def get_action(o, remove_grad=True, train=True):
-        a = ac_(torch.unsqueeze(torch.as_tensor(o, dtype=torch.float32), dim=0).to(device=device_), train= train)[0]
+        #a = ac_(torch.unsqueeze(torch.as_tensor(o, dtype=torch.float32), dim=0).to(device=device_), train= train)[0]
+        a = ac_({'grid' : torch.unsqueeze(torch.as_tensor(o['grid'], dtype=torch.float32), dim=0).to(device=device_),
+        'flat' : torch.unsqueeze(torch.as_tensor(o['flat'], dtype=torch.float32), dim=0).to(device=device_)}, train=train)[0]
         if remove_grad:
             return a.detach().cpu().numpy()
         return a
@@ -190,8 +225,11 @@ if __name__ == "__main__":
 
     ts_axis = []
     rt_axis = []
+    
     max_avg_rt = -1000.0
+    prev_time = 0
 
+    score_logger = []
     # Main loop: collect experience in env and update/log each epoch
     for t in range(total_steps):
         # Until start_steps have elapsed, randomly sample actions
@@ -199,6 +237,11 @@ if __name__ == "__main__":
         # use the learned policy. 
         #import ipdb;ipdb.set_trace()
         if t >= 0:
+        
+        
+        #if t >= args['start_steps']:
+            #print(time.time() - prev_time)
+            #prev_time = time.time()
             a = get_action(o)
         else:
             a = [env_.get_random_action()]
@@ -228,15 +271,19 @@ if __name__ == "__main__":
         # End of trajectory handling
         if d or (ep_len == exp_epi_len_):
             #print(info['dist'])
+            score_logger.append(ep_ret)
             o, ep_ret, ep_len = env_.reset(), 0, 0
 
-        
         # Update handling
-        if t >= update_after_ and t % update_every_ == 0:
+        if (t+1) >= update_after_ and (t+1) % update_every_ == 0:
             for j in range(update_every_):
                 batch = replay_buffer_.sample_batch(batch_size_)
-                update(data=batch)
-
+                log_infos = update(data=batch)
+            log_infos['time steps']  = t
+            log_infos['reward'] = np.mean(score_logger[-3:])
+            wandb.log(log_infos)
+         
+        '''
         # End of epoch handling
         if (t+1) % steps_per_epoch_ == 0:
             epoch = (t+1) // steps_per_epoch_
@@ -255,3 +302,8 @@ if __name__ == "__main__":
                 plt.plot(ts_axis, rt_axis)
                 plt.pause(0.001)
             o = env_.reset()
+            loss_infos['reward'] = avg_rt
+        '''
+        if (t+1) % steps_per_epoch_ == 0:
+            epoch = (t+1) // steps_per_epoch_
+            torch.save(ac_, POLICY_PATH + exp_name_ + "/ac_" + str(epoch).zfill(3)+".pt")

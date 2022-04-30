@@ -1,0 +1,38 @@
+2022-04-29 22:45:34,412 INFO    MainThread:410016 [wandb_setup.py:_EarlyLogger._flush():75] Loading settings from /home/brain5/.config/wandb/settings
+2022-04-29 22:45:34,413 INFO    MainThread:410016 [wandb_setup.py:_EarlyLogger._flush():75] Loading settings from /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/settings
+2022-04-29 22:45:34,413 INFO    MainThread:410016 [wandb_setup.py:_EarlyLogger._flush():75] Loading settings from environment variables: {}
+2022-04-29 22:45:34,413 INFO    MainThread:410016 [wandb_setup.py:_EarlyLogger._flush():75] Inferring run settings from compute environment: {'program_relpath': 'scripts/sac_discrete.py', 'program': 'sac_discrete.py'}
+2022-04-29 22:45:34,414 INFO    MainThread:410016 [wandb_init.py:_WandbInit._log_setup():437] Logging user logs to /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220429_224534-qlyxxqud/logs/debug.log
+2022-04-29 22:45:34,414 INFO    MainThread:410016 [wandb_init.py:_WandbInit._log_setup():438] Logging internal logs to /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220429_224534-qlyxxqud/logs/debug-internal.log
+2022-04-29 22:45:34,414 INFO    MainThread:410016 [wandb_init.py:_WandbInit.init():471] calling init triggers
+2022-04-29 22:45:34,414 INFO    MainThread:410016 [wandb_init.py:_WandbInit.init():474] wandb.init called with sweep_config: {}
+config: {}
+2022-04-29 22:45:34,414 INFO    MainThread:410016 [wandb_init.py:_WandbInit.init():524] starting backend
+2022-04-29 22:45:34,414 INFO    MainThread:410016 [backend.py:Backend._multiprocessing_setup():97] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2022-04-29 22:45:34,429 INFO    MainThread:410016 [backend.py:Backend.ensure_launched():217] starting backend process...
+2022-04-29 22:45:34,442 INFO    MainThread:410016 [backend.py:Backend.ensure_launched():222] started backend process with pid: 410039
+2022-04-29 22:45:34,444 INFO    MainThread:410016 [wandb_init.py:_WandbInit.init():533] backend started and connected
+2022-04-29 22:45:34,450 INFO    MainThread:410016 [wandb_init.py:_WandbInit.init():597] updated telemetry
+2022-04-29 22:45:34,482 INFO    MainThread:410016 [wandb_init.py:_WandbInit.init():628] communicating run to backend with 30 second timeout
+2022-04-29 22:45:35,845 INFO    MainThread:410016 [wandb_run.py:Run._on_init():1923] communicating current version
+2022-04-29 22:45:35,913 INFO    MainThread:410016 [wandb_run.py:Run._on_init():1927] got version response 
+2022-04-29 22:45:35,913 INFO    MainThread:410016 [wandb_init.py:_WandbInit.init():659] starting run threads in backend
+2022-04-29 22:45:37,046 WARNING MainThread:410016 [wandb_init.py:init():1016] interrupted
+Traceback (most recent call last):
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/wandb/sdk/wandb_init.py", line 995, in init
+    run = wi.init()
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/wandb/sdk/wandb_init.py", line 670, in init
+    _ = backend.interface.communicate_run_start(run_obj)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/wandb/sdk/interface/interface.py", line 221, in communicate_run_start
+    result = self._communicate_run_start(run_start)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/wandb/sdk/interface/interface_shared.py", line 440, in _communicate_run_start
+    result = self._communicate(rec)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/wandb/sdk/interface/interface_shared.py", line 226, in _communicate
+    return self._communicate_async(rec, local=local).get(timeout=timeout)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/wandb/sdk/interface/router.py", line 37, in get
+    is_set = self._object_ready.wait(timeout)
+  File "/home/brain5/anaconda3/lib/python3.8/threading.py", line 558, in wait
+    signaled = self._cond.wait(timeout)
+  File "/home/brain5/anaconda3/lib/python3.8/threading.py", line 306, in wait
+    gotit = waiter.acquire(True, timeout)
+KeyboardInterrupt

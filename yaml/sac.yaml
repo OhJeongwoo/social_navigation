@@ -18,17 +18,17 @@ pi_options: ['default', 'leaky-relu', 'default']
 replay_size: 10000
 gamma: 0.99
 polyak: 0.995
-alpha: 0.2
+alpha: 0.002
 
 # training hyperparameters
-learning_rate: 0.001
+learning_rate: 0.0001
 epochs: 1000
-steps_per_epoch: 400
+steps_per_epoch: 1000
 batch_size: 256
 n_log_epi: 10
 start_steps: 1000
-update_after: 100
-update_every: 50
+update_after: 1000
+update_every: 200
 save_interval: 10
 plot_rendering: True
 

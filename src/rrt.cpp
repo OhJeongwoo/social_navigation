@@ -376,4 +376,3 @@ int main(int argc,char** argv){
   RRT rrt = RRT();
   ros::spin();
 }
-

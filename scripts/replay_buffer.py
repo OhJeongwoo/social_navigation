@@ -50,7 +50,9 @@ def statistics_scalar(x):
 class ReplayBuffer:
     def __init__(self, obs_dim, act_dim, size, device):
         self.obs_buf = np.zeros(combined_shape(size, obs_dim), dtype=np.float32)
+        self.obs_grid_buf = np.zeros((size, 15, 40, 40), dtype=np.float32)
         self.obs2_buf = np.zeros(combined_shape(size, obs_dim), dtype=np.float32)
+        self.obs2_grid_buf = np.zeros((size, 15, 40, 40), dtype=np.float32)
         self.act_buf = np.zeros(combined_shape(size, act_dim), dtype=np.float32)
         self.rew_buf = np.zeros(size, dtype=np.float32)
         self.done_buf = np.zeros(size, dtype=np.float32)
@@ -58,8 +60,10 @@ class ReplayBuffer:
         self.device = device
 
     def store(self, obs, act, rew, next_obs, done):
-        self.obs_buf[self.ptr] = obs
-        self.obs2_buf[self.ptr] = next_obs
+        self.obs_buf[self.ptr] = obs['flat']
+        self.obs_grid_buf[self.ptr] = obs['grid']
+        self.obs2_buf[self.ptr] = next_obs['flat']
+        self.obs2_grid_buf[self.ptr] = next_obs['grid']
         self.act_buf[self.ptr] = act
         self.rew_buf[self.ptr] = rew
         self.done_buf[self.ptr] = done
@@ -68,12 +72,15 @@ class ReplayBuffer:
 
     def sample_batch(self, batch_size=32):
         idxs = np.random.randint(0, self.size, size=batch_size)
-        batch = dict(obs=self.obs_buf[idxs],
-                     obs2=self.obs2_buf[idxs],
-                     act=self.act_buf[idxs],
-                     rew=self.rew_buf[idxs],
-                     done=self.done_buf[idxs])
-        return {k: torch.as_tensor(v, dtype=torch.float32).to(device=self.device) for k,v in batch.items()}
+        batch = dict(obs={'flat': torch.as_tensor(self.obs_buf[idxs], dtype=torch.float32).to(device=self.device),
+                        'grid': torch.as_tensor(self.obs_grid_buf[idxs], dtype=torch.float32).to(device=self.device)},
+                     obs2={'flat': torch.as_tensor(self.obs2_buf[idxs], dtype=torch.float32).to(device=self.device),
+                        'grid': torch.as_tensor(self.obs2_grid_buf[idxs], dtype=torch.float32).to(device=self.device)},
+                     act=torch.as_tensor(self.act_buf[idxs], dtype=torch.float32).to(device=self.device),
+                     rew=torch.as_tensor(self.rew_buf[idxs], dtype=torch.float32).to(device=self.device),
+                     done=torch.as_tensor(self.done_buf[idxs], dtype=torch.float32).to(device=self.device))
+        return batch
+        #return {k: torch.as_tensor(v, dtype=torch.float32).to(device=self.device) for k,v in batch.items()}
 
 
 class PPOBuffer:

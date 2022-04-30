@@ -5,3 +5,4 @@ geometry_msgs/Point goal
 float64[] lidar
 geometry_msgs/Point[] pedestrians
 float64 goal_distance
+float64[] grid_map

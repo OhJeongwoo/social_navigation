@@ -67,10 +67,10 @@ class Depth2PC{
   double cy = 374.88818359375;
   double tx = -0.05911977216601372;
   double ty = -2.3358141334028915e-05;
-  double min_x = -2.0;
-  double max_x = 2.0;
+  double min_x = -10.0;
+  double max_x = 10.0;
   double min_z = -1.0;
-  double max_z = 10.0;
+  double max_z = 15.0;
   double resolution = 0.02;
   int W_ = int((max_x-min_x) / resolution);
   int H_ = int((max_z-min_z) / resolution);
@@ -185,14 +185,14 @@ class Depth2PC{
       }
       sort(pv.begin(), pv.end(), compare);
       if(n==0) continue;
-      for(int t = int(n/10); t<int(9*n/10);t++){
+      for(int t = int(2*n/10); t<int(8*n/10);t++){
         x += pv[t].x;
         y += pv[t].y;
         z += pv[t].z;
       }
-      x /= (int(9*n/10) - int(n/10));
-      y /= (int(9*n/10) - int(n/10));
-      z /= (int(9*n/10) - int(n/10));
+      x /= (int(8*n/10) - int(2*n/10));
+      y /= (int(8*n/10) - int(2*n/10));
+      z /= (int(8*n/10) - int(2*n/10));
       // x /= n;
       // y /= n;
       // z /= n;
@@ -233,7 +233,7 @@ class Depth2PC{
       if(x<min_x || x >max_x || z < min_z || z > max_z) continue;
       int px = int((x - min_x) / resolution);
       int py = int((z - min_z) / resolution);
-      cv::circle(image, cv::Point(px, py), 10, CV_RGB(255,0,0), -1);     
+      cv::circle(image, cv::Point(px, py), 30, CV_RGB(255,0,0), -1);     
     }
     cv_bridge::CvImage img_bridge;
     sensor_msgs::Image img_msg; // >> message to be sent
