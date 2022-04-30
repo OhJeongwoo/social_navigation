@@ -20,6 +20,7 @@ str_kd = 1.0
 action_list = [[0.0, -1], [0.0, -0.5], [0.0, 0.0], [0.0, 0.5], [0.0, 1.0]
              , [0.5, -1], [0.5, -0.5], [0.5, 0.0], [0.5, 0.5], [0.5, 1.0]
              , [1.0, -1], [1.0, -0.5], [1.0, 0.0], [1.0, 0.5], [1.0, 1.0]]
+STOP = 2
 
 def check_path(path_name):
     if not os.path.exists(path_name):
@@ -226,10 +227,10 @@ def purepursuit(pose, goal, v, prv_acc_err =None, prv_str_err=None):
 
 def get_similar_action(a):
     min_d = get_length(action_list[0], a)
-    rt = action_list[0]
-    for act in action_list:
+    rt = 0
+    for i, act in enumerate(action_list):
         d = get_length(act, a)
         if min_d > d:
             min_d = d
-            rt = act
-    return rt
+            rt = i
+    return [rt]
