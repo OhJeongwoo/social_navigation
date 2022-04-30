@@ -13,9 +13,13 @@
 
 #include <sensor_msgs/PointCloud2.h>
 #include "sensor_msgs/Image.h"
+#include "sensor_msgs/LaserScan.h"
 #include "geometry_msgs/Point.h"
+#include "gazebo_msgs/ModelStates.h"
 #include "std_msgs/Int32.h"
+#include "std_msgs/Float64MultiArray.h"
 #include "social_navigation/RRT.h"
+#include "social_navigation/RRTresponse.h"
 
 #include <image_geometry/pinhole_camera_model.h> 
 
@@ -96,22 +100,30 @@ class RRT{
     ros::NodeHandle nh_;
     ros::Publisher pub_;
     ros::Subscriber sub_;
+    ros::Subscriber sub_lidar_;
+    ros::Subscriber sub_jackal_;
 
     point root_;
     point goal_;
     int step_;
     int max_sample_;
-    int lookahead_;
     double distance_threshold_;
     double tau_;
     double coeff_tau_;
     vector<node> local_path_;
     int path_length_;
+    double lambda_;
+    double collision_threshold_;
+    bool stop_;
 
     double x_min_;
     double x_max_;
     double y_min_;
     double y_max_;
+
+    double jx_;
+    double jy_;
+    double jt_;
 
     double sx_;
     double sy_;
@@ -123,7 +135,16 @@ class RRT{
     stringstream pkg_path_;
     string collision_file_;
     string image_file_;
+    string costmap_file_;
     Mat local_map_;
+    Mat cost_map_;
+    Mat local_cost_map_;
+    int skip_angle_;
+    int kernel_block_;
+    double kernel_step_;
+    int kernel_half_;
+    int kernel_size_;
+    vector<vector<int>> kernel_;
     const char delimiter =  ' ';
 
     clock_t init_time_;
@@ -139,8 +160,18 @@ class RRT{
         pkg_path_ << ros::package::getPath("social_navigation") << "/";
         collision_file_ = pkg_path_.str() + "config/collision_301_1f.txt";
         image_file_ = pkg_path_.str() + "config/free_space_301_1f.png";
+        costmap_file_ = pkg_path_.str() + "config/costmap_301_1f.png";
         local_map_ = imread(image_file_, CV_8UC1);
-        load_collision_map();
+        cost_map_ = imread(costmap_file_, CV_8UC1);
+        img_w_ = cost_map_.rows;
+        img_h_ = cost_map_.cols;
+        local_cost_map_ = Mat(img_w_, img_h_, CV_8UC1, Scalar(0));
+        
+        kernel_block_ = 7;
+        kernel_step_ = 0.05;
+        kernel_half_ = 20;
+        kernel_size_ = 2 * kernel_half_ + 1;
+        build_kernel();
         
         // sy_ = -2.517*0.02;
         // sx_ = 2.494*0.02;
@@ -158,14 +189,36 @@ class RRT{
         distance_threshold_ = 1.0;
         tau_ = 0.2;
         coeff_tau_ = 5.0;
-        lookahead_ = 10;
         path_length_ = 50;
+        lambda_ = 0.3;
+        collision_threshold_ = 0.8;
+        stop_ = false;
 
         draw_ = true;
         cout << "complete to initialize" << endl;
 
-        pub_ = nh_.advertise<geometry_msgs::Point>("/local_goal", 1000);
+        pub_ = nh_.advertise<social_navigation::RRTresponse>("/local_goal", 1000);
+        sub_lidar_ = nh_.subscribe("/front/scan", 1, &RRT::callback_lidar, this);
+        sub_jackal_ = nh_.subscribe("/gazebo/model_states", 1, &RRT::callback_jackal, this);
+        sleep(1.0);
         sub_ = nh_.subscribe("/rrt", 1, &RRT::callback, this);
+    }
+
+    void build_kernel(){
+        for(int i = 0; i < kernel_size_; i++){
+            cout << i<<endl;
+            vector<int> kernel_row;
+            for(int j = 0; j < kernel_size_; j++){
+                int d = abs(i - kernel_half_) + abs(j - kernel_half_);
+                if(d <= kernel_block_) kernel_row.push_back(255);
+                else{
+                    double x = 1 - (d - kernel_block_) * kernel_step_;
+                    if(x<0) kernel_row.push_back(0);
+                    else kernel_row.push_back(int(x*255));
+                }
+            }
+            kernel_.push_back(kernel_row);
+        }
     }
 
     void callback(const social_navigation::RRT::ConstPtr& msg){
@@ -174,12 +227,64 @@ class RRT{
 
         cout << "root: " << root_.first << ", " << root_.second << endl;
         cout << "goal: " << goal_.first << ", " << goal_.second << endl;
-        point local_goal = rrt(msg->option);
-        geometry_msgs::Point rt;
-        rt.x = local_goal.first;
-        rt.y = local_goal.second;
-        rt.z = 0.0;
+        cout << get_cost(root_) << endl;
+        
+        vector<point> path = rrt(msg->option);
+        cout << path.size() << endl;
+        social_navigation::RRTresponse rt;
+        vector<geometry_msgs::Point> rt_data;
+        for(point p : path) {
+            geometry_msgs::Point x;
+            x.x = p.first;
+            x.y = p.second;
+            x.z = 0.0;
+            rt_data.push_back(x);
+        }
+        rt.path = rt_data;
+        rt.stop = stop_;
         pub_.publish(rt);
+    }
+
+
+    void callback_lidar(const sensor_msgs::LaserScan::ConstPtr& msg){
+        Mat local_cost_map = Mat(img_w_, img_h_, CV_8UC1, Scalar(0));
+        double w = msg->angle_min;
+        double dw = msg->angle_increment;
+        int n = msg->ranges.size();
+        for(int k = 0; k < n; k++){
+            if(isinf(msg->ranges[k])||isnan(msg->ranges[k])) continue;
+            double a = jt_ + w + dw * k;
+            double x = jx_ + msg->ranges[k] * cos(a);
+            double y = jy_ + msg->ranges[k] * sin(a);
+            pixel p = get_pixel(point(x,y));
+            for(int i = -kernel_half_; i <= kernel_half_; i++){
+                for(int j = -kernel_half_; j <= kernel_half_; j++){
+                    int px = p.first + i;
+                    int py = p.second + j;
+                    local_cost_map.at<uchar>(px,py) = max<uchar>(local_cost_map.at<uchar>(px,py), kernel_[i+kernel_half_][j+kernel_half_]);
+                }
+            }
+        }
+        local_cost_map_ = local_cost_map;
+    }
+
+    void callback_jackal(const gazebo_msgs::ModelStates::ConstPtr& msg){
+        int idx = -1;
+        for(int i = 0; i < msg->name.size(); i++){
+            if(msg->name[i].compare("jackal") == 0) idx = i;
+        }
+        if(idx == -1) {
+            cout << "Jackal does not exist!!" << endl;
+            return;
+        }
+        geometry_msgs::Pose pos = msg->pose[idx];
+        geometry_msgs::Quaternion q = pos.orientation;
+        double qx = 1 - 2 * (q.y * q.y + q.z * q.z);
+        double qy = 2 * (q.w * q.z + q.x * q.y);
+        jx_ = pos.position.x;
+        jy_ = pos.position.y;
+        jt_ = atan2(qy, qx);
+        return;
     }
 
     void load_collision_map(){
@@ -213,16 +318,37 @@ class RRT{
         return pixel(px, py);
     }
 
+    double get_cost(point p){
+        int px = int((p.second-cy_)/sy_);
+        int py = int((p.first-cx_)/sx_);
+        if(px < 0 || px >= img_w_ || py < 0 || py >= img_h_) return INF;
+        return double(max(cost_map_.at<uchar>(px, py), local_cost_map_.at<uchar>(px,py))) / 255.0;
+    }
+
     point interpolate(point a, point b, double lambda){
         return point(a.first * lambda + b.first * (1 - lambda), a.second * lambda + b.second * (1 - lambda));
     }
 
+    double get_edge_cost(point a, point b){
+        double d = get_dist(a, b);
+        double c = 0.0;
+        for(int i = 0; i <= step_; i++) c += get_cost(interpolate(a, b, 1.0 * i / step_));
+        c /= step_ + 1;
+        return (c + lambda_) * d;
+    }
+
     bool is_collision(point a, point b){
-        for(int i = 0; i <= step_; i++){
-            pixel p = get_pixel(interpolate(a, b, 1.0 * i / step_));
-            if(p.first < 0 || p.first >= img_w_ || p.second < 0 || p.second >= img_h_) return true;
-            if(collision_map_[p.first][p.second]) return true;
-        }
+        // for(int i = 0; i <= step_; i++){
+        //     pixel p = get_pixel(interpolate(a, b, 1.0 * i / step_));
+        //     if(p.first < 0 || p.first >= img_w_ || p.second < 0 || p.second >= img_h_) return true;
+        //     if(collision_map_[p.first][p.second]) return true;
+        // }
+        // return false;
+        double c = 0.0;
+        for(int i = 0; i <= step_; i++) c += get_cost(interpolate(a, b, 1.0 * i / step_));
+        c /= step_ + 1;
+        // cout << c << endl;
+        if(c > collision_threshold_) return true;
         return false;
     }
 
@@ -242,18 +368,22 @@ class RRT{
         r.parent = -1;
         rt.push_back(r);
         double d = 0.0;
+        stop_ = false;
         for(int i = idx; i < local_path_.size(); i++){
             node r;
             r.p = local_path_[i].p;
             r.parent = i - idx;
-            d += get_dist(rt[i-idx].p, r.p);
+            // d += get_dist(rt[i-idx].p, r.p);
+            d += get_edge_cost(rt[i-idx].p, r.p);
+            if(is_collision(rt[i-idx].p, r.p)) stop_ = true;
             r.cost = d;
             rt.push_back(r);
         }
+        if(stop_) cout << "stop!!" << endl;
         return rt;
     }
 
-    point rrt(bool option){
+    vector<point> rrt(bool option){
         clock_t start = clock();
         point goal = goal_;
         point root = root_;
@@ -281,13 +411,15 @@ class RRT{
             vector<int> near_idx = find_near(p, pts, coeff_tau_ * tau_);
             node nnode = node(p);
             nnode.parent = idx;
-            nnode.cost = pts[idx].cost + get_dist(pts[idx].p, p);
+            // nnode.cost = pts[idx].cost + get_dist(pts[idx].p, p);
+            nnode.cost = pts[idx].cost + get_edge_cost(pts[idx].p, p);
             pts.push_back(nnode);
             pts[idx].childs.push_back(n_sample);
             for(int i = 0; i < near_idx.size(); i++){
                 int n_idx = near_idx[i];
                 if(n_idx == idx) continue;
-                if(pts[n_idx].cost > pts[n_sample].cost + get_dist(pts[n_idx].p, pts[n_sample].p)){
+                // if(pts[n_idx].cost > pts[n_sample].cost + get_dist(pts[n_idx].p, pts[n_sample].p)){
+                if(pts[n_idx].cost > pts[n_sample].cost + get_edge_cost(pts[n_idx].p, pts[n_sample].p)){
                     int par = pts[n_idx].parent;
                     if(par != -1){
                         vector<int> n_child;
@@ -298,7 +430,8 @@ class RRT{
                         pts[par].childs = n_child;
                     }
                     pts[n_idx].parent = n_sample;
-                    double delta_cost = pts[n_sample].cost + get_dist(pts[n_idx].p, pts[n_sample].p) - pts[n_idx].cost;
+                    // double delta_cost = pts[n_sample].cost + get_dist(pts[n_idx].p, pts[n_sample].p) - pts[n_idx].cost;
+                    double delta_cost = pts[n_sample].cost + get_edge_cost(pts[n_idx].p, pts[n_sample].p) - pts[n_idx].cost;
                     queue<int> q;
                     q.push(n_idx);
                     while(!q.empty()){
@@ -318,6 +451,7 @@ class RRT{
             if(dist < distance_threshold_ || n_sample > max_sample_) break;
         }
         vector<int> path;
+        vector<point> rt;
         while(1){
             path.push_back(nearest_index);
             pts[nearest_index].is_path = true;
@@ -340,32 +474,38 @@ class RRT{
             for(int i = path.size() - 1; i > path.size() - path_length_ ; i --) ntree.push_back(node(pts[path[i]].p));
             local_path_ = ntree;
         }
-        if(path.size() < lookahead_) return pts[path[0]].p;
-        return pts[path[path.size() - lookahead_]].p;
+        for(int i = 0; i < path.size(); i++) rt.push_back(pts[path[path.size()-1-i]].p);
+        return rt;
+        // if(path.size() < lookahead_) return pts[path[0]].p;
+        // return pts[path[path.size() - lookahead_]].p;
     }
 
     void draw(const vector<node>& pts, point goal){
         // local_map_ = Mat(img_h_, img_w_, CV_8UC3, Scalar(255,255,255));
         // local_map_ = Mat(img_h_, img_w_, CV_8UC3, Scalar(255,255,255));
-        local_map_ = imread(image_file_, CV_8UC1);
+        local_map_ = imread(costmap_file_, CV_8UC1);
         string local_map_save_path = pkg_path_.str() + "test.png";
         
+        for(int i = 0; i < img_w_; i++){
+            for(int j =0; j < img_h_; j++) local_map_.at<uchar>(i, j) = max(local_map_.at<uchar>(i, j), local_cost_map_.at<uchar>(i, j));
+        }
 
         for(const node& p: pts){
             if(p.parent == -1) continue;
             pixel cur = get_pixel(p.p);
             pixel par = get_pixel(pts[p.parent].p);
-            if(p.is_path) cv::line(local_map_, Point(cur.second, cur.first), Point(par.second, par.first), Scalar(0), 5);
-            else cv::line(local_map_, Point(cur.second, cur.first), Point(par.second, par.first), Scalar(140), 2);
+            if(p.is_path) cv::line(local_map_, Point(cur.second, cur.first), Point(par.second, par.first), Scalar(255), 5);
+            else cv::line(local_map_, Point(cur.second, cur.first), Point(par.second, par.first), Scalar(180), 2);
         }
         
         pixel root = get_pixel(pts[0].p);
-        cv::circle(local_map_,  Point(root.second, root.first), 10.0, Scalar(80), -1);
+        cv::circle(local_map_,  Point(root.second, root.first), 10.0, Scalar(280), -1);
 
         pixel pgoal = get_pixel(goal);
-        cv::circle(local_map_,  Point(pgoal.second, pgoal.first), 10.0, Scalar(40), -1);
+        cv::circle(local_map_,  Point(pgoal.second, pgoal.first), 10.0, Scalar(240), -1);
 
         cv::imwrite(local_map_save_path, local_map_);
+        // cv::imwrite(local_cost_map_save_path, local_cost_map_);
     }
 
 

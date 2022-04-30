@@ -39,6 +39,7 @@ add_message_files(
   PedestrianArray.msg
   StateInfo.msg
   RRT.msg
+  RRTresponse.msg
 )
 
 add_service_files(

@@ -1,4 +1,3 @@
-from black import T
 import rospy
 import rospkg
 import numpy as np
@@ -262,23 +261,23 @@ class PedSim:
 
         self.recent_action = [0,0]
 
-        # check valid starting point
-        candidates = []
-        for pos in self.spawn_:
-            check = True
-            for name in self.actor_name_:
-                if self.status_[name] != MOVE:
-                    continue
-                if get_length(pos['spawn'], [self.pose_[name].x, self.pose_[name].y]) < self.spawn_threshold_:
-                    check = False
-                    break
-            if check:
-                candidates.append(pos)
+        # # check valid starting point
+        # candidates = []
+        # for pos in self.spawn_:
+        #     check = True
+        #     for name in self.actor_name_:
+        #         if self.status_[name] != MOVE:
+        #             continue
+        #         if get_length(pos['spawn'], [self.pose_[name].x, self.pose_[name].y]) < self.spawn_threshold_:
+        #             check = False
+        #             break
+        #     if check:
+        #         candidates.append(pos)
 
         # randomly choice
-        candidate = random.choice(candidates)
-        self.jackal_goal_ = candidate['goal']
-        #self.jackal_goal_ = [28.9,16.7]
+        # candidate = random.choice(candidates)
+        # self.jackal_goal_ = candidate['goal']
+        self.jackal_goal_ = [28.9,16.7]
 
         # unpause gazebo
         self.is_pause_ = False
@@ -286,7 +285,12 @@ class PedSim:
         time.sleep(0.1)
 
         # replace jackal
-        self.replace_jackal(candidate['spawn'])
+        # self.replace_jackal(candidate['spawn'])
+        self.replace_jackal([-22,-4])
+        time.sleep(0.1)
+        # self.replace_goal(candidate['goal'])
+        self.replace_goal(self.jackal_goal_)
+        # print(candidate['goal'])
         self.jackal_cmd([0,0])
         
         # pause gazebo
@@ -438,6 +442,20 @@ class PedSim:
                 self.jackal_pose.orientation = y2q(yaw)
             
 
+        except:
+            pass
+
+    def replace_goal(self, pose):
+        req = SetModelStateRequest()
+        req.model_state.model_name = 'goal'
+        req.model_state.pose = Pose(position=Point(pose[0],pose[1],3.0), orientation=y2q(0.0))
+        print(req)
+        try:
+            res = self.set_model_(req)
+            print(res)
+            if not res.success:
+                print("error")
+                rospy.logwarn(res.status_message)
         except:
             pass
 
