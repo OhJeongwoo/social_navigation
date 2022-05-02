@@ -23,7 +23,8 @@ class PedSim:
     
     def __init__(self, mode='safeRL', gazebo_ns='/gazebo'):
         # parater for file
-        self.traj_file_ = "traj.json"
+        # self.traj_file_ = "traj.json"
+        self.traj_file_ = rospkg.RosPack().get_path("social_navigation") + "/config/ped_traj_candidate.json"
         self.spawn_file_ = "goal.json"
         self.collision_file_ = rospkg.RosPack().get_path("social_navigation") + "/config/free_space_301_1f.png"
 
@@ -71,6 +72,15 @@ class PedSim:
         with open(self.spawn_file_, 'r') as jf:
             self.spawn_ = json.load(jf)
 
+        self.waypoints_ = [[-28.44, 3.90], [-29.38, -5.60], [-21.05, -1.17], [-20.57, -7.67], [-13.99, -1.62],
+                           [-6.55, -2.20], [8.14, -2.49], [15.19, -7.38], [29.93, -7.62], [28.73, 15.92]]
+        self.n_waypoints_ = len(self.waypoints_)
+
+        self.ped_waypoints_ = [[-28.44, 3.90], [-29.38, -5.60], [-21.05, -1.17], [-20.57, -7.67], [-13.99, -1.62],
+                               [-6.55, -2.20], [8.14, -2.49], [15.19, -7.38], [29.93, -7.62], [28.73, 15.92]]
+        self.n_ped_waypoints_ = len(self.ped_waypoints_)
+        
+
         # parameter for lidar
         self.scan_size_ = 1081
         self.scan_dim_ = 30
@@ -79,11 +89,6 @@ class PedSim:
         self.lidar_angles = np.linspace(-np.pi/4, 5 * np.pi/4, 1081)
         self.lidar_sin = np.sin(self.lidar_angles)
         self.lidar_cos = np.cos(self.lidar_angles)
-
-
-        
-
-
 
         #parameter for grid map
         self.grid_size = 40
@@ -97,7 +102,7 @@ class PedSim:
         self.col_mesh_y = self.col_mesh_y.ravel()
 
         # parameter for actor
-        self.n_actor_ = 0
+        self.n_actor_ = 8
         self.actor_name_ = []
         self.status_ = {}
         self.status_time_ = {}
@@ -105,6 +110,7 @@ class PedSim:
         self.pose_ = {}
         self.goal_ = {}
         self.traj_idx_ = {}
+        self.waypoint_idx_ = {}
         self.pub_ = {}
         self.sub_status_ = {}
         self.sub_pose_ = {}
@@ -119,23 +125,25 @@ class PedSim:
 
 
         self.n_traj_ = len(self.traj_)
-        self.adj_mat_ = []
-
+        self.traj_list_ = [[] for _ in range(self.n_ped_waypoints_)]
         for i in range(self.n_traj_):
-            adj_row = []
-            for j in range(self.n_traj_):
-                check = False
-                n = len(self.traj_[i]['waypoints'])
-                m = len(self.traj_[j]['waypoints'])
-                for seq1 in range(n):
-                    for seq2 in range(m):
-                        if get_length(self.traj_[i]['waypoints'][seq1], self.traj_[j]['waypoints'][seq2]) < 3.0:
-                            check = True
-                            break
-                    if check:
-                        break
-                adj_row.append(check)
-            self.adj_mat_.append(adj_row)
+            self.traj_list_[self.traj_[i]['start']].append(i)
+
+        # for i in range(self.n_traj_):
+        #     adj_row = []
+        #     for j in range(self.n_traj_):
+        #         check = False
+        #         n = len(self.traj_[i]['waypoints'])
+        #         m = len(self.traj_[j]['waypoints'])
+        #         for seq1 in range(n):
+        #             for seq2 in range(m):
+        #                 if get_length(self.traj_[i]['waypoints'][seq1], self.traj_[j]['waypoints'][seq2]) < 3.0:
+        #                     check = True
+        #                     break
+        #             if check:
+        #                 break
+        #         adj_row.append(check)
+        #     self.adj_mat_.append(adj_row)
         
 
         # set actor parameters
@@ -145,6 +153,7 @@ class PedSim:
             self.status_[name] = WAIT
             self.status_time_[name] = self.time_
             self.traj_idx_[name] = -1
+            self.waypoint_idx_[name] = -1
             self.pub_[name] = rospy.Publisher('/' + name + '/cmd', Command, queue_size=10)
             self.sub_status_[name] = rospy.Subscriber('/' + name + '/status', Status, self.callback_status)
             # self.sub_pose_[name] = rospy.Subscriber('/' + name + '/pose', PoseStamped, self.callback_pose)
@@ -302,10 +311,12 @@ class PedSim:
 
         # replace jackal
         self.replace_jackal(candidate['spawn'])
-        #self.replace_jackal([-22,-4])
+        # self.replace_jackal([-22,-4])
+        # self.replace_jackal(self.waypoints_[root_index])
         time.sleep(0.1)
-        self.replace_goal(candidate['goal'])
-        
+        # self.replace_goal(candidate['goal'])
+        # self.replace_goal(self.jackal_goal_)
+        # print(candidate['goal'])
         self.jackal_cmd([0,0])
         
         # pause gazebo
@@ -321,6 +332,7 @@ class PedSim:
     
 
     def step(self, a):
+        
         self.timestep += 1
         s = self.get_obs()
 
@@ -474,19 +486,19 @@ class PedSim:
         except:
             pass
 
-    def replace_goal(self, pose):
-        req = SetModelStateRequest()
-        req.model_state.model_name = 'goal'
-        req.model_state.pose = Pose(position=Point(pose[0],pose[1],3.0), orientation=y2q(0.0))
-        print(req)
-        try:
-            res = self.set_model_(req)
-            print(res)
-            if not res.success:
-                print("error")
-                rospy.logwarn(res.status_message)
-        except:
-            pass
+    # def replace_goal(self, pose):
+    #     req = SetModelStateRequest()
+    #     req.model_state.model_name = 'goal'
+    #     req.model_state.pose = Pose(position=Point(pose[0],pose[1],3.0), orientation=y2q(0.0))
+
+    #     try:
+    #         res = self.set_model_(req)
+    #         print(res)
+    #         if not res.success:
+    #             print("error")
+    #             rospy.logwarn(res.status_message)
+    #     except:
+    #         pass
 
 
     def get_goal(self, name):
@@ -498,6 +510,8 @@ class PedSim:
         B = traj['waypoints'][k+1]
         alpha = (time - interval * k) / interval
         goal = interpolate(A,B,alpha)
+        # d = ((goal[0]-self.pose_[name].x) ** 2 + (goal[1]-self.pose_[name].y) ** 2) ** 0.5
+        # print("name: %s, traj_time: %.3f, time: %.3f, interval: %.2f, k: %d, goal: (%.3f, %.3f), pose: (%.3f, %.3f) dist: %.3f" %(name, traj['time'], time, interval, k, goal[0], goal[1], self.pose_[name].x, self.pose_[name].y, d))        
         return Point(goal[0], goal[1], 2.0)
 
 
@@ -611,13 +625,6 @@ class PedSim:
         col_map = (np_collision_map_valid==0)
         col_map = np.expand_dims(col_map.reshape((self.grid_size, self.grid_size)), axis=0)
 
-
-
-        
-        
-        
-
-
         #pedestrian grid
         pedestrian_grid = np.zeros_like(lidar_grid_map)
 
@@ -643,7 +650,6 @@ class PedSim:
             if self.status_[name] == MOVE:
                 traj_num = self.traj_idx_[name]
                 if self.time_ - self.status_time_[name] > self.traj_[traj_num]['time']:
-                    self.traj_idx_[name] = -1
                     self.status_[name] = WAIT
                     rt = Command()
                     rt.name = name
@@ -659,35 +665,41 @@ class PedSim:
                 self.pub_[name].publish(rt)
             
             elif self.status_[name] == WAIT:
-                p = random.uniform(0.0, 1.0)
-                if p > self.actor_prob_:
-                    continue
+                if self.waypoint_idx_[name] == -1:
+                    traj_num = random.randint(0, self.n_traj_-1)
+                else:
+                    traj_num = random.choice(self.traj_list_[self.waypoint_idx_[name]])
+                self.waypoint_idx_[name] = self.traj_[traj_num]['end']
+                self.traj_idx_[name] = traj_num
+                # p = random.uniform(0.0, 1.0)
+                # if p > self.actor_prob_:
+                #     continue
                 
-                # select possible trajectory
-                traj_cand = [True for i in range(self.n_traj_)]
-                for name2 in self.actor_name_:
-                    if self.traj_idx_[name2] == -1:
-                        continue
-                    for i in range(self.n_traj_):
-                        if self.adj_mat_[self.traj_idx_[name2]][i]:
-                            traj_cand[i] = False
-                s=0
-                for i in range(self.n_traj_):
-                    if traj_cand[i]:
-                        s += 1
-                if s != 0:
-                    while True:
-                        traj_num = random.randint(0, self.n_traj_-1)
-                        if traj_cand[traj_num]:
-                                break
-                    self.traj_idx_[name] = traj_num
+                # # select possible trajectory
+                # traj_cand = [True for i in range(self.n_traj_)]
+                # for name2 in self.actor_name_:
+                #     if self.traj_idx_[name2] == -1:
+                #         continue
+                #     for i in range(self.n_traj_):
+                #         if self.adj_mat_[self.traj_idx_[name2]][i]:
+                #             traj_cand[i] = False
+                # s=0
+                # for i in range(self.n_traj_):
+                #     if traj_cand[i]:
+                #         s += 1
+                # if s != 0:
+                #     while True:
+                #         traj_num = random.randint(0, self.n_traj_-1)
+                #         if traj_cand[traj_num]:
+                #                 break
+                #     self.traj_idx_[name] = traj_num
 
-                    # INIT actor
-                    rt = Command()
-                    rt.name = name
-                    rt.status = INIT
-                    rt.goal = Pose(position=Point(self.traj_[traj_num]['waypoints'][0][0], self.traj_[traj_num]['waypoints'][0][1], 0.0))
-                    self.pub_[name].publish(rt)
+                # INIT actor
+                rt = Command()
+                rt.name = name
+                rt.status = INIT
+                rt.goal = Pose(position=Point(self.traj_[traj_num]['waypoints'][0][0], self.traj_[traj_num]['waypoints'][0][1], 0.0))
+                self.pub_[name].publish(rt)
         
         # control jackal
         cmd = Twist()
