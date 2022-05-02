@@ -53,7 +53,7 @@ class PedSim:
         self.ped_cost_coeff_ = 1.0
         self.ped_collision_threshold_ = 0.5
         self.map_collision_threshold_ = 0.5
-        self.goal_threshold_ = 0.5
+        self.goal_threshold_ = 0.4
         self.action_limit_ = 1.0
         self.mode_ = mode
         self.collision_map_ = Image.open(self.collision_file_)
@@ -220,6 +220,22 @@ class PedSim:
             return True
         return False
 
+    def oob_dist(self):
+        jx = self.jackal_pose_.position.x
+        jy = self.jackal_pose_.position.y
+        px = int((jx - self.cx_) / self.sx_)
+        py = int((jy - self.cy_) / self.sy_)
+        if px < 0 or px >= self.img_w_ or py < 0 or py >= self.img_h_:
+            return 100
+        hazard_dist_pixels = int(1 * 20)
+        carved = np.array(self.collision_map_)[py-hazard_dist_pixels:py+hazard_dist_pixels+1, px-hazard_dist_pixels:px+hazard_dist_pixels+1].ravel()
+        hazards = np.where(carved==0)[0]
+        if len(hazards) <= 0:
+            return 100
+        hazard_dist = ((((hazards // (2*hazard_dist_pixels+1)) - hazard_dist_pixels) * self.sy_)**2 + (((hazards % (2*hazard_dist_pixels+1)) - hazard_dist_pixels) * self.sx_)**2 )**0.5
+        return hazard_dist.min()
+        
+
 
     def simulation(self):
         self.target_time_ = self.time_ + self.dt_
@@ -262,22 +278,22 @@ class PedSim:
         self.recent_action = [0,0]
 
         # # check valid starting point
-        # candidates = []
-        # for pos in self.spawn_:
-        #     check = True
-        #     for name in self.actor_name_:
-        #         if self.status_[name] != MOVE:
-        #             continue
-        #         if get_length(pos['spawn'], [self.pose_[name].x, self.pose_[name].y]) < self.spawn_threshold_:
-        #             check = False
-        #             break
-        #     if check:
-        #         candidates.append(pos)
+        candidates = []
+        for pos in self.spawn_:
+            check = True
+            for name in self.actor_name_:
+                if self.status_[name] != MOVE:
+                    continue
+                if get_length(pos['spawn'], [self.pose_[name].x, self.pose_[name].y]) < self.spawn_threshold_:
+                    check = False
+                    break
+            if check:
+                candidates.append(pos)
 
         # randomly choice
-        # candidate = random.choice(candidates)
-        # self.jackal_goal_ = candidate['goal']
-        self.jackal_goal_ = [28.9,16.7]
+        candidate = random.choice(candidates)
+        self.jackal_goal_ = candidate['goal']
+        #self.jackal_goal_ = [28.9,16.7]
 
         # unpause gazebo
         self.is_pause_ = False
@@ -285,12 +301,11 @@ class PedSim:
         time.sleep(0.1)
 
         # replace jackal
-        # self.replace_jackal(candidate['spawn'])
-        self.replace_jackal([-22,-4])
+        self.replace_jackal(candidate['spawn'])
+        #self.replace_jackal([-22,-4])
         time.sleep(0.1)
-        # self.replace_goal(candidate['goal'])
-        self.replace_goal(self.jackal_goal_)
-        # print(candidate['goal'])
+        self.replace_goal(candidate['goal'])
+        
         self.jackal_cmd([0,0])
         
         # pause gazebo
@@ -339,14 +354,24 @@ class PedSim:
             success_reward = 1.0
             print("goal reached!")
 
+        '''
         # jackal cost
         control_cost = self.control_cost_coeff_ * (abs(ns[0].accel) + abs(ns[0].ang_vel - s[0].ang_vel))
+        '''
 
-        # map cost
-        map_cost = self.map_cost_coeff_ * collision_cost(min(ns[0].lidar))
+
+        
+
+
+
+        #Lidar cost
+        oob_dist = self.oob_dist()
+        collision_cost_total = self.map_cost_coeff_ * collision_cost(min(min(self.lidar_state_),oob_dist))
+        
         if min(self.lidar_state_) < self.map_collision_threshold_ or self.is_collision() == True:
             done = True
             collision_reward = -1
+            collision_cost_total = 10
             if min(self.lidar_state_) < self.map_collision_threshold_:
                 print('lidar collision')
             if self.is_collision() == True:
@@ -354,9 +379,14 @@ class PedSim:
 
 
 
+        
+        
+        
+
+
         if not done and self.timestep >= 200:
             print('timeout!')
-        
+        '''
         # peds cost
         ped_cost = 0.0
         P = len(ns[0].pedestrians)
@@ -366,16 +396,15 @@ class PedSim:
 
             ped_cost += collision_cost(d)
         ped_cost = self.ped_cost_coeff_ * ped_cost
+        '''
 
         reward = dist_reward + collision_reward + success_reward + slack_reward
-        cost = control_cost + map_cost + ped_cost
+        cost = 0 + collision_cost_total
 
-        cost = 0 #Temporary
 
-        info = {'reward':{'total': reward, 'dist': dist_reward, 'success' : success_reward, 'collision' : collision_reward, 'slack' : slack_reward}, 'cost': {'total': cost, 'control':control_cost, 'map': map_cost, 'ped': ped_cost}, 'done': done, 'dist': ns[0].goal_distance}
+        info = {'reward':{'total': reward, 'dist': dist_reward, 'success' : success_reward, 'collision' : collision_reward, 'slack' : slack_reward}, 'cost': {'total':cost,'pedestrian':0,'collision':collision_cost_total}}
         
-        if self.mode_ == 'RL':
-            reward = reward - cost
+        
         
         return self.obs2list(ns), reward, done, info
 

@@ -1,0 +1,24 @@
+{
+    "os": "Linux-5.13.0-40-generic-x86_64-with-glibc2.10",
+    "python": "3.8.8",
+    "heartbeatAt": "2022-05-01T02:05:33.884659",
+    "startedAt": "2022-05-01T02:05:32.533524",
+    "docker": null,
+    "gpu": "NVIDIA GeForce RTX 3060 Laptop GPU",
+    "gpu_count": 1,
+    "cpu_count": 16,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "bc.py",
+    "codePath": "scripts/bc.py",
+    "git": {
+        "remote": "git@github.com:OhJeongwoo/social_navigation.git",
+        "commit": "81e14e0f7fa30cf2929b782f6fab04f1c9903853"
+    },
+    "email": "jaeseok.heo@rllab.snu.ac.kr",
+    "root": "/home/brain5/catkin_ws/src/social_navigation",
+    "host": "brain5-Legion-5-17ACH6H",
+    "username": "brain5",
+    "executable": "/home/brain5/anaconda3/bin/python"
+}

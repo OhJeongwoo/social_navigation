@@ -1,0 +1,177 @@
+2022-05-01 10:58:16,705 INFO    MainThread:5288 [internal.py:wandb_internal():90] W&B internal server running at pid: 5288, started at: 2022-05-01 10:58:16.704987
+2022-05-01 10:58:16,707 INFO    WriterThread:5288 [datastore.py:open_for_write():75] open: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/run-1atjvmwg.wandb
+2022-05-01 10:58:16,710 DEBUG   SenderThread:5288 [sender.py:send():232] send: header
+2022-05-01 10:58:16,710 DEBUG   SenderThread:5288 [sender.py:send():232] send: run
+2022-05-01 10:58:17,177 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: check_version
+2022-05-01 10:58:17,184 INFO    SenderThread:5288 [dir_watcher.py:__init__():166] watching files in: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files
+2022-05-01 10:58:17,184 INFO    SenderThread:5288 [sender.py:_start_run_threads():811] run started: 1atjvmwg with start time 1651370295
+2022-05-01 10:58:17,184 DEBUG   SenderThread:5288 [sender.py:send():232] send: summary
+2022-05-01 10:58:17,184 INFO    SenderThread:5288 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-05-01 10:58:17,185 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: check_version
+2022-05-01 10:58:17,240 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: run_start
+2022-05-01 10:58:17,244 DEBUG   HandlerThread:5288 [meta.py:__init__():35] meta init
+2022-05-01 10:58:17,244 DEBUG   HandlerThread:5288 [meta.py:__init__():49] meta init done
+2022-05-01 10:58:17,244 DEBUG   HandlerThread:5288 [meta.py:probe():209] probe
+2022-05-01 10:58:17,251 DEBUG   HandlerThread:5288 [meta.py:_setup_git():199] setup git
+2022-05-01 10:58:17,265 DEBUG   HandlerThread:5288 [meta.py:_setup_git():206] setup git done
+2022-05-01 10:58:17,265 DEBUG   HandlerThread:5288 [meta.py:_save_pip():53] save pip
+2022-05-01 10:58:17,265 DEBUG   HandlerThread:5288 [meta.py:_save_pip():67] save pip done
+2022-05-01 10:58:17,265 DEBUG   HandlerThread:5288 [meta.py:_save_conda():74] save conda
+2022-05-01 10:58:18,185 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_created():213] file/dir created: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/requirements.txt
+2022-05-01 10:58:18,186 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_created():213] file/dir created: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/wandb-summary.json
+2022-05-01 10:58:18,186 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_created():213] file/dir created: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/conda-environment.yaml
+2022-05-01 10:58:18,636 DEBUG   HandlerThread:5288 [meta.py:_save_conda():84] save conda done
+2022-05-01 10:58:18,637 DEBUG   HandlerThread:5288 [meta.py:probe():247] probe done
+2022-05-01 10:58:18,690 DEBUG   SenderThread:5288 [sender.py:send():232] send: files
+2022-05-01 10:58:18,691 INFO    SenderThread:5288 [sender.py:_save_file():946] saving file wandb-metadata.json with policy now
+2022-05-01 10:58:18,698 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 10:58:18,699 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 10:58:18,912 DEBUG   SenderThread:5288 [sender.py:send():232] send: telemetry
+2022-05-01 10:58:18,913 DEBUG   SenderThread:5288 [sender.py:send():232] send: telemetry
+2022-05-01 10:58:18,913 DEBUG   SenderThread:5288 [sender.py:send():232] send: run
+2022-05-01 10:58:19,189 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/config.yaml
+2022-05-01 10:58:19,189 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_created():213] file/dir created: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 10:58:19,189 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_created():213] file/dir created: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/wandb-metadata.json
+2022-05-01 10:58:19,197 INFO    SenderThread:5288 [sender.py:send_run():707] updated run: 1atjvmwg
+2022-05-01 10:58:19,307 INFO    Thread-11 :5288 [upload_job.py:push():137] Uploaded file /tmp/tmphceqyiucwandb/13xlxebq-wandb-metadata.json
+2022-05-01 10:58:21,190 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 10:58:27,192 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 10:58:31,195 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 10:58:33,914 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 10:58:33,915 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 10:58:45,541 DEBUG   SenderThread:5288 [sender.py:send():232] send: stats
+2022-05-01 10:58:48,202 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/config.yaml
+2022-05-01 10:58:49,146 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 10:58:49,146 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 10:59:04,378 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 10:59:04,379 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 10:59:05,210 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 10:59:15,829 DEBUG   SenderThread:5288 [sender.py:send():232] send: stats
+2022-05-01 10:59:19,696 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 10:59:19,696 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 10:59:34,931 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 10:59:34,931 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 10:59:46,137 DEBUG   SenderThread:5288 [sender.py:send():232] send: stats
+2022-05-01 10:59:50,151 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 10:59:50,152 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 11:00:05,444 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 11:00:05,445 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 11:00:16,434 DEBUG   SenderThread:5288 [sender.py:send():232] send: stats
+2022-05-01 11:00:20,744 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 11:00:20,744 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 11:00:40,745 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 11:00:54,614 ERROR   SenderThread:5288 [retry.py:__call__():126] Retry attempt failed:
+Traceback (most recent call last):
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/urllib3/connectionpool.py", line 445, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/urllib3/connectionpool.py", line 440, in _make_request
+    httplib_response = conn.getresponse()
+  File "/home/brain5/anaconda3/lib/python3.8/http/client.py", line 1347, in getresponse
+    response.begin()
+  File "/home/brain5/anaconda3/lib/python3.8/http/client.py", line 307, in begin
+    version, status, reason = self._read_status()
+  File "/home/brain5/anaconda3/lib/python3.8/http/client.py", line 268, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/home/brain5/anaconda3/lib/python3.8/socket.py", line 669, in readinto
+    return self._sock.recv_into(b)
+  File "/home/brain5/anaconda3/lib/python3.8/ssl.py", line 1241, in recv_into
+    return self.read(nbytes, buffer)
+  File "/home/brain5/anaconda3/lib/python3.8/ssl.py", line 1099, in read
+    return self._sslobj.read(len, buffer)
+socket.timeout: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/requests/adapters.py", line 439, in send
+    resp = conn.urlopen(
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/urllib3/connectionpool.py", line 755, in urlopen
+    retries = retries.increment(
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/urllib3/util/retry.py", line 532, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/urllib3/packages/six.py", line 735, in reraise
+    raise value
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/urllib3/connectionpool.py", line 699, in urlopen
+    httplib_response = self._make_request(
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/urllib3/connectionpool.py", line 447, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/urllib3/connectionpool.py", line 336, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='api.wandb.ai', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/wandb/sdk/lib/retry.py", line 102, in __call__
+    result = self._call_fn(*args, **kwargs)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/wandb/sdk/internal/internal_api.py", line 140, in execute
+    return self.client.execute(*args, **kwargs)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 52, in execute
+    result = self._get_result(document, *args, **kwargs)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 60, in _get_result
+    return self.transport.execute(document, *args, **kwargs)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/transport/requests.py", line 38, in execute
+    request = requests.post(self.url, **post_args)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/requests/api.py", line 119, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/requests/api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/requests/sessions.py", line 542, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/requests/sessions.py", line 655, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/requests/adapters.py", line 529, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPSConnectionPool(host='api.wandb.ai', port=443): Read timed out. (read timeout=10)
+2022-05-01 11:00:59,796 WARNING FileStreamThread:5288 [file_stream.py:request_with_retry():593] requests_with_retry encountered retryable exception: 500 Server Error: Internal Server Error for url: https://api.wandb.ai/files/j13947/starlab/1atjvmwg/file_stream. func: <bound method Session.post of <requests.sessions.Session object at 0x7fe61f5fe370>>, args: ('https://api.wandb.ai/files/j13947/starlab/1atjvmwg/file_stream',), kwargs: {'json': {'files': {'wandb-events.jsonl': {'offset': 3, 'content': ['{"system.gpu.0.gpu": 12.2, "system.gpu.0.memory": 3.8, "system.gpu.0.memoryAllocated": 36.93, "system.gpu.0.temp": 38.73, "system.gpu.process.0.gpu": 12.2, "system.gpu.process.0.memory": 3.8, "system.gpu.process.0.memoryAllocated": 36.93, "system.gpu.process.0.temp": 38.73, "system.cpu": 6.39, "system.memory": 71.18, "system.disk": 37.9, "system.proc.memory.availableMB": 3986.76, "system.proc.memory.rssMB": 99.45, "system.proc.memory.percent": 0.72, "system.proc.cpu.threads": 12.0, "system.network.sent": 19643744, "system.network.recv": 22637101, "_wandb": true, "_timestamp": 1651370416, "_runtime": 121}']}}, 'dropped': 0}}
+2022-05-01 11:01:00,745 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 11:01:19,425 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 11:01:20,746 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 11:01:24,175 DEBUG   SenderThread:5288 [sender.py:send():232] send: stats
+2022-05-01 11:01:24,176 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 11:01:27,282 DEBUG   SenderThread:5288 [sender.py:send():232] send: stats
+2022-05-01 11:01:27,283 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 11:01:40,746 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 11:01:40,747 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 11:01:47,372 DEBUG   SenderThread:5288 [sender.py:send():232] send: stats
+2022-05-01 11:01:56,068 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 11:01:56,069 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 11:02:11,291 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 11:02:11,291 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 11:02:17,701 DEBUG   SenderThread:5288 [sender.py:send():232] send: stats
+2022-05-01 11:02:26,582 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 11:02:26,582 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 11:02:42,148 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 11:02:42,148 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 11:02:47,979 DEBUG   SenderThread:5288 [sender.py:send():232] send: stats
+2022-05-01 11:02:57,319 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 11:02:57,438 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 11:02:57,438 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 11:03:05,323 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 11:03:07,324 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 11:03:09,325 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 11:03:11,326 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 11:03:12,763 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 11:03:12,763 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 11:03:13,327 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 11:03:15,328 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 11:03:17,329 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 11:03:18,291 DEBUG   SenderThread:5288 [sender.py:send():232] send: stats
+2022-05-01 11:03:19,330 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 11:03:21,331 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 11:03:23,332 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 11:03:25,333 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 11:03:27,334 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 11:03:28,027 DEBUG   HandlerThread:5288 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 11:03:28,028 DEBUG   SenderThread:5288 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 11:03:29,335 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 11:03:31,336 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 11:03:33,338 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 11:03:35,339 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 11:03:37,339 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 11:03:39,239 WARNING MainThread:5288 [internal.py:wandb_internal():153] Internal process interrupt: 1
+2022-05-01 11:03:39,341 INFO    Thread-7  :5288 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_105815-1atjvmwg/files/output.log
+2022-05-01 11:03:39,428 WARNING MainThread:5288 [internal.py:wandb_internal():153] Internal process interrupt: 2
+2022-05-01 11:03:39,428 ERROR   MainThread:5288 [internal.py:wandb_internal():156] Internal process interrupted.
+2022-05-01 11:03:39,792 INFO    MainThread:5288 [internal.py:handle_exit():80] Internal process exited

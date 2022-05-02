@@ -1,0 +1,161 @@
+2022-05-01 17:01:33,407 INFO    MainThread:169717 [internal.py:wandb_internal():90] W&B internal server running at pid: 169717, started at: 2022-05-01 17:01:33.407697
+2022-05-01 17:01:33,411 INFO    WriterThread:169717 [datastore.py:open_for_write():75] open: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/run-pk8v172y.wandb
+2022-05-01 17:01:33,412 DEBUG   SenderThread:169717 [sender.py:send():232] send: header
+2022-05-01 17:01:33,412 DEBUG   SenderThread:169717 [sender.py:send():232] send: run
+2022-05-01 17:01:33,763 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: check_version
+2022-05-01 17:01:33,768 INFO    SenderThread:169717 [dir_watcher.py:__init__():166] watching files in: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files
+2022-05-01 17:01:33,768 INFO    SenderThread:169717 [sender.py:_start_run_threads():811] run started: pk8v172y with start time 1651392092
+2022-05-01 17:01:33,768 DEBUG   SenderThread:169717 [sender.py:send():232] send: summary
+2022-05-01 17:01:33,768 INFO    SenderThread:169717 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-05-01 17:01:33,769 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: check_version
+2022-05-01 17:01:33,828 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: run_start
+2022-05-01 17:01:33,830 DEBUG   HandlerThread:169717 [meta.py:__init__():35] meta init
+2022-05-01 17:01:33,831 DEBUG   HandlerThread:169717 [meta.py:__init__():49] meta init done
+2022-05-01 17:01:33,831 DEBUG   HandlerThread:169717 [meta.py:probe():209] probe
+2022-05-01 17:01:33,837 DEBUG   HandlerThread:169717 [meta.py:_setup_git():199] setup git
+2022-05-01 17:01:33,854 DEBUG   HandlerThread:169717 [meta.py:_setup_git():206] setup git done
+2022-05-01 17:01:33,854 DEBUG   HandlerThread:169717 [meta.py:_save_pip():53] save pip
+2022-05-01 17:01:33,855 DEBUG   HandlerThread:169717 [meta.py:_save_pip():67] save pip done
+2022-05-01 17:01:33,855 DEBUG   HandlerThread:169717 [meta.py:_save_conda():74] save conda
+2022-05-01 17:01:34,770 INFO    Thread-7  :169717 [dir_watcher.py:_on_file_created():213] file/dir created: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/conda-environment.yaml
+2022-05-01 17:01:34,770 INFO    Thread-7  :169717 [dir_watcher.py:_on_file_created():213] file/dir created: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/wandb-summary.json
+2022-05-01 17:01:34,771 INFO    Thread-7  :169717 [dir_watcher.py:_on_file_created():213] file/dir created: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/requirements.txt
+2022-05-01 17:01:35,156 DEBUG   HandlerThread:169717 [meta.py:_save_conda():84] save conda done
+2022-05-01 17:01:35,156 DEBUG   HandlerThread:169717 [meta.py:probe():247] probe done
+2022-05-01 17:01:35,183 DEBUG   SenderThread:169717 [sender.py:send():232] send: files
+2022-05-01 17:01:35,184 INFO    SenderThread:169717 [sender.py:_save_file():946] saving file wandb-metadata.json with policy now
+2022-05-01 17:01:35,188 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-01 17:01:35,189 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: stop_status
+2022-05-01 17:01:35,772 INFO    Thread-7  :169717 [dir_watcher.py:_on_file_created():213] file/dir created: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/wandb-metadata.json
+2022-05-01 17:01:35,773 INFO    Thread-7  :169717 [dir_watcher.py:_on_file_created():213] file/dir created: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/output.log
+2022-05-01 17:01:37,773 INFO    Thread-7  :169717 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/output.log
+2022-05-01 17:01:38,253 DEBUG   SenderThread:169717 [sender.py:send():232] send: telemetry
+2022-05-01 17:01:38,254 DEBUG   SenderThread:169717 [sender.py:send():232] send: telemetry
+2022-05-01 17:01:38,254 DEBUG   SenderThread:169717 [sender.py:send():232] send: run
+2022-05-01 17:01:38,773 INFO    Thread-7  :169717 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/config.yaml
+2022-05-01 17:01:39,113 INFO    Thread-11 :169717 [upload_job.py:push():137] Uploaded file /tmp/tmppw2e3hw9wandb/26j8mejt-wandb-metadata.json
+2022-05-01 17:01:39,191 INFO    SenderThread:169717 [sender.py:send_run():707] updated run: pk8v172y
+2022-05-01 17:01:41,774 INFO    Thread-7  :169717 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/output.log
+2022-05-01 17:01:49,409 DEBUG   SenderThread:169717 [sender.py:send():232] send: telemetry
+2022-05-01 17:01:49,777 INFO    Thread-7  :169717 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/output.log
+2022-05-01 17:01:51,778 INFO    Thread-7  :169717 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/output.log
+2022-05-01 17:01:52,208 DEBUG   SenderThread:169717 [sender.py:send():232] send: exit
+2022-05-01 17:01:52,209 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-01 17:01:52,209 INFO    SenderThread:169717 [sender.py:send_exit():368] handling exit code: 1
+2022-05-01 17:01:52,209 INFO    SenderThread:169717 [sender.py:send_exit():370] handling runtime: 18
+2022-05-01 17:01:52,211 INFO    SenderThread:169717 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-05-01 17:01:52,211 INFO    SenderThread:169717 [sender.py:send_exit():376] send defer
+2022-05-01 17:01:52,212 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: poll_exit
+2022-05-01 17:01:52,213 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: defer
+2022-05-01 17:01:52,213 INFO    HandlerThread:169717 [handler.py:handle_request_defer():164] handle defer: 0
+2022-05-01 17:01:52,214 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: defer
+2022-05-01 17:01:52,214 INFO    SenderThread:169717 [sender.py:send_request_defer():385] handle sender defer: 0
+2022-05-01 17:01:52,214 INFO    SenderThread:169717 [sender.py:transition_state():389] send defer: 1
+2022-05-01 17:01:52,215 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: defer
+2022-05-01 17:01:52,215 INFO    HandlerThread:169717 [handler.py:handle_request_defer():164] handle defer: 1
+2022-05-01 17:01:52,326 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-01 17:01:52,326 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: defer
+2022-05-01 17:01:52,327 INFO    SenderThread:169717 [sender.py:send_request_defer():385] handle sender defer: 1
+2022-05-01 17:01:52,327 INFO    SenderThread:169717 [sender.py:transition_state():389] send defer: 2
+2022-05-01 17:01:52,327 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: poll_exit
+2022-05-01 17:01:52,327 DEBUG   SenderThread:169717 [sender.py:send():232] send: stats
+2022-05-01 17:01:52,328 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: defer
+2022-05-01 17:01:52,328 INFO    HandlerThread:169717 [handler.py:handle_request_defer():164] handle defer: 2
+2022-05-01 17:01:52,328 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: defer
+2022-05-01 17:01:52,329 INFO    SenderThread:169717 [sender.py:send_request_defer():385] handle sender defer: 2
+2022-05-01 17:01:52,329 INFO    SenderThread:169717 [sender.py:transition_state():389] send defer: 3
+2022-05-01 17:01:52,329 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: defer
+2022-05-01 17:01:52,329 INFO    HandlerThread:169717 [handler.py:handle_request_defer():164] handle defer: 3
+2022-05-01 17:01:52,329 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: defer
+2022-05-01 17:01:52,329 INFO    SenderThread:169717 [sender.py:send_request_defer():385] handle sender defer: 3
+2022-05-01 17:01:52,329 INFO    SenderThread:169717 [sender.py:transition_state():389] send defer: 4
+2022-05-01 17:01:52,330 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: defer
+2022-05-01 17:01:52,330 INFO    HandlerThread:169717 [handler.py:handle_request_defer():164] handle defer: 4
+2022-05-01 17:01:52,330 DEBUG   SenderThread:169717 [sender.py:send():232] send: summary
+2022-05-01 17:01:52,330 INFO    SenderThread:169717 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-05-01 17:01:52,330 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: defer
+2022-05-01 17:01:52,330 INFO    SenderThread:169717 [sender.py:send_request_defer():385] handle sender defer: 4
+2022-05-01 17:01:52,331 INFO    SenderThread:169717 [sender.py:transition_state():389] send defer: 5
+2022-05-01 17:01:52,331 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: defer
+2022-05-01 17:01:52,331 INFO    HandlerThread:169717 [handler.py:handle_request_defer():164] handle defer: 5
+2022-05-01 17:01:52,331 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: defer
+2022-05-01 17:01:52,331 INFO    SenderThread:169717 [sender.py:send_request_defer():385] handle sender defer: 5
+2022-05-01 17:01:52,430 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-01 17:01:52,576 INFO    SenderThread:169717 [sender.py:transition_state():389] send defer: 6
+2022-05-01 17:01:52,576 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: poll_exit
+2022-05-01 17:01:52,576 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: defer
+2022-05-01 17:01:52,577 INFO    HandlerThread:169717 [handler.py:handle_request_defer():164] handle defer: 6
+2022-05-01 17:01:52,577 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: defer
+2022-05-01 17:01:52,577 INFO    SenderThread:169717 [sender.py:send_request_defer():385] handle sender defer: 6
+2022-05-01 17:01:52,577 INFO    SenderThread:169717 [dir_watcher.py:finish():279] shutting down directory watcher
+2022-05-01 17:01:52,678 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-01 17:01:52,779 INFO    Thread-7  :169717 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/wandb-summary.json
+2022-05-01 17:01:52,779 INFO    SenderThread:169717 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/config.yaml
+2022-05-01 17:01:52,779 INFO    SenderThread:169717 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/output.log
+2022-05-01 17:01:52,779 INFO    SenderThread:169717 [dir_watcher.py:finish():309] scan: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files
+2022-05-01 17:01:52,779 INFO    SenderThread:169717 [dir_watcher.py:finish():323] scan save: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/config.yaml config.yaml
+2022-05-01 17:01:52,780 INFO    SenderThread:169717 [dir_watcher.py:finish():323] scan save: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/wandb-summary.json wandb-summary.json
+2022-05-01 17:01:52,783 INFO    SenderThread:169717 [dir_watcher.py:finish():323] scan save: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/wandb-metadata.json wandb-metadata.json
+2022-05-01 17:01:52,783 INFO    SenderThread:169717 [dir_watcher.py:finish():323] scan save: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/conda-environment.yaml conda-environment.yaml
+2022-05-01 17:01:52,786 INFO    SenderThread:169717 [dir_watcher.py:finish():323] scan save: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/output.log output.log
+2022-05-01 17:01:52,786 INFO    SenderThread:169717 [dir_watcher.py:finish():323] scan save: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/requirements.txt requirements.txt
+2022-05-01 17:01:52,789 INFO    SenderThread:169717 [sender.py:transition_state():389] send defer: 7
+2022-05-01 17:01:52,794 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: poll_exit
+2022-05-01 17:01:52,795 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: defer
+2022-05-01 17:01:52,795 INFO    HandlerThread:169717 [handler.py:handle_request_defer():164] handle defer: 7
+2022-05-01 17:01:52,796 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: defer
+2022-05-01 17:01:52,796 INFO    SenderThread:169717 [sender.py:send_request_defer():385] handle sender defer: 7
+2022-05-01 17:01:52,796 INFO    SenderThread:169717 [file_pusher.py:finish():145] shutting down file pusher
+2022-05-01 17:01:52,896 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-01 17:01:52,897 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: poll_exit
+2022-05-01 17:01:52,998 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-01 17:01:52,999 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: poll_exit
+2022-05-01 17:01:53,100 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-01 17:01:53,101 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: poll_exit
+2022-05-01 17:01:53,202 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-01 17:01:53,202 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: poll_exit
+2022-05-01 17:01:53,304 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-01 17:01:53,304 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: poll_exit
+2022-05-01 17:01:53,405 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-01 17:01:53,406 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: poll_exit
+2022-05-01 17:01:53,413 INFO    Thread-13 :169717 [upload_job.py:push():137] Uploaded file /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/wandb-summary.json
+2022-05-01 17:01:53,420 INFO    Thread-12 :169717 [upload_job.py:push():137] Uploaded file /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/config.yaml
+2022-05-01 17:01:53,438 INFO    Thread-15 :169717 [upload_job.py:push():137] Uploaded file /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/requirements.txt
+2022-05-01 17:01:53,508 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-01 17:01:53,509 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: poll_exit
+2022-05-01 17:01:53,546 INFO    Thread-14 :169717 [upload_job.py:push():137] Uploaded file /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/files/output.log
+2022-05-01 17:01:53,611 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-01 17:01:53,611 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: poll_exit
+2022-05-01 17:01:53,714 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-01 17:01:53,714 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: poll_exit
+2022-05-01 17:01:53,747 INFO    Thread-6  :169717 [sender.py:transition_state():389] send defer: 8
+2022-05-01 17:01:53,747 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: defer
+2022-05-01 17:01:53,747 INFO    HandlerThread:169717 [handler.py:handle_request_defer():164] handle defer: 8
+2022-05-01 17:01:53,747 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: defer
+2022-05-01 17:01:53,747 INFO    SenderThread:169717 [sender.py:send_request_defer():385] handle sender defer: 8
+2022-05-01 17:01:53,815 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-01 17:01:54,449 INFO    SenderThread:169717 [sender.py:transition_state():389] send defer: 9
+2022-05-01 17:01:54,449 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: poll_exit
+2022-05-01 17:01:54,450 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: defer
+2022-05-01 17:01:54,450 INFO    HandlerThread:169717 [handler.py:handle_request_defer():164] handle defer: 9
+2022-05-01 17:01:54,450 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: defer
+2022-05-01 17:01:54,450 INFO    SenderThread:169717 [sender.py:send_request_defer():385] handle sender defer: 9
+2022-05-01 17:01:54,450 INFO    SenderThread:169717 [sender.py:transition_state():389] send defer: 10
+2022-05-01 17:01:54,451 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: defer
+2022-05-01 17:01:54,451 DEBUG   SenderThread:169717 [sender.py:send():232] send: final
+2022-05-01 17:01:54,451 INFO    HandlerThread:169717 [handler.py:handle_request_defer():164] handle defer: 10
+2022-05-01 17:01:54,451 DEBUG   SenderThread:169717 [sender.py:send():232] send: footer
+2022-05-01 17:01:54,451 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: defer
+2022-05-01 17:01:54,451 INFO    SenderThread:169717 [sender.py:send_request_defer():385] handle sender defer: 10
+2022-05-01 17:01:54,551 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-01 17:01:54,551 DEBUG   SenderThread:169717 [sender.py:send_request():246] send_request: poll_exit
+2022-05-01 17:01:54,551 INFO    SenderThread:169717 [file_pusher.py:join():150] waiting for file pusher
+2022-05-01 17:01:55,358 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: sampled_history
+2022-05-01 17:01:55,360 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: get_summary
+2022-05-01 17:01:55,361 DEBUG   HandlerThread:169717 [handler.py:handle_request():141] handle_request: shutdown
+2022-05-01 17:01:55,361 INFO    HandlerThread:169717 [handler.py:finish():806] shutting down handler
+2022-05-01 17:01:55,451 INFO    WriterThread:169717 [datastore.py:close():279] close: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_170132-pk8v172y/run-pk8v172y.wandb
+2022-05-01 17:01:56,256 INFO    SenderThread:169717 [sender.py:finish():1106] shutting down sender
+2022-05-01 17:01:56,257 INFO    SenderThread:169717 [file_pusher.py:finish():145] shutting down file pusher
+2022-05-01 17:01:56,257 INFO    SenderThread:169717 [file_pusher.py:join():150] waiting for file pusher
+2022-05-01 17:01:56,258 INFO    MainThread:169717 [internal.py:handle_exit():80] Internal process exited
