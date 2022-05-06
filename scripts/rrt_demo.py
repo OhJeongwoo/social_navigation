@@ -8,7 +8,16 @@ from std_msgs.msg import Float64MultiArray
 from gazebo_master import PedSim
 from utils import *
 import pickle
+from model_discrete import SACCoreDiscrete
+import torch
+import argparse
+import yaml
 
+
+
+PROJECT_PATH = os.path.abspath("..")
+POLICY_PATH = PROJECT_PATH + "/policy/"
+YAML_PATH = PROJECT_PATH + "/yaml/"
 
 class Demo:
     def __init__(self):
@@ -16,6 +25,43 @@ class Demo:
 
         self.pub_ = rospy.Publisher("/rrt", RRT, queue_size=10)
         self.sub_ = rospy.Subscriber("/local_goal", RRTresponse, self.callback)
+        parser = argparse.ArgumentParser(description='Soft Actor-Critic (SAC)')
+        parser.add_argument('--yaml', default='sac', type=str)
+        args = parser.parse_args()
+
+
+        YAML_FILE = YAML_PATH + args.yaml + ".yaml"
+
+        # set yaml path
+        with open(YAML_FILE) as file:
+            args = yaml.load(file, Loader=yaml.FullLoader)
+            print(args)
+
+        # set hyperparameters
+        exp_name_ = args['exp_name'] # experiment name
+        check_path(POLICY_PATH + exp_name_) # check if the path exists, if not make the directory
+
+
+
+
+        
+
+        self.device_ = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        
+        exp_obs_dim_, exp_act_dim_ = self.ped_sim_.get_dim()
+
+
+    
+        # set model
+        hidden_layers_ = args['pi_hidden_layers']
+        options_ = args['pi_options']
+        learning_rate_ = args['learning_rate']
+    
+
+
+        self.ac_ = SACCoreDiscrete(exp_obs_dim_, exp_act_dim_, hidden_layers_, learning_rate_, self.device_, options_).to(self.device_)
+        self.ac_weights = torch.load(POLICY_PATH + exp_name_ + "/ac_219.pt")
+        self.ac_.load_state_dict(self.ac_weights.state_dict())
 
         self.valid = False
         self.lookahead_ = 5
@@ -36,6 +82,14 @@ class Demo:
         else:
             self.local_goal_ = self.path[len(self.path)-1]
         self.valid = True
+
+    def get_action(self, o, remove_grad=True, train=True):
+        #a = ac_(torch.unsqueeze(torch.as_tensor(o, dtype=torch.float32), dim=0).to(device=device_), train= train)[0]
+        a = self.ac_({'grid' : torch.unsqueeze(torch.as_tensor(o['grid'], dtype=torch.float32), dim=0).to(device=self.device_),
+        'flat' : torch.unsqueeze(torch.as_tensor(o['flat'], dtype=torch.float32), dim=0).to(device=self.device_)}, train=train)[0]
+        if remove_grad:
+            return a.detach().cpu().numpy()
+        return a
 
     def loop(self):
 
@@ -62,7 +116,7 @@ class Demo:
                 rt.goal = self.global_goal_
                 
                 rt.option = False
-                if self.stop_step_ > 100:
+                if self.stop_step_ > 100 or ep_step == 0:
                     rt.option = True
 
                 self.pub_.publish(rt)
@@ -71,8 +125,14 @@ class Demo:
                     if time.time() - t > 1.0:
                         break
                     time.sleep(0.001)
-                a = purepursuit(self.ped_sim_.jackal_pose_, self.local_goal_, 1.0)
-                a = get_similar_action(a)
+                # self.ped_sim_.jackal_goal_ = [self.local_goal_.x, self.local_goal_.y]
+                #a = purepursuit(self.ped_sim_.jackal_pose_, self.local_goal_, 1.0)
+                #a = get_similar_action(a)
+
+                a = self.get_action(o)
+
+                
+
                 if self.stop:
                     a = [STOP]
                 o2, r, done, _ =self.ped_sim_.step(a)

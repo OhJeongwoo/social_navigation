@@ -52,9 +52,9 @@ class PedSim:
         self.control_cost_coeff_ = 1.0
         self.map_cost_coeff_ = 1.0
         self.ped_cost_coeff_ = 1.0
-        self.ped_collision_threshold_ = 0.5
-        self.map_collision_threshold_ = 0.5
-        self.goal_threshold_ = 0.4
+        self.ped_collision_threshold_ = 0.3
+        self.map_collision_threshold_ = 0.3
+        self.goal_threshold_ = 0.5
         self.action_limit_ = 1.0
         self.mode_ = mode
         self.collision_map_ = Image.open(self.collision_file_)
@@ -102,7 +102,7 @@ class PedSim:
         self.col_mesh_y = self.col_mesh_y.ravel()
 
         # parameter for actor
-        self.n_actor_ = 8
+        self.n_actor_ = 0
         self.actor_name_ = []
         self.status_ = {}
         self.status_time_ = {}
@@ -302,7 +302,9 @@ class PedSim:
         # randomly choice
         candidate = random.choice(candidates)
         self.jackal_goal_ = candidate['goal']
+        
         #self.jackal_goal_ = [28.9,16.7]
+        self.local_goal_ = self.jackal_goal_
 
         # unpause gazebo
         self.is_pause_ = False
@@ -311,11 +313,10 @@ class PedSim:
 
         # replace jackal
         self.replace_jackal(candidate['spawn'])
-        # self.replace_jackal([-22,-4])
+        #self.replace_jackal([-22,-4])
         # self.replace_jackal(self.waypoints_[root_index])
         time.sleep(0.1)
-        # self.replace_goal(candidate['goal'])
-        # self.replace_goal(self.jackal_goal_)
+
         # print(candidate['goal'])
         self.jackal_cmd([0,0])
         
@@ -486,19 +487,6 @@ class PedSim:
         except:
             pass
 
-    # def replace_goal(self, pose):
-    #     req = SetModelStateRequest()
-    #     req.model_state.model_name = 'goal'
-    #     req.model_state.pose = Pose(position=Point(pose[0],pose[1],3.0), orientation=y2q(0.0))
-
-    #     try:
-    #         res = self.set_model_(req)
-    #         print(res)
-    #         if not res.success:
-    #             print("error")
-    #             rospy.logwarn(res.status_message)
-    #     except:
-    #         pass
 
 
     def get_goal(self, name):
@@ -529,17 +517,25 @@ class PedSim:
 
 
 
+        '''
+        #Temporary goal state
+        gx, gy = transform_coordinate(self.local_goal_[0] - jx, self.local_goal_[1] - jy, ct, st)
+        state.goal_distance = (gx**2 + gy**2)**0.5
+        dir_gx = gx / state.goal_distance
+        dir_gy = gy / state.goal_distance
+        state.goal = Point(dir_gx, dir_gy, 0)
+        '''
+
         
-
-
         # goal state
         gx, gy = transform_coordinate(self.jackal_goal_[0] - jx, self.jackal_goal_[1] - jy, ct, st)
         state.goal_distance = (gx**2 + gy**2)**0.5
         dir_gx = gx / state.goal_distance
         dir_gy = gy / state.goal_distance
         state.goal = Point(dir_gx, dir_gy, 0)
+        
 
-        self.goal_distance = state.goal_distance
+        self.goal_distance = ((self.jackal_goal_[0] - jx)**2 + (self.jackal_goal_[1]-jy)**2)**0.5
 
         state.goal_distance = state.goal_distance if state.goal_distance < self.max_goal_dist else self.max_goal_dist #Clio goal distance going into
         
@@ -627,6 +623,7 @@ class PedSim:
 
         #pedestrian grid
         pedestrian_grid = np.zeros_like(lidar_grid_map)
+
 
         grid_map = np.concatenate([lidar_grid_map, col_map, pedestrian_grid], axis=0)
 

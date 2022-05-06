@@ -1,0 +1,24 @@
+{
+    "os": "Linux-5.13.0-40-generic-x86_64-with-glibc2.10",
+    "python": "3.8.8",
+    "heartbeatAt": "2022-05-02T15:02:55.731768",
+    "startedAt": "2022-05-02T15:02:54.208419",
+    "docker": null,
+    "gpu": "NVIDIA GeForce RTX 3060 Laptop GPU",
+    "gpu_count": 1,
+    "cpu_count": 16,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "sac_discrete.py",
+    "codePath": "scripts/sac_discrete.py",
+    "git": {
+        "remote": "git@github.com:OhJeongwoo/social_navigation.git",
+        "commit": "aad1fe44e9e7daffd6c6a874a08f6c4b7101546e"
+    },
+    "email": "jaeseok.heo@rllab.snu.ac.kr",
+    "root": "/home/brain5/catkin_ws/src/social_navigation",
+    "host": "brain5-Legion-5-17ACH6H",
+    "username": "brain5",
+    "executable": "/home/brain5/anaconda3/bin/python"
+}
