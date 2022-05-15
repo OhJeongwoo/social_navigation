@@ -1,0 +1,22 @@
+2022-05-06 16:19:39,447 INFO    MainThread:43178 [wandb_setup.py:_EarlyLogger._flush():76] Loading settings from /home/jay/.config/wandb/settings
+2022-05-06 16:19:39,447 INFO    MainThread:43178 [wandb_setup.py:_EarlyLogger._flush():76] Loading settings from /home/jay/catkin_ws/src/social_navigation/scripts/wandb/settings
+2022-05-06 16:19:39,447 INFO    MainThread:43178 [wandb_setup.py:_EarlyLogger._flush():76] Loading settings from environment variables: {}
+2022-05-06 16:19:39,447 INFO    MainThread:43178 [wandb_setup.py:_EarlyLogger._flush():76] Inferring run settings from compute environment: {'program_relpath': 'scripts/sac_discrete.py', 'program': 'sac_discrete.py'}
+2022-05-06 16:19:39,447 INFO    MainThread:43178 [wandb_setup.py:_EarlyLogger._flush():76] Applying login settings: {'mode': 'offline'}
+2022-05-06 16:19:39,447 INFO    MainThread:43178 [wandb_init.py:_WandbInit._log_setup():428] Logging user logs to /home/jay/catkin_ws/src/social_navigation/scripts/wandb/offline-run-20220506_161939-2h3lsi65/logs/debug.log
+2022-05-06 16:19:39,447 INFO    MainThread:43178 [wandb_init.py:_WandbInit._log_setup():429] Logging internal logs to /home/jay/catkin_ws/src/social_navigation/scripts/wandb/offline-run-20220506_161939-2h3lsi65/logs/debug-internal.log
+2022-05-06 16:19:39,448 INFO    MainThread:43178 [wandb_init.py:_WandbInit.init():462] calling init triggers
+2022-05-06 16:19:39,448 INFO    MainThread:43178 [wandb_init.py:_WandbInit.init():465] wandb.init called with sweep_config: {}
+config: {}
+2022-05-06 16:19:39,448 INFO    MainThread:43178 [wandb_init.py:_WandbInit.init():515] starting backend
+2022-05-06 16:19:39,448 INFO    MainThread:43178 [backend.py:Backend._multiprocessing_setup():97] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2022-05-06 16:19:39,459 INFO    MainThread:43178 [backend.py:Backend.ensure_launched():217] starting backend process...
+2022-05-06 16:19:39,462 INFO    MainThread:43178 [backend.py:Backend.ensure_launched():222] started backend process with pid: 43236
+2022-05-06 16:19:39,462 INFO    MainThread:43178 [wandb_init.py:_WandbInit.init():525] backend started and connected
+2022-05-06 16:19:39,464 INFO    MainThread:43178 [wandb_init.py:_WandbInit.init():596] updated telemetry
+2022-05-06 16:19:39,470 INFO    MainThread:43178 [wandb_init.py:_WandbInit.init():662] starting run threads in backend
+2022-05-06 16:19:39,807 INFO    MainThread:43178 [wandb_run.py:Run._console_start():1898] atexit reg
+2022-05-06 16:19:39,807 INFO    MainThread:43178 [wandb_run.py:Run._redirect():1771] redirect: SettingsConsole.REDIRECT
+2022-05-06 16:19:39,808 INFO    MainThread:43178 [wandb_run.py:Run._redirect():1776] Redirecting console.
+2022-05-06 16:19:39,808 INFO    MainThread:43178 [wandb_run.py:Run._redirect():1832] Redirects installed.
+2022-05-06 16:19:39,808 INFO    MainThread:43178 [wandb_init.py:_WandbInit.init():688] run started, returning control to user process

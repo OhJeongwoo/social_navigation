@@ -1,0 +1,18 @@
+2022-05-09 12:09:56,728 INFO    MainThread:23698 [internal.py:wandb_internal():90] W&B internal server running at pid: 23698, started at: 2022-05-09 12:09:56.727995
+2022-05-09 12:09:56,729 DEBUG   HandlerThread:23698 [handler.py:handle_request():141] handle_request: run_start
+2022-05-09 12:09:56,729 INFO    WriterThread:23698 [datastore.py:open_for_write():75] open: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/offline-run-20220509_120956-2rhfmiy8/run-2rhfmiy8.wandb
+2022-05-09 12:09:56,732 DEBUG   HandlerThread:23698 [meta.py:__init__():35] meta init
+2022-05-09 12:09:56,732 DEBUG   HandlerThread:23698 [meta.py:__init__():49] meta init done
+2022-05-09 12:09:56,732 DEBUG   HandlerThread:23698 [meta.py:probe():209] probe
+2022-05-09 12:09:56,738 DEBUG   HandlerThread:23698 [meta.py:_setup_git():199] setup git
+2022-05-09 12:09:56,744 DEBUG   HandlerThread:23698 [meta.py:_setup_git():206] setup git done
+2022-05-09 12:09:56,744 DEBUG   HandlerThread:23698 [meta.py:_save_pip():53] save pip
+2022-05-09 12:09:56,744 DEBUG   HandlerThread:23698 [meta.py:_save_pip():67] save pip done
+2022-05-09 12:09:56,744 DEBUG   HandlerThread:23698 [meta.py:probe():247] probe done
+2022-05-09 13:41:11,401 WARNING MainThread:23698 [internal.py:wandb_internal():153] Internal process interrupt: 1
+2022-05-09 13:41:11,568 WARNING MainThread:23698 [internal.py:wandb_internal():153] Internal process interrupt: 2
+2022-05-09 13:41:11,569 ERROR   MainThread:23698 [internal.py:wandb_internal():156] Internal process interrupted.
+2022-05-09 13:41:11,717 INFO    WriterThread:23698 [datastore.py:close():279] close: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/offline-run-20220509_120956-2rhfmiy8/run-2rhfmiy8.wandb
+2022-05-09 13:41:11,718 INFO    HandlerThread:23698 [handler.py:finish():806] shutting down handler
+2022-05-09 13:41:12,204 INFO    SenderThread:23698 [sender.py:finish():1110] shutting down sender
+2022-05-09 13:41:12,204 INFO    MainThread:23698 [internal.py:handle_exit():80] Internal process exited

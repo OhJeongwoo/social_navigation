@@ -1,0 +1,34 @@
+
+{'exp_name': 'pedsim', 'exp_epi_len': 200, 'pi_hidden_layers': [128, 128], 'pi_options': ['default', 'leaky-relu', 'default'], 'replay_size': 10000, 'gamma': 0.99, 'polyak': 0.995, 'alpha': 0.002, 'learning_rate': 0.0001, 'epochs': 1000, 'steps_per_epoch': 1000, 'batch_size': 256, 'n_log_epi': 10, 'start_steps': 1000, 'update_after': 1000, 'update_every': 200, 'save_interval': 10, 'plot_rendering': True, 'seed': 1}
+Traceback (most recent call last):
+  File "sac_discrete.py", line 49, in <module>
+    exp_obs_dim_, exp_act_dim_ = env_.get_dim()
+  File "/home/jay/catkin_ws/src/social_navigation/scripts/gazebo_master.py", line 472, in get_dim
+    o = self.reset()
+  File "/home/jay/catkin_ws/src/social_navigation/scripts/gazebo_master.py", line 357, in reset
+    self.rrt_pub.publish(rt)
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/topics.py", line 882, in publish
+    self.impl.publish(data)
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/topics.py", line 1066, in publish
+    serialize_message(b, self.seq, message)
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/msg.py", line 152, in serialize_message
+    msg.serialize(b)
+  File "/home/jay/catkin_ws/devel/lib/python3/dist-packages/social_navigation/msg/_RRT.py", line 70, in serialize
+    buff.write(_get_struct_6dB().pack(_x.root.x, _x.root.y, _x.root.z, _x.goal.x, _x.goal.y, _x.goal.z, _x.option))
+AttributeError: 'list' object has no attribute 'x'
+Traceback (most recent call last):
+  File "sac_discrete.py", line 49, in <module>
+    exp_obs_dim_, exp_act_dim_ = env_.get_dim()
+  File "/home/jay/catkin_ws/src/social_navigation/scripts/gazebo_master.py", line 472, in get_dim
+    o = self.reset()
+  File "/home/jay/catkin_ws/src/social_navigation/scripts/gazebo_master.py", line 357, in reset
+    self.rrt_pub.publish(rt)
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/topics.py", line 882, in publish
+    self.impl.publish(data)
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/topics.py", line 1066, in publish
+    serialize_message(b, self.seq, message)
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/msg.py", line 152, in serialize_message
+    msg.serialize(b)
+  File "/home/jay/catkin_ws/devel/lib/python3/dist-packages/social_navigation/msg/_RRT.py", line 70, in serialize
+    buff.write(_get_struct_6dB().pack(_x.root.x, _x.root.y, _x.root.z, _x.goal.x, _x.goal.y, _x.goal.z, _x.option))
+AttributeError: 'list' object has no attribute 'x'

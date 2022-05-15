@@ -1,0 +1,33 @@
+{'exp_name': 'pedsim', 'exp_epi_len': 200, 'pi_hidden_layers': [128, 128], 'pi_options': ['default', 'leaky-relu', 'default'], 'replay_size': 10000, 'gamma': 0.99, 'polyak': 0.995, 'alpha': 0.002, 'learning_rate': 0.0001, 'epochs': 1000, 'steps_per_epoch': 1000, 'batch_size': 256, 'n_log_epi': 10, 'start_steps': 1000, 'update_after': 1000, 'update_every': 200, 'save_interval': 10, 'plot_rendering': True, 'seed': 1}
+> /home/jay/catkin_ws/src/social_navigation/scripts/gazebo_master.py(362)reset()
+    361
+--> 362         self.reset_ = False
+    363         self.target_time_ = self.time_
+[?2004h[?1l[?25l[?7lipdb> [?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7ls[?7h[?12l[?25h[?25l[?7le[?7h[?12l[?25h[?25l[?7ll[?7h[?12l[?25h[?25l[?7lf[?7h[?12l[?25h[?25l[?7l.[?7h[?12l[?25h[?25l[?7ll[?7h[?12l[?25h[?25l[?7lo[?7h[?12l[?25h[?25l[?7lc[?7h[?12l[?25h[?25l[?7la[?7h[?12l[?25h[?25l[?7ll[?7h[?12l[?25h[?25l[?7l_[?7h[?12l[?25h[?25l[?7lg[?7h[?12l[?25h[?25l[?7lo[?7h[?12l[?25h[?25l[?7la[?7h[?12l[?25h[?25l[?7ll[?ipdb> self.local_goal
+[?7h[?12l[?25h[?2004l*** AttributeError: 'PedSim' object has no attribute 'local_goal'
+[?2004h[?25l[?7lipdb> [?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7lself.local_goal[?7h[?12l[?25h[?25l[?7l_[ipdb> self.local_goal_
+[?7h[?12l[?25h[?2004lx: -21.21989508157755
+y: -3.9108172472516562
+z: 0.0
+[?2004h[?25l[?7lipdb> [?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7lq[?7h[?12l[?25h[?25l[?7lu[?7h[?12l[?25h[?25l[?7li[?7h[?12l[?25h[?25l[?7lt[?7h[?12l[?25h[?25l[?7l([?7h[?12l[?25h[?25l[?7l)[?7h[?12l[?ipdb> quit()
+[?7h[?12l[?25h[?2004l
+Traceback (most recent call last):
+  File "sac_discrete.py", line 49, in <module>
+    exp_obs_dim_, exp_act_dim_ = env_.get_dim()
+  File "/home/jay/catkin_ws/src/social_navigation/scripts/gazebo_master.py", line 473, in get_dim
+  File "/home/jay/catkin_ws/src/social_navigation/scripts/gazebo_master.py", line 362, in reset
+    rt = RRT()
+  File "/home/jay/catkin_ws/src/social_navigation/scripts/gazebo_master.py", line 362, in reset
+    rt = RRT()
+  File "/usr/lib/python3.8/bdb.py", line 88, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/usr/lib/python3.8/bdb.py", line 113, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.3.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True

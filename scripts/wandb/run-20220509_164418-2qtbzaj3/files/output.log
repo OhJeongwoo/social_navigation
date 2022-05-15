@@ -1,0 +1,44 @@
+
+{'exp_name': 'pedsim', 'exp_epi_len': 1000, 'pi_hidden_layers': [128, 128], 'pi_options': ['default', 'leaky-relu', 'default'], 'replay_size': 10000, 'gamma': 0.99, 'polyak': 0.995, 'alpha': 0.002, 'learning_rate': 0.0001, 'epochs': 1000, 'steps_per_epoch': 4000, 'batch_size': 512, 'n_log_epi': 10, 'start_steps': 1000, 'update_after': 4000, 'update_every': 1000, 'save_interval': 10, 'plot_rendering': True, 'seed': 1}
+[-23.15, 3.049999999999997] [-48.349999999999994, -58.95]
+> /home/jay/catkin_ws/src/social_navigation/scripts/gazebo_master.py(614)update_state()
+    613         # goal state
+--> 614         gx, gy = transform_coordinate(self.local_goal_.x - jx, self.local_goal_.y - jy, ct, st)
+    615         state.goal_distance = (gx**2 + gy**2)**0.5
+
+[?2004h[?1l[?25l[?7lipdb> [?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7ls[?7h[?12l[?25h[?25l[?7le[?7h[?12l[?25h[?25l[?7ll[?7h[?12l[?25h[?25l[?7lf[?7h[?12l[?25h[?25l[?7l.[?7h[?12l[?25h[?25l[?7ll[?7h[?12l[?25h[?25l[?7lo[?7h[?12l[?25h[?25l[?7lc[?7h[?12l[?25h[?25l[?7la[?7h[?12l[?25h[?25l[?7ll[?7h[?12l[?25h[?25l[?7l_[?7h[?12l[?25h[?25l[?7lg[?7h[?12l[?25h[?25l[?7lo[?7h[?12l[?25h[?25l[?7la[?7h[?12l[?25h[?25l[?7ll[?7h[?12l[?25h[?25l[?7l_[ipdb> self.local_goal_
+[?7h[?12l[?25h[?2004lx: -48.352510661576716
+y: -58.95155206739598
+z: 0.0
+[?2004h[?25l[?7lipdb> [?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7lj[?7h[?12l[?25h[?25l[?7lx[?7h[?12l[?25h[ipdb> jx
+[?7h[?12l[?25h[?2004l-48.352510661576716
+[?2004h[?25l[?7lipdb> [?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7lj[?7h[?12l[?25h[?25l[?7ly[?7h[?12l[?25h[ipdb> jy
+[?7h[?12l[?25h[?2004l-58.95155206739598
+
+[?2004h[?25l[?7lipdb> [?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7ls[?7h[?12l[?25h[?25l[?7le[?7h[?12l[?25h[?25l[?7ll[?7h[?12l[?25h[?25l[?7lf[?7h[?12l[?25h[?25l[?7l.[?7h[?12l[?25h[?25l[?7lj[?7h[?12l[?25h[?25l[?7la[?7h[?12l[?25h[?25l[?7lc[?7h[?12l[?25h[?25l[?7lk[?7h[?12l[?25h[?25l[?7lL[?7h[?12l[?25h[?25l[?7[?7h[?12l[?25h[?25l[?7la[?7h[?12l[?25h[?25l[?7ll[?7h[?12l[?25h[?25l[?7l_[?7h[?12l[?25h[?25l[?7lg[?7h[?12l[?25h[?25l[?7lo[?7h[?12l[?25h[?25l[?7la[?7h[?12l[?25h[?25l[?7ll[?7h[?12l[?25h[?25l[?7l_ipdb> self.jackal_goal_
+[?7h[?12l[?25h[?2004l[-23.15, 3.049999999999997]
+
+
+[?2004h[?25l[?7lipdb> [?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7ls[?7h[?12l[?25h[?25l[?7le[?7h[?12l[?25h[?25l[?7ll[?7h[?12l[?25h[?25l[?7lf[?7h[?12l[?25h[?25l[?7l.[?7h[?12l[?25h[?25l[?7[?7h[?12l[?25h
+Traceback (most recent call last):
+  File "sac_discrete.py", line 49, in <module>
+    exp_obs_dim_, exp_act_dim_ = env_.get_dim()
+  File "/home/jay/catkin_ws/src/social_navigation/scripts/gazebo_master.py", line 519, in get_dim
+  File "/home/jay/catkin_ws/src/social_navigation/scripts/gazebo_master.py", line 401, in reset
+    #a = [self.recent_action[0] * weight + np.clip(a[0], 0.0, 1.0) * (1-weight), self.recent_action[1] * weight + (1-weight) * np.clip(a[1], -1.0, 1.0)]
+  File "/home/jay/catkin_ws/src/social_navigation/scripts/gazebo_master.py", line 614, in update_state
+  File "/home/jay/catkin_ws/src/social_navigation/scripts/gazebo_master.py", line 614, in update_state
+  File "/usr/lib/python3.8/bdb.py", line 88, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/usr/lib/python3.8/bdb.py", line 113, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.3.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+
+[?2004h[?25l[?7lipdb> [?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7ls[?7h[?12l[?25h[?25l[?7le[?7h[?12l[?25h[?25l[?7ll[?7h[?12l[?25h[?25l[?7lf[?7h[?12l[?25h[?25l[?7l.[?7h[?12l[?25h[?25l[?7[?7h[?12l[?25h[?25l[?7[?7h[?12l[?25h[?25l[?7[?7h[?12l[?25h[?25l[?7[?7h[?12l[?25h[?25l[?7[?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7l[?7h[?12l[?25h[?25l[?7lq[?7h[?12l[?25h[?25l[?7lu[?7h[?12l[?25h[?25l[?7li[?7h[?12l[?25h[?25l[?7lt[?7h[?12l[?25h[?25l[?7l([?7h[?12l[?25h[?25l[?7l)[?7h[?12l[?ipdb> quit()
+[?7h[?12l[?25h[?2004l
