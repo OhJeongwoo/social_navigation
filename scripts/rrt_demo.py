@@ -149,8 +149,8 @@ class Demo:
 
                 step += 1
                 ep_step += 1
-                if done or ep_step >= 200:
-                    break
+                # if done or ep_step >= 200:
+                #     break
         expert_data = {}
         expert_data['state_array'] = state_array
         expert_data['next_state_array'] = next_state_array

@@ -354,6 +354,7 @@ class RRT{
 
     vector<node> init_rrt(point root, bool option){
         // if option is true, remove fixed local path
+        stop_ = false;
         vector<node> rt;
         if(local_path_.size() == 0 || option){
             node r;
@@ -368,7 +369,6 @@ class RRT{
         r.parent = -1;
         rt.push_back(r);
         double d = 0.0;
-        stop_ = false;
         for(int i = idx; i < local_path_.size(); i++){
             node r;
             r.p = local_path_[i].p;

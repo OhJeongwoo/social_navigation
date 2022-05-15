@@ -64,6 +64,11 @@
     <gravity>0 0 -9.8</gravity>
     <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
     <atmosphere type="adiabatic"/>
+    <physics name="default_physics" default="0" type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
     <scene>
       <ambient>0.4 0.4 0.4 1</ambient>
       <background>0.7 0.7 0.7 1</background>
@@ -80,7 +85,6 @@
       <elevation>0</elevation>
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
-    
     <model name="301_7f_1">
       <pose frame="">1.02031 25.2413 0 0 -0 0</pose>
       <link name="Wall_0">
@@ -11502,34 +11506,6 @@
     </model>
     <actor name="actor_000">
       <pose>-20 -20 1.25 0 0 0 </pose>
-      <link name="actor_000_body">
-        <collision name="actor_000_body_Collision">
-          <geometry>
-            <cylinder>
-              <radius>0.3</radius>
-              <length>2.0</length>
-            </cylinder>
-          </geometry>
-          <pose frame="">0 0 0.0 0 -0 0</pose>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <pose frame="">0 0 0 0 -0 0</pose>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
       <skin>
         <filename>walk.dae</filename>
         <scale>1.0</scale>
@@ -11553,34 +11529,6 @@
     </actor>
     <actor name="actor_001">
       <pose>-20 -20 1.25 0 0 0 </pose>
-      <link name="actor_001_body">
-        <collision name="actor_001_body_Collision">
-          <geometry>
-            <cylinder>
-              <radius>0.3</radius>
-              <length>2.0</length>
-            </cylinder>
-          </geometry>
-          <pose frame="">0 0 0.0 0 -0 0</pose>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <pose frame="">0 0 0 0 -0 0</pose>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
       <skin>
         <filename>walk.dae</filename>
         <scale>1.0</scale>
@@ -11604,34 +11552,6 @@
     </actor>
     <actor name="actor_002">
       <pose>-20 -20 1.25 0 0 0 </pose>
-      <link name="actor_002_body">
-        <collision name="actor_002_body_Collision">
-          <geometry>
-            <cylinder>
-              <radius>0.3</radius>
-              <length>2.0</length>
-            </cylinder>
-          </geometry>
-          <pose frame="">0 0 0.0 0 -0 0</pose>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <pose frame="">0 0 0 0 -0 0</pose>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
       <skin>
         <filename>walk.dae</filename>
         <scale>1.0</scale>
@@ -11758,6 +11678,52 @@
       </animation>
       <plugin name="actor_007" filename="libHumanPlugin.so">
         <model_name>actor_007</model_name>
+        <x>-20</x>
+        <y>-20</y>
+        <target_weight>1.15</target_weight>
+        <obstacle_weight>1.8</obstacle_weight>
+        <animation_factor>5.1</animation_factor>
+        <ignore_obstacles>
+          <model>ground_plane</model>
+        </ignore_obstacles>
+      </plugin>
+    </actor>
+    <actor name="actor_008">
+      <pose>-20 -20 1.25 0 0 0 </pose>
+      <skin>
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walking">
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      <plugin name="actor_008" filename="libHumanPlugin.so">
+        <model_name>actor_008</model_name>
+        <x>-20</x>
+        <y>-20</y>
+        <target_weight>1.15</target_weight>
+        <obstacle_weight>1.8</obstacle_weight>
+        <animation_factor>5.1</animation_factor>
+        <ignore_obstacles>
+          <model>ground_plane</model>
+        </ignore_obstacles>
+      </plugin>
+    </actor>
+    <actor name="actor_009">
+      <pose>-20 -20 1.25 0 0 0 </pose>
+      <skin>
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walking">
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      <plugin name="actor_009" filename="libHumanPlugin.so">
+        <model_name>actor_009</model_name>
         <x>-20</x>
         <y>-20</y>
         <target_weight>1.15</target_weight>

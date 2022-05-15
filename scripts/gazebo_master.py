@@ -113,15 +113,18 @@ class PedSim:
         self.col_mesh_y = self.col_mesh_y.ravel()
 
         # parameter for actor
-        self.n_actor_ = 0
+        self.n_actor_ = 10
         self.actor_name_ = []
-        self.status_ = {}
-        self.status_time_ = {}
+        self.group_id_ = {}
+        self.r_pos_ = {}
+        # self.status_ = {}
+        self.actor_status_ = {}
+        # self.status_time_ = {}
         self.reset_pose_ = {}
         self.pose_ = {}
         self.goal_ = {}
-        self.traj_idx_ = {}
-        self.waypoint_idx_ = {}
+        # self.traj_idx_ = {}
+        # self.waypoint_idx_ = {}
         self.pub_ = {}
         self.sub_status_ = {}
         self.sub_pose_ = {}
@@ -139,35 +142,45 @@ class PedSim:
         self.traj_list_ = [[] for _ in range(self.n_ped_waypoints_)]
         for i in range(self.n_traj_):
             self.traj_list_[self.traj_[i]['start']].append(i)
-
-        # for i in range(self.n_traj_):
-        #     adj_row = []
-        #     for j in range(self.n_traj_):
-        #         check = False
-        #         n = len(self.traj_[i]['waypoints'])
-        #         m = len(self.traj_[j]['waypoints'])
-        #         for seq1 in range(n):
-        #             for seq2 in range(m):
-        #                 if get_length(self.traj_[i]['waypoints'][seq1], self.traj_[j]['waypoints'][seq2]) < 3.0:
-        #                     check = True
-        #                     break
-        #             if check:
-        #                 break
-        #         adj_row.append(check)
-        #     self.adj_mat_.append(adj_row)
         
+        
+        groups = make_group(self.n_actor_)
+        self.n_groups_ = len(groups)
+        g_ids = []
+        for g_id, g in enumerate(groups):
+            for i in range(g):
+                g_ids.append(g_id)
+
+        r_pos = []
+        for g in groups:
+            p = set_relative_pose(g)
+            r_pos += p
+        
+        self.status_ = []
+        self.status_time_ = []
+        self.traj_idx_ = []
+        self.waypoint_idx_ = []
+
+        for g in  range(self.n_groups_):
+            self.status_.append(WAIT)
+            self.status_time_.append(0.0)
+            self.traj_idx_.append(-1)
+            self.waypoint_idx_.append(-1)
 
         # set actor parameters
         for seq in range(self.n_actor_):
             name = 'actor_'+str(seq).zfill(3)
             self.actor_name_.append(name)
-            self.status_[name] = WAIT
-            self.status_time_[name] = self.time_
-            self.traj_idx_[name] = -1
-            self.waypoint_idx_[name] = -1
+            self.group_id_[name] = g_ids[seq]
+            self.r_pos_[name] = r_pos[seq]
+            self.actor_status_[name] = WAIT
+            # self.status_[name] = WAIT
+            # self.status_time_[name] = self.time_
+            # self.traj_idx_[name] = -1
+            # self.waypoint_idx_[name] = -1
             self.pub_[name] = rospy.Publisher('/' + name + '/cmd', Command, queue_size=10)
             self.sub_status_[name] = rospy.Subscriber('/' + name + '/status', Status, self.callback_status)
-            # self.sub_pose_[name] = rospy.Subscriber('/' + name + '/pose', PoseStamped, self.callback_pose)
+
 
         # define ROS communicator
         self.sub_pose_ = rospy.Subscriber('/gazebo/model_states', ModelStates, self.callback_pose)
@@ -203,9 +216,11 @@ class PedSim:
 
     def callback_status(self, msg):
         name = msg.name
-        if self.status_[name] != msg.status:
-            self.status_[name] = msg.status
-            self.status_time_[name] = self.time_
+        # if self.status_[name] != msg.status:
+        #     self.status_[name] = msg.status
+        #     self.status_time_[name] = self.time_
+        if self.actor_status_[name] != msg.status:
+            self.actor_status_[name] = msg.status
 
 
     def callback_pose(self, msg):
@@ -332,7 +347,7 @@ class PedSim:
         for pos in self.spawn_:
             check = True
             for name in self.actor_name_:
-                if self.status_[name] != MOVE:
+                if self.actor_status_[name] != MOVE:
                     continue
                 if get_length(pos['spawn'], [self.pose_[name].x, self.pose_[name].y]) < self.spawn_threshold_:
                     check = False
@@ -566,17 +581,28 @@ class PedSim:
 
 
 
-    def get_goal(self, name):
-        traj = self.traj_[self.traj_idx_[name]]
-        time = min(self.time_ - self.status_time_[name] + self.lookahead_time_, traj['time'] - EPS)
+    # def get_goal(self, name):
+    #     traj = self.traj_[self.traj_idx_[name]]
+    #     time = min(self.time_ - self.status_time_[name] + self.lookahead_time_, traj['time'] - EPS)
+    #     interval = traj['interval']
+    #     k = int(time // interval)
+    #     A = traj['waypoints'][k]
+    #     B = traj['waypoints'][k+1]
+    #     alpha = (time - interval * k) / interval
+    #     goal = interpolate(A,B,alpha)
+    #     # d = ((goal[0]-self.pose_[name].x) ** 2 + (goal[1]-self.pose_[name].y) ** 2) ** 0.5
+    #     # print("name: %s, traj_time: %.3f, time: %.3f, interval: %.2f, k: %d, goal: (%.3f, %.3f), pose: (%.3f, %.3f) dist: %.3f" %(name, traj['time'], time, interval, k, goal[0], goal[1], self.pose_[name].x, self.pose_[name].y, d))        
+    #     return Point(goal[0], goal[1], 2.0)
+
+    def get_goal(self, g):
+        traj = self.traj_[self.traj_idx_[g]]
+        time = min(self.time_ - self.status_time_[g] + self.lookahead_time_, traj['time'] - EPS)
         interval = traj['interval']
         k = int(time // interval)
         A = traj['waypoints'][k]
         B = traj['waypoints'][k+1]
         alpha = (time - interval * k) / interval
         goal = interpolate(A,B,alpha)
-        # d = ((goal[0]-self.pose_[name].x) ** 2 + (goal[1]-self.pose_[name].y) ** 2) ** 0.5
-        # print("name: %s, traj_time: %.3f, time: %.3f, interval: %.2f, k: %d, goal: (%.3f, %.3f), pose: (%.3f, %.3f) dist: %.3f" %(name, traj['time'], time, interval, k, goal[0], goal[1], self.pose_[name].x, self.pose_[name].y, d))        
         return Point(goal[0], goal[1], 2.0)
 
 
@@ -731,60 +757,101 @@ class PedSim:
             return
         
         # control pedestrian
+        peds = {}
+        goals = []
         for name in self.actor_name_:
-            if self.status_[name] == MOVE:
-                traj_num = self.traj_idx_[name]
-                if self.time_ - self.status_time_[name] > self.traj_[traj_num]['time']:
-                    self.status_[name] = WAIT
-                    rt = Command()
-                    rt.name = name
-                    rt.status = WAIT
-                    self.pub_[name].publish(rt)
+            ped = {'group': self.group_id_[name], 'pos': self.pose_[name], 'rpos': self.r_pos_[name]}
+            peds[name] = ped        
+        for g in range(self.n_groups_):
+            if self.status_[g] == MOVE:
+                traj_num = self.traj_idx_[g]
+                if self.time_ - self.status_time_[g] > self.traj_[traj_num]['time']:
+                    goal = None
+                    self.status_[g] = WAIT
+                    for name in self.actor_name_:
+                        if self.group_id_[name] == g:
+                            self.actor_status_[name] = WAIT
+                        continue
+                goal = self.get_goal(g)
+            elif self.status_[g] == WAIT:
+                if self.waypoint_idx_[g] == -1:
+                    traj_num = random.randint(0, self.n_traj_-1)
+                else:
+                    traj_num = random.choice(self.traj_list_[self.waypoint_idx_[g]])
+                self.waypoint_idx_[g] = self.traj_[traj_num]['end']
+                self.traj_idx_[g] = traj_num
+                self.status_[g] = INIT
+                goal = None
+            elif self.status_[g] == INIT:
+                check = True
+                traj_num = self.traj_idx_[g]
+                for name in self.actor_name_:
+                    if self.group_id_[name] != g:
+                        continue
+                    if self.actor_status_[name] != MOVE:
+                        check = False
+                        break
+                if check:
+                    self.status_[g] = MOVE
+                    self.status_time_[g] = self.time_
+                goal = Point(self.traj_[traj_num]['waypoints'][0][0], self.traj_[traj_num]['waypoints'][0][1], 0.0)
+            goals.append(goal)
+
+        jackal = self.jackal_pose_.position
+        sub_goals, sub_vel = pedestrian_controller(peds, goals, jackal)
+        for name in self.actor_name_:
+            g = self.group_id_[name]
+            if self.status_[g] == MOVE:
+                if not name in sub_goals.keys():
                     continue
-                self.goal_[name] = self.get_goal(name)
+                self.actor_status_[name] = MOVE
                 rt = Command()
                 rt.name = name
                 rt.status = MOVE
-                rt.goal = Pose(position=self.goal_[name])
-                rt.velocity = L2dist(self.pose_[name], self.goal_[name]) / self.lookahead_time_
+                rt.goal = Pose(position = sub_goals[name])
+                rt.velocity  = sub_vel[name]
                 self.pub_[name].publish(rt)
-            
-            elif self.status_[name] == WAIT:
-                if self.waypoint_idx_[name] == -1:
-                    traj_num = random.randint(0, self.n_traj_-1)
-                else:
-                    traj_num = random.choice(self.traj_list_[self.waypoint_idx_[name]])
-                self.waypoint_idx_[name] = self.traj_[traj_num]['end']
-                self.traj_idx_[name] = traj_num
-                # p = random.uniform(0.0, 1.0)
-                # if p > self.actor_prob_:
-                #     continue
-                
-                # # select possible trajectory
-                # traj_cand = [True for i in range(self.n_traj_)]
-                # for name2 in self.actor_name_:
-                #     if self.traj_idx_[name2] == -1:
-                #         continue
-                #     for i in range(self.n_traj_):
-                #         if self.adj_mat_[self.traj_idx_[name2]][i]:
-                #             traj_cand[i] = False
-                # s=0
-                # for i in range(self.n_traj_):
-                #     if traj_cand[i]:
-                #         s += 1
-                # if s != 0:
-                #     while True:
-                #         traj_num = random.randint(0, self.n_traj_-1)
-                #         if traj_cand[traj_num]:
-                #                 break
-                #     self.traj_idx_[name] = traj_num
-
-                # INIT actor
+            elif self.status_[g] == INIT:
+                traj_num = self.traj_idx_[g]
                 rt = Command()
                 rt.name = name
                 rt.status = INIT
-                rt.goal = Pose(position=Point(self.traj_[traj_num]['waypoints'][0][0], self.traj_[traj_num]['waypoints'][0][1], 0.0))
+                rt.goal = Pose(position=Point(self.traj_[traj_num]['waypoints'][0][0] + self.r_pos_[name].x, self.traj_[traj_num]['waypoints'][0][1] + self.r_pos_[name].y, 0.0))
                 self.pub_[name].publish(rt)
+
+
+        # for name in self.actor_name_:
+        #     if self.status_[name] == MOVE:
+        #         traj_num = self.traj_idx_[name]
+        #         if self.time_ - self.status_time_[name] > self.traj_[traj_num]['time']:
+        #             self.status_[name] = WAIT
+        #             rt = Command()
+        #             rt.name = name
+        #             rt.status = WAIT
+        #             self.pub_[name].publish(rt)
+        #             continue
+        #         self.goal_[name] = self.get_goal(name)
+        #         rt = Command()
+        #         rt.name = name
+        #         rt.status = MOVE
+        #         rt.goal = Pose(position=self.goal_[name])
+        #         rt.velocity = L2dist(self.pose_[name], self.goal_[name]) / self.lookahead_time_
+        #         self.pub_[name].publish(rt)
+            
+        #     elif self.status_[name] == WAIT:
+        #         if self.waypoint_idx_[name] == -1:
+        #             traj_num = random.randint(0, self.n_traj_-1)
+        #         else:
+        #             traj_num = random.choice(self.traj_list_[self.waypoint_idx_[name]])
+        #         self.waypoint_idx_[name] = self.traj_[traj_num]['end']
+        #         self.traj_idx_[name] = traj_num
+
+        #         # INIT actor
+        #         rt = Command()
+        #         rt.name = name
+        #         rt.status = INIT
+        #         rt.goal = Pose(position=Point(self.traj_[traj_num]['waypoints'][0][0], self.traj_[traj_num]['waypoints'][0][1], 0.0))
+        #         self.pub_[name].publish(rt)
         
         # control jackal
         cmd = Twist()

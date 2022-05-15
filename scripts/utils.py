@@ -5,7 +5,10 @@ from matplotlib.pyplot import get
 from lxml import etree
 from lxml.etree import Element
 import math
+import random
 from geometry_msgs.msg import Pose, Point, Quaternion
+
+from collections import namedtuple
 
 WAIT = 0
 INIT = 1
@@ -234,3 +237,99 @@ def get_similar_action(a):
             min_d = d
             rt = i
     return [rt]
+
+
+def make_group(N, max_n=3):
+    rt = []
+    while N > 0:
+        n = min(random.randint(1, max_n), N)
+        rt.append(n)
+        N -= n
+    return rt
+
+
+def set_relative_pose(N, grid=0.5):
+    rt = []
+    for _ in range(N):
+        while True:
+            x = random.uniform(-grid,grid)
+            y = random.uniform(-grid,grid)
+            if len(rt) == 0:
+                break
+            q = Point(x,y,0.0)
+            dist_list = []
+            for p in rt:
+                dist_list.append(L2dist(p,q))
+            if min(dist_list) > 0.3:
+                break
+        rt.append(Point(x,y,0.0))
+    return rt
+
+
+def pedestrian_controller(peds, goals, jackal=None):
+    N = len(peds)
+    rt = {}
+    rt_v = {}
+    c1 = 6.0 # for goal
+    c2 = 0.5 # for social force
+    actor_name_ = peds.keys()
+    for name in actor_name_:
+        ped = peds[name]
+        g_id = ped['group']
+        ppos = ped['pos']
+        rpos = ped['rpos']
+        goal = goals[g_id]
+        if goal is None:
+            continue
+        g = Point(rpos.x + goal.x, rpos.y + goal.y, 0.0)
+        r = Point(g.x - ppos.x, g.y - ppos.y, 0.0)
+        v = (r.x ** 2 + r.y ** 2) ** 0.5
+        if v < 0.01:
+            continue
+        r = Point(r.x / v * c1, r.y / v * c1, 0.0)
+        f = Point(0.0, 0.0, 0.0)
+        for q_name in actor_name_:
+            q = peds[q_name]
+            if q['group'] == g_id:
+                continue
+            d = L2dist(ppos, q['pos'])
+            if d > 3.0:
+                continue
+            c = 3.0 - d
+            u = Point(ppos.x - q['pos'].x, ppos.y - q['pos'].y, 0.0)
+            nu = norm_2d(u)
+            if nu < 0.01:
+                continue
+            f.x += u.x / nu * c * c2
+            f.y += u.y / nu * c * c2
+        d = L2dist(ppos, jackal)
+        if d < 3.0:
+            c = 3.0 - d
+            u = Point(ppos.x - jackal.x, ppos.y - jackal.y, 0.0)
+            nu = norm_2d(u)
+            if nu > 0.01:
+                f.x += 3.0 * u.x / nu * c * c2
+                f.y += 3.0 * u.y / nu * c * c2
+        # dir = Point(r.x + f.x, r.y + f.y, 0.0)
+        # if norm_2d(dir) < 0.01:
+        #     continue
+        # dir = Point(ppos.x + v * dir.x / norm_2d(dir), ppos.y + v * dir.y / norm_2d(dir), 0.0)
+        dir = Point(g.x + f.x, g.y + f.y, 0.0)
+        rt[name] = dir
+        rt_v[name] = L2dist(dir, ppos)
+    return rt, rt_v
+    # for ped in peds:
+    #     g_id = ped['group']
+    #     g_goal = goal[g_id]
+    #     p_pos = ped['pos']
+    #     goal = Point(ped['rpos'].x + g_goal.x, ped['rpos'].y + g_goal.y, 0.0)
+    #     g_v = Point(goal.x - p_pos.x, goal.y - p_pos.y, 0.0)
+    #     vel = (g_v.x ** 2 + g_v.y ** 2) ** 0.5
+    #     g_v = Point(g_v.x / vel, g_v.y / vel, 0.0)
+    #     s_v = Point(0.0, 0.0, 0.0)
+    #     for q in peds:
+    #         if q['group'] == g_id:
+    #             continue
+    #         d = L2dist(p_pos, q['pos'])
+
+
