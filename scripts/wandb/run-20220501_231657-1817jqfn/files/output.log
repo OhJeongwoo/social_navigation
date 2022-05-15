@@ -1,0 +1,139 @@
+
+{'exp_name': 'pedsim_cpo', 'exp_epi_len': 200, 'pi_hidden_layers': [128, 128], 'pi_options': ['default', 'leaky-relu', 'default'], 'replay_size': 10000, 'gamma': 0.99, 'lambda': 0.97, 'polyak': 0.995, 'alpha': 0.002, 'learning_rate': 0.0001, 'epochs': 1000, 'steps_per_epoch': 1000, 'batch_size': 256, 'n_log_epi': 10, 'start_steps': 1000, 'update_after': 1000, 'update_every': 200, 'save_interval': 10, 'plot_rendering': True, 'seed': 1}
+/home/brain5/anaconda3/lib/python3.8/site-packages/torch/cuda/__init__.py:80: UserWarning: CUDA initialization: CUDA unknown error - this may be due to an incorrectly set up environment, e.g. changing env variable CUDA_VISIBLE_DEVICES after program start. Setting the available devices to be zero. (Triggered internally at  ../c10/cuda/CUDAFunctions.cpp:112.)
+  return torch._C._cuda_getDeviceCount() > 0
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 27.330440000000003
+      y: -0.25669999999999504
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -6.338559999999987
+      y: -5.592739999999996
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -7.535679999999992
+      y: -0.45805999999999614
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -13.670919999999995
+      y: -7.404979999999998
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -19.506879999999995
+      y: -5.2906999999999975
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+Traceback (most recent call last):
+  File "cpo_discrete.py", line 424, in <module>
+    o2, r, d, info = env_.step(a)
+  File "/home/brain5/catkin_ws/src/social_navigation/scripts/gazebo_master.py", line 336, in step
+    self.simulation()
+  File "/home/brain5/catkin_ws/src/social_navigation/scripts/gazebo_master.py", line 244, in simulation
+    self.client_unpause_()
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/impl/tcpros_service.py", line 442, in __call__
+    return self.call(*args, **kwds)
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/impl/tcpros_service.py", line 525, in call
+    raise ServiceException("service [%s] returned no response"%self.resolved_name)
+rospy.service.ServiceException: service [/gazebo/unpause_physics] returned no response

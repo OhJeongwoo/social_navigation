@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "rrt_sac_demo.py", line 341, in <module>
+    ped_sim = Demo()
+  File "rrt_sac_demo.py", line 84, in __init__
+    exp_obs_dim_, exp_act_dim_ = self.ped_sim_.get_dim()
+  File "/home/brain5/catkin_ws/src/social_navigation/scripts/gazebo_master_rrt.py", line 458, in get_dim
+    o = self.reset()
+  File "/home/brain5/catkin_ws/src/social_navigation/scripts/gazebo_master_rrt.py", line 348, in reset
+    self.update_state()
+  File "/home/brain5/catkin_ws/src/social_navigation/scripts/gazebo_master_rrt.py", line 548, in update_state
+    self.rrt_pub.publish(rt)
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/topics.py", line 882, in publish
+    self.impl.publish(data)
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/topics.py", line 1066, in publish
+    serialize_message(b, self.seq, message)
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/msg.py", line 152, in serialize_message
+    msg.serialize(b)
+  File "/home/brain5/catkin_ws/devel/lib/python3/dist-packages/social_navigation/msg/_RRT.py", line 70, in serialize
+    buff.write(_get_struct_6dB().pack(_x.root.x, _x.root.y, _x.root.z, _x.goal.x, _x.goal.y, _x.goal.z, _x.option))
+AttributeError: 'list' object has no attribute 'x'

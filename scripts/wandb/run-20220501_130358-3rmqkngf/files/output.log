@@ -1,0 +1,3799 @@
+
+{'exp_name': 'pedsim', 'exp_epi_len': 200, 'pi_hidden_layers': [128, 128], 'pi_options': ['default', 'leaky-relu', 'default'], 'replay_size': 10000, 'gamma': 0.99, 'polyak': 0.995, 'alpha': 0.002, 'learning_rate': 0.0001, 'epochs': 1000, 'steps_per_epoch': 1000, 'batch_size': 256, 'n_log_epi': 10, 'start_steps': 1000, 'update_after': 1000, 'update_every': 200, 'save_interval': 10, 'plot_rendering': True, 'seed': 1}
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -33.423399999999994
+      y: -8.210419999999996
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -7.535679999999992
+      y: -0.45805999999999614
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 14.311760000000014
+      y: -6.599540000000001
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -22.000879999999995
+      y: -0.6594199999999972
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -33.223879999999994
+      y: -6.64988
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 14.311760000000014
+      y: -6.599540000000001
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 13.76308000000001
+      y: -3.126079999999998
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 27.729480000000017
+      y: 16.20448
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 9.024480000000018
+      y: -0.25669999999999504
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -27.437799999999992
+      y: 4.223560000000003
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -29.732279999999992
+      y: -4.132879999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -16.763479999999987
+      y: -5.492059999999999
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 18.950600000000016
+      y: -3.7301600000000015
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 14.361640000000016
+      y: -0.5587400000000002
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -9.032079999999993
+      y: -5.44172
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 14.311760000000014
+      y: -6.599540000000001
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 5.083960000000012
+      y: -2.924719999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 4.335760000000008
+      y: -2.2702999999999953
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -20.903519999999993
+      y: -7.505659999999995
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -33.223879999999994
+      y: -6.64988
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -25.292959999999994
+      y: -3.2267600000000023
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -26.789359999999995
+      y: -7.304300000000001
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 7.927120000000009
+      y: -0.6594199999999972
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -9.032079999999993
+      y: -5.44172
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 14.710800000000013
+      y: -0.7600999999999978
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -14.219599999999993
+      y: -0.5083999999999982
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -21.103039999999993
+      y: -1.4145199999999996
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -29.782159999999998
+      y: -4.2335599999999936
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 4.535280000000014
+      y: -6.096139999999995
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 5.083960000000012
+      y: -2.924719999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -16.763479999999987
+      y: -5.492059999999999
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -31.877119999999994
+      y: -4.787299999999998
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 25.135720000000013
+      y: -0.35737999999999914
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -20.903519999999993
+      y: -7.505659999999995
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -5.540479999999988
+      y: -0.6090799999999987
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 17.304560000000016
+      y: -5.139680000000002
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 29.12612000000002
+      y: 2.7133600000000015
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 12.51608000000001
+      y: -3.0757399999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -26.789359999999995
+      y: -7.304300000000001
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -30.181199999999993
+      y: -4.636279999999996
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 14.361640000000016
+      y: -0.5587400000000002
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -26.83923999999999
+      y: 0.6494200000000028
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -17.711199999999998
+      y: -2.7736999999999945
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -5.241199999999992
+      y: -1.3138399999999955
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -20.903519999999993
+      y: -7.505659999999995
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -26.83923999999999
+      y: 0.6494200000000028
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 14.361640000000016
+      y: -7.9083799999999975
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 27.330440000000003
+      y: -0.25669999999999504
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -22.000879999999995
+      y: -0.6594199999999972
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -4.592759999999991
+      y: -0.6594199999999972
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 27.330440000000003
+      y: -0.25669999999999504
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 25.135720000000013
+      y: -0.35737999999999914
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -22.599439999999994
+      y: -2.219959999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 11.41872
+      y: -5.391380000000002
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -26.789359999999995
+      y: -7.304300000000001
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 8.326160000000009
+      y: -2.0185999999999957
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 4.535280000000014
+      y: -6.096139999999995
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -6.338559999999987
+      y: -5.592739999999996
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 4.335760000000008
+      y: -2.2702999999999953
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 3.78708000000001
+      y: -3.5288000000000004
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -2.148639999999986
+      y: -4.535599999999999
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -20.255079999999992
+      y: -5.945119999999992
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -22.150519999999993
+      y: -2.82404
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -26.83923999999999
+      y: 0.6494200000000028
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 14.660920000000011
+      y: -6.951919999999998
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -0.5524799999999885
+      y: -4.938320000000001
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 13.862840000000013
+      y: -3.0757399999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -26.988879999999995
+      y: -0.6090799999999987
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -2.148639999999986
+      y: -4.535599999999999
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -11.925119999999993
+      y: -0.25669999999999504
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 11.668120000000009
+      y: -2.9750599999999956
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -12.623439999999988
+      y: -4.73696
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 29.12612000000002
+      y: -1.263499999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -20.255079999999992
+      y: -5.945119999999992
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 14.311760000000014
+      y: -6.599540000000001
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 8.326160000000009
+      y: -6.045799999999996
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 9.074360000000006
+      y: -5.2906999999999975
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -22.599439999999994
+      y: -2.219959999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 9.024480000000018
+      y: -0.25669999999999504
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -21.103039999999993
+      y: -1.4145199999999996
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -0.5524799999999885
+      y: -4.938320000000001
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -2.2483999999999895
+      y: -3.881179999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -20.903519999999993
+      y: -7.505659999999995
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 29.17600000000001
+      y: 10.11334
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -18.858439999999987
+      y: -0.6090799999999987
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 12.51608000000001
+      y: -3.0757399999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -18.858439999999987
+      y: -0.6090799999999987
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 21.4446
+      y: -0.40771999999999764
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+out of bounds
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 29.425400000000018
+      y: -5.542399999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 29.17600000000001
+      y: 10.11334
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -11.476199999999992
+      y: -2.219959999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 29.225880000000025
+      y: 13.3351
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 14.660920000000011
+      y: -6.951919999999998
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 29.12612000000002
+      y: -1.263499999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -9.032079999999993
+      y: -5.44172
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 13.862840000000013
+      y: -3.0757399999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 27.729480000000017
+      y: 16.20448
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 28.776960000000024
+      y: 2.4616600000000055
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -26.789359999999995
+      y: -7.304300000000001
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 11.41872
+      y: -5.391380000000002
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+out of bounds
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -29.732279999999992
+      y: -4.132879999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 30.472880000000025
+      y: -1.0117999999999974
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -2.2483999999999895
+      y: -3.881179999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 28.776960000000024
+      y: 2.4616600000000055
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 4.535280000000014
+      y: -6.096139999999995
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 29.12612000000002
+      y: -1.263499999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -22.599439999999994
+      y: -2.219959999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -5.540479999999988
+      y: -0.6090799999999987
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 14.311760000000014
+      y: -6.599540000000001
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -18.858439999999987
+      y: -0.6090799999999987
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 29.225880000000025
+      y: 13.3351
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -25.891519999999993
+      y: 0.4480600000000017
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 4.335760000000008
+      y: -2.2702999999999953
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -13.670919999999995
+      y: -7.404979999999998
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 13.76308000000001
+      y: -3.126079999999998
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -33.423399999999994
+      y: -8.210419999999996
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 15.259480000000018
+      y: -7.404979999999998
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -23.34764
+      y: -5.743759999999998
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -25.292959999999994
+      y: -3.2267600000000023
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -31.877119999999994
+      y: -4.787299999999998
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -8.682919999999989
+      y: -4.132879999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 13.76308000000001
+      y: -3.126079999999998
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 16.506480000000018
+      y: -0.25669999999999504
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 14.710800000000013
+      y: -0.7600999999999978
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 15.259480000000018
+      y: -7.404979999999998
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 14.710800000000013
+      y: -0.7600999999999978
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 7.927120000000009
+      y: -0.6594199999999972
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 17.354440000000018
+      y: -4.837639999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -26.988879999999995
+      y: -0.6090799999999987
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 14.311760000000014
+      y: -6.599540000000001
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -22.000879999999995
+      y: -0.6594199999999972
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 3.78708000000001
+      y: -3.5288000000000004
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 4.535280000000014
+      y: -6.096139999999995
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 16.506480000000018
+      y: -0.25669999999999504
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -13.221999999999994
+      y: -1.5655399999999986
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 4.335760000000008
+      y: -2.2702999999999953
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -5.241199999999992
+      y: -1.3138399999999955
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -20.903519999999993
+      y: -7.505659999999995
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 18.651320000000005
+      y: -4.887979999999995
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 5.083960000000012
+      y: -2.924719999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -26.988879999999995
+      y: -7.606339999999992
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -11.476199999999992
+      y: -2.219959999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -6.338559999999987
+      y: -5.592739999999996
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -34.071839999999995
+      y: -3.1764199999999967
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 21.4446
+      y: -0.40771999999999764
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 17.354440000000018
+      y: -4.837639999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 3.78708000000001
+      y: -3.5288000000000004
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 30.472880000000025
+      y: -1.0117999999999974
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -14.219599999999993
+      y: -0.5083999999999982
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -22.599439999999994
+      y: -2.219959999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+goal reached!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -25.19319999999999
+      y: -3.126079999999998
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 18.651320000000005
+      y: -4.887979999999995
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"

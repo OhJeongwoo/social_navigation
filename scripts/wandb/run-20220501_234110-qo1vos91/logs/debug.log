@@ -1,0 +1,84 @@
+2022-05-01 23:41:10,415 INFO    MainThread:199705 [wandb_setup.py:_EarlyLogger._flush():75] Loading settings from /home/brain5/.config/wandb/settings
+2022-05-01 23:41:10,415 INFO    MainThread:199705 [wandb_setup.py:_EarlyLogger._flush():75] Loading settings from /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/settings
+2022-05-01 23:41:10,415 INFO    MainThread:199705 [wandb_setup.py:_EarlyLogger._flush():75] Loading settings from environment variables: {}
+2022-05-01 23:41:10,415 INFO    MainThread:199705 [wandb_setup.py:_EarlyLogger._flush():75] Inferring run settings from compute environment: {'program_relpath': 'scripts/cpo_discrete.py', 'program': 'cpo_discrete.py'}
+2022-05-01 23:41:10,415 INFO    MainThread:199705 [wandb_init.py:_WandbInit._log_setup():437] Logging user logs to /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_234110-qo1vos91/logs/debug.log
+2022-05-01 23:41:10,415 INFO    MainThread:199705 [wandb_init.py:_WandbInit._log_setup():438] Logging internal logs to /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220501_234110-qo1vos91/logs/debug-internal.log
+2022-05-01 23:41:10,415 INFO    MainThread:199705 [wandb_init.py:_WandbInit.init():471] calling init triggers
+2022-05-01 23:41:10,415 INFO    MainThread:199705 [wandb_init.py:_WandbInit.init():474] wandb.init called with sweep_config: {}
+config: {}
+2022-05-01 23:41:10,415 INFO    MainThread:199705 [wandb_init.py:_WandbInit.init():524] starting backend
+2022-05-01 23:41:10,416 INFO    MainThread:199705 [backend.py:Backend._multiprocessing_setup():97] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2022-05-01 23:41:10,429 INFO    MainThread:199705 [backend.py:Backend.ensure_launched():217] starting backend process...
+2022-05-01 23:41:10,441 INFO    MainThread:199705 [backend.py:Backend.ensure_launched():222] started backend process with pid: 199735
+2022-05-01 23:41:10,443 INFO    MainThread:199705 [wandb_init.py:_WandbInit.init():533] backend started and connected
+2022-05-01 23:41:10,448 INFO    MainThread:199705 [wandb_init.py:_WandbInit.init():597] updated telemetry
+2022-05-01 23:41:10,475 INFO    MainThread:199705 [wandb_init.py:_WandbInit.init():628] communicating run to backend with 30 second timeout
+2022-05-01 23:41:12,450 INFO    MainThread:199705 [wandb_run.py:Run._on_init():1923] communicating current version
+2022-05-01 23:41:12,515 INFO    MainThread:199705 [wandb_run.py:Run._on_init():1927] got version response 
+2022-05-01 23:41:12,516 INFO    MainThread:199705 [wandb_init.py:_WandbInit.init():659] starting run threads in backend
+2022-05-01 23:41:13,934 INFO    MainThread:199705 [wandb_run.py:Run._console_start():1897] atexit reg
+2022-05-01 23:41:13,934 INFO    MainThread:199705 [wandb_run.py:Run._redirect():1770] redirect: SettingsConsole.REDIRECT
+2022-05-01 23:41:13,935 INFO    MainThread:199705 [wandb_run.py:Run._redirect():1775] Redirecting console.
+2022-05-01 23:41:13,936 INFO    MainThread:199705 [wandb_run.py:Run._redirect():1831] Redirects installed.
+2022-05-01 23:41:13,936 INFO    MainThread:199705 [wandb_init.py:_WandbInit.init():684] run started, returning control to user process
+2022-05-01 23:42:56,562 INFO    MainThread:199705 [wandb_run.py:Run._atexit_cleanup():1866] got exitcode: 0
+2022-05-01 23:42:56,563 INFO    MainThread:199705 [wandb_run.py:Run._restore():1838] restore
+2022-05-01 23:42:59,220 INFO    MainThread:199705 [wandb_run.py:Run._on_finish():1995] got exit ret: file_counts {
+  wandb_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 800
+  total_bytes: 800
+}
+
+2022-05-01 23:42:59,526 INFO    MainThread:199705 [wandb_run.py:Run._on_finish():1995] got exit ret: file_counts {
+  wandb_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 800
+  total_bytes: 800
+}
+
+2022-05-01 23:43:00,515 INFO    MainThread:199705 [wandb_run.py:Run._on_finish():1995] got exit ret: file_counts {
+  wandb_count: 3
+}
+pusher_stats {
+  uploaded_bytes: 800
+  total_bytes: 1209
+}
+
+2022-05-01 23:43:00,617 INFO    MainThread:199705 [wandb_run.py:Run._on_finish():1995] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 800
+  total_bytes: 17067
+}
+
+2022-05-01 23:43:00,719 INFO    MainThread:199705 [wandb_run.py:Run._on_finish():1995] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 800
+  total_bytes: 17067
+}
+
+2022-05-01 23:43:00,821 INFO    MainThread:199705 [wandb_run.py:Run._on_finish():1995] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 800
+  total_bytes: 17067
+}
+
+2022-05-01 23:43:00,924 INFO    MainThread:199705 [wandb_run.py:Run._on_finish():1995] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 800
+  total_bytes: 17067
+}
+
+2022-05-01 23:43:06,559 INFO    MainThread:199705 [wandb_run.py:Run._on_finish():1995] got exit ret: None
+2022-05-01 23:43:06,659 INFO    MainThread:199705 [wandb_run.py:Run._restore():1838] restore

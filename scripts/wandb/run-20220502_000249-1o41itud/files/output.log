@@ -1,0 +1,370 @@
+
+{'exp_name': 'pedsim_cpo', 'exp_epi_len': 200, 'pi_hidden_layers': [128, 128], 'pi_options': ['default', 'leaky-relu', 'default'], 'replay_size': 10000, 'gamma': 0.99, 'lambda': 0.97, 'polyak': 0.995, 'alpha': 0.002, 'learning_rate': 0.0001, 'epochs': 1000, 'steps_per_epoch': 1000, 'batch_size': 256, 'n_log_epi': 10, 'start_steps': 1000, 'update_after': 1000, 'update_every': 200, 'save_interval': 10, 'plot_rendering': True, 'seed': 1}
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -34.071839999999995
+      y: -3.1764199999999967
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 16.506480000000018
+      y: -0.25669999999999504
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 10.02208000000001
+      y: -4.535599999999999
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -12.623439999999988
+      y: -4.73696
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -7.535679999999992
+      y: -0.45805999999999614
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 29.225880000000025
+      y: 13.3351
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -8.333759999999991
+      y: -1.8675800000000002
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -22.599439999999994
+      y: -2.219959999999997
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -27.138519999999993
+      y: 0.2970399999999991
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: -6.338559999999987
+      y: -5.592739999999996
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+timeout!
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 14.361640000000016
+      y: -7.9083799999999975
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 7.927120000000009
+      y: -0.6594199999999972
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 29.225880000000025
+      y: 13.3351
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+lidar collision
+model_state:
+  model_name: "goal"
+  pose:
+    position:
+      x: 14.361640000000016
+      y: -0.5587400000000002
+      z: 3.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+  twist:
+    linear:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  reference_frame: ''
+success: True
+status_message: "SetModelState: set model state done"
+Traceback (most recent call last):
+  File "cpo_discrete.py", line 462, in <module>
+    log_infos = update(data=batch)
+  File "cpo_discrete.py", line 229, in update
+    encoded_o = ac_.encoder(state_grid_tensor)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/brain5/catkin_ws/src/social_navigation/scripts/model_discrete.py", line 142, in forward
+    return self.conv(input_)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/torch/nn/modules/container.py", line 141, in forward
+    input = module(input)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/torch/nn/modules/activation.py", line 98, in forward
+    return F.relu(input, inplace=self.inplace)
+  File "/home/brain5/anaconda3/lib/python3.8/site-packages/torch/nn/functional.py", line 1299, in relu
+    result = torch.relu(input)
+RuntimeError: CUDA out of memory. Tried to allocate 978.00 MiB (GPU 0; 5.81 GiB total capacity; 2.76 GiB already allocated; 857.75 MiB free; 2.77 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF

@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "rrt_sac_demo.py", line 341, in <module>
+    ped_sim = Demo()
+  File "rrt_sac_demo.py", line 84, in __init__
+    exp_obs_dim_, exp_act_dim_ = self.ped_sim_.get_dim()
+  File "/home/brain5/catkin_ws/src/social_navigation/scripts/gazebo_master_rrt.py", line 458, in get_dim
+    o = self.reset()
+  File "/home/brain5/catkin_ws/src/social_navigation/scripts/gazebo_master_rrt.py", line 348, in reset
+    self.update_state()
+  File "/home/brain5/catkin_ws/src/social_navigation/scripts/gazebo_master_rrt.py", line 543, in update_state
+    rt.goal = self.global_goal_
+AttributeError: 'PedSim' object has no attribute 'global_goal_'

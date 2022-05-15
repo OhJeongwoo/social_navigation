@@ -179,6 +179,41 @@ class QFunctionDiscrete(nn.Module):
 
 
 
+class ValueFunctionDiscrete(nn.Module):
+    def __init__(self, obs_dim, hidden_layers, learning_rate, device, option):
+        super(ValueFunctionDiscrete, self).__init__()
+        self.device = device
+        self.option = option
+        self.obs_dim = obs_dim
+        
+        self.hidden_layers = hidden_layers
+        self.H = len(self.hidden_layers)
+        self.fc = nn.ModuleList([])
+        self.fc.append(nn.Linear(self.obs_dim + 256, self.hidden_layers[0]))
+        self.lr = learning_rate
+        for i in range(1, self.H):
+            self.fc.append(nn.Linear(self.hidden_layers[i-1], self.hidden_layers[i]))
+        self.fc.append(nn.Linear(self.hidden_layers[self.H - 1],1))
+       
+        self.optimizer = optim.Adam(self.parameters(), lr = self.lr)
+
+    def forward(self, flat, encoded):
+        #x = obs.to(self.device)
+        x = torch.cat([flat, encoded], axis=1)
+        for i in range(0,self.H):
+            if self.option[1] == 'leaky-relu':
+                x = F.leaky_relu(self.fc[i](x))
+            elif self.option[1] == 'sigmoid':
+                x = F.sigmoid(self.fc[i](x))
+            elif self.option[1] == 'tanh':
+                x = F.tanh(self.fc[i](x))
+            else:
+                x = F.relu(self.fc[i](x))
+        val = self.fc[self.H](x).squeeze(-1)
+        return val
+
+
+
     
 
 class SACCoreDiscrete(nn.Module):
@@ -206,3 +241,28 @@ class SACCoreDiscrete(nn.Module):
         actions = prob.sample().unsqueeze(-1)
         return actions
 
+
+class CPOCoreDiscrete(nn.Module):
+    def __init__(self, obs_dim, act_dim, hidden_layers, learning_rate, device, option):
+        super(CPOCoreDiscrete, self).__init__()
+        self.device = device
+        self.option = option
+        self.obs_dim = obs_dim
+        self.act_dim = act_dim
+        self.hidden_layers = hidden_layers
+        self.H = len(self.hidden_layers)
+        self.lr = learning_rate
+        self.encoder = Encoder(learning_rate)
+        self.pi = DiscreteActor(obs_dim, act_dim, hidden_layers, learning_rate, device, option)
+        self.value = ValueFunctionDiscrete(obs_dim, hidden_layers, learning_rate, device, option)
+        self.cost_value = ValueFunctionDiscrete(obs_dim, hidden_layers, learning_rate, device, option)
+
+    def forward(self, obs, train=True):
+        encoded = self.encoder(obs['grid'])
+        if train == False:
+            actions = torch.argmax(self.pi(obs['flat'], encoded), dim=-1, keepdim=True)
+            return actions
+        prob = Categorical(self.pi(obs['flat'], encoded))
+        
+        actions = prob.sample().unsqueeze(-1)
+        return actions

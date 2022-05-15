@@ -21,7 +21,7 @@ POLICY_PATH = PROJECT_PATH + "/policy/"
 YAML_PATH = PROJECT_PATH + "/yaml/"
 
 wandb.init(project='starlab')
-wandb.run.name = 'sac'
+wandb.run.name = 'sac_fixedgoal'
 
 if __name__ == "__main__":
     rospy.init_node("sac")
@@ -273,7 +273,7 @@ if __name__ == "__main__":
             #print(info['dist'])
             score_logger.append(ep_ret)
             o, ep_ret, ep_len = env_.reset(), 0, 0
-
+        '''
         # Update handling
         if (t+1) >= update_after_ and (t+1) % update_every_ == 0:
             for j in range(update_every_):
@@ -282,6 +282,7 @@ if __name__ == "__main__":
             log_infos['time steps']  = t
             log_infos['reward'] = np.mean(score_logger[-3:])
             wandb.log(log_infos)
+        '''
          
         '''
         # End of epoch handling

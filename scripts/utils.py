@@ -192,7 +192,7 @@ def transform_coordinate(x, y, ct, st):
     return x * ct + y * st, -x * st + y * ct
 
 def collision_cost(d):
-    return 1.0 / (1.0 + math.exp((d-2.0)))
+    return 1.0 / (1.0 + math.exp(10 * (d-0.6)))
 
 
 def purepursuit(pose, goal, v, prv_acc_err =None, prv_str_err=None):

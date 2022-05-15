@@ -1,0 +1,46 @@
+2022-05-02 00:06:59,722 INFO    MainThread:13669 [internal.py:wandb_internal():90] W&B internal server running at pid: 13669, started at: 2022-05-02 00:06:59.722275
+2022-05-02 00:06:59,725 INFO    WriterThread:13669 [datastore.py:open_for_write():75] open: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220502_000658-7ompl4mc/run-7ompl4mc.wandb
+2022-05-02 00:06:59,726 DEBUG   SenderThread:13669 [sender.py:send():232] send: header
+2022-05-02 00:06:59,726 DEBUG   SenderThread:13669 [sender.py:send():232] send: run
+2022-05-02 00:07:01,668 DEBUG   HandlerThread:13669 [handler.py:handle_request():141] handle_request: check_version
+2022-05-02 00:07:01,673 INFO    SenderThread:13669 [dir_watcher.py:__init__():166] watching files in: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220502_000658-7ompl4mc/files
+2022-05-02 00:07:01,673 INFO    SenderThread:13669 [sender.py:_start_run_threads():811] run started: 7ompl4mc with start time 1651417618
+2022-05-02 00:07:01,673 DEBUG   SenderThread:13669 [sender.py:send():232] send: summary
+2022-05-02 00:07:01,673 INFO    SenderThread:13669 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-05-02 00:07:01,673 DEBUG   SenderThread:13669 [sender.py:send_request():246] send_request: check_version
+2022-05-02 00:07:01,789 DEBUG   HandlerThread:13669 [handler.py:handle_request():141] handle_request: run_start
+2022-05-02 00:07:01,791 DEBUG   HandlerThread:13669 [meta.py:__init__():35] meta init
+2022-05-02 00:07:01,791 DEBUG   HandlerThread:13669 [meta.py:__init__():49] meta init done
+2022-05-02 00:07:01,791 DEBUG   HandlerThread:13669 [meta.py:probe():209] probe
+2022-05-02 00:07:01,799 DEBUG   HandlerThread:13669 [meta.py:_setup_git():199] setup git
+2022-05-02 00:07:01,811 DEBUG   HandlerThread:13669 [meta.py:_setup_git():206] setup git done
+2022-05-02 00:07:01,811 DEBUG   HandlerThread:13669 [meta.py:_save_pip():53] save pip
+2022-05-02 00:07:01,812 DEBUG   HandlerThread:13669 [meta.py:_save_pip():67] save pip done
+2022-05-02 00:07:01,812 DEBUG   HandlerThread:13669 [meta.py:_save_conda():74] save conda
+2022-05-02 00:07:02,674 INFO    Thread-7  :13669 [dir_watcher.py:_on_file_created():213] file/dir created: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220502_000658-7ompl4mc/files/wandb-summary.json
+2022-05-02 00:07:02,675 INFO    Thread-7  :13669 [dir_watcher.py:_on_file_created():213] file/dir created: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220502_000658-7ompl4mc/files/conda-environment.yaml
+2022-05-02 00:07:02,675 INFO    Thread-7  :13669 [dir_watcher.py:_on_file_created():213] file/dir created: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220502_000658-7ompl4mc/files/requirements.txt
+2022-05-02 00:07:02,975 DEBUG   HandlerThread:13669 [meta.py:_save_conda():84] save conda done
+2022-05-02 00:07:02,975 DEBUG   HandlerThread:13669 [meta.py:probe():247] probe done
+2022-05-02 00:07:03,005 DEBUG   SenderThread:13669 [sender.py:send():232] send: files
+2022-05-02 00:07:03,005 INFO    SenderThread:13669 [sender.py:_save_file():946] saving file wandb-metadata.json with policy now
+2022-05-02 00:07:03,009 DEBUG   HandlerThread:13669 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-02 00:07:03,009 DEBUG   SenderThread:13669 [sender.py:send_request():246] send_request: stop_status
+2022-05-02 00:07:03,304 DEBUG   SenderThread:13669 [sender.py:send():232] send: telemetry
+2022-05-02 00:07:03,305 DEBUG   SenderThread:13669 [sender.py:send():232] send: telemetry
+2022-05-02 00:07:03,305 DEBUG   SenderThread:13669 [sender.py:send():232] send: run
+2022-05-02 00:07:03,673 INFO    Thread-7  :13669 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220502_000658-7ompl4mc/files/config.yaml
+2022-05-02 00:07:03,675 INFO    Thread-7  :13669 [dir_watcher.py:_on_file_created():213] file/dir created: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220502_000658-7ompl4mc/files/output.log
+2022-05-02 00:07:03,675 INFO    Thread-7  :13669 [dir_watcher.py:_on_file_created():213] file/dir created: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220502_000658-7ompl4mc/files/wandb-metadata.json
+2022-05-02 00:07:03,712 INFO    Thread-11 :13669 [upload_job.py:push():137] Uploaded file /tmp/tmppoyrctd_wandb/4yz3g1gp-wandb-metadata.json
+2022-05-02 00:07:04,533 INFO    SenderThread:13669 [sender.py:send_run():707] updated run: 7ompl4mc
+2022-05-02 00:07:05,674 INFO    Thread-7  :13669 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220502_000658-7ompl4mc/files/output.log
+2022-05-02 00:07:09,676 INFO    Thread-7  :13669 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220502_000658-7ompl4mc/files/output.log
+2022-05-02 00:07:12,652 WARNING MainThread:13669 [internal.py:wandb_internal():153] Internal process interrupt: 1
+2022-05-02 00:07:12,868 WARNING MainThread:13669 [internal.py:wandb_internal():153] Internal process interrupt: 2
+2022-05-02 00:07:12,869 ERROR   MainThread:13669 [internal.py:wandb_internal():156] Internal process interrupted.
+2022-05-02 00:07:13,023 INFO    WriterThread:13669 [datastore.py:close():279] close: /home/brain5/catkin_ws/src/social_navigation/scripts/wandb/run-20220502_000658-7ompl4mc/run-7ompl4mc.wandb
+2022-05-02 00:07:13,024 INFO    SenderThread:13669 [sender.py:finish():1106] shutting down sender
+2022-05-02 00:07:13,024 INFO    SenderThread:13669 [dir_watcher.py:finish():279] shutting down directory watcher
+2022-05-02 00:07:13,026 INFO    HandlerThread:13669 [handler.py:finish():806] shutting down handler
+2022-05-02 00:07:13,158 INFO    MainThread:13669 [internal.py:handle_exit():80] Internal process exited
