@@ -1,0 +1,91 @@
+
+{'exp_name': 'pedsim', 'exp_epi_len': 1000, 'pi_hidden_layers': [128, 128], 'pi_options': ['default', 'leaky-relu', 'default'], 'replay_size': 10000, 'gamma': 0.99, 'polyak': 0.995, 'alpha': 0.002, 'learning_rate': 0.0001, 'epochs': 1000, 'steps_per_epoch': 4000, 'batch_size': 512, 'n_log_epi': 10, 'start_steps': 1000, 'update_after': 4000, 'update_every': 1000, 'save_interval': 10, 'plot_rendering': True, 'seed': 1}
+goal reached!
+goal reached!
+goal reached!
+goal reached!
+lidar collision
+goal reached!
+goal reached!
+lidar collision
+goal reached!
+goal reached!
+lidar collision
+goal reached!
+goal reached!
+goal reached!
+goal reached!
+goal reached!
+goal reached!
+goal reached!
+goal reached!
+goal reached!
+goal reached!
+goal reached!
+goal reached!
+lidar collision
+goal reached!
+goal reached!
+goal reached!
+goal reached!
+lidar collision
+goal reached!
+goal reached!
+goal reached!
+timeout!
+goal reached!
+goal reached!
+Exception in thread ChkStopThr:
+Traceback (most recent call last):
+  File "/usr/lib/python3.8/threading.py", line 932, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.8/threading.py", line 870, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/jay/.local/lib/python3.8/site-packages/wandb/sdk/wandb_run.py", line 170, in check_status
+    status_response = self._interface.communicate_stop_status()
+  File "/home/jay/.local/lib/python3.8/site-packages/wandb/sdk/interface/interface.py", line 127, in communicate_stop_status
+    resp = self._communicate_stop_status(status)
+  File "/home/jay/.local/lib/python3.8/site-packages/wandb/sdk/interface/interface_shared.py", line 395, in _communicate_stop_status
+    resp = self._communicate(req, local=True)
+  File "/home/jay/.local/lib/python3.8/site-packages/wandb/sdk/interface/interface_shared.py", line 226, in _communicate
+    return self._communicate_async(rec, local=local).get(timeout=timeout)
+  File "/home/jay/.local/lib/python3.8/site-packages/wandb/sdk/interface/interface_shared.py", line 231, in _communicate_async
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown
+Exception in thread NetStatThr:
+Traceback (most recent call last):
+  File "/usr/lib/python3.8/threading.py", line 932, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.8/threading.py", line 870, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/jay/.local/lib/python3.8/site-packages/wandb/sdk/wandb_run.py", line 152, in check_network_status
+    status_response = self._interface.communicate_network_status()
+  File "/home/jay/.local/lib/python3.8/site-packages/wandb/sdk/interface/interface.py", line 138, in communicate_network_status
+    resp = self._communicate_network_status(status)
+  File "/home/jay/.local/lib/python3.8/site-packages/wandb/sdk/interface/interface_shared.py", line 405, in _communicate_network_status
+    resp = self._communicate(req, local=True)
+  File "/home/jay/.local/lib/python3.8/site-packages/wandb/sdk/interface/interface_shared.py", line 226, in _communicate
+    return self._communicate_async(rec, local=local).get(timeout=timeout)
+  File "/home/jay/.local/lib/python3.8/site-packages/wandb/sdk/interface/interface_shared.py", line 231, in _communicate_async
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown
+Traceback (most recent call last):
+  File "sac_discrete.py", line 275, in <module>
+    o, ep_ret, ep_len = env_.reset(), 0, 0
+  File "/home/jay/catkin_ws/src/social_navigation/scripts/gazebo_master.py", line 364, in reset
+    self.client_pause_()
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/impl/tcpros_service.py", line 442, in __call__
+    return self.call(*args, **kwds)
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/impl/tcpros_service.py", line 525, in call
+    raise ServiceException("service [%s] returned no response"%self.resolved_name)
+rospy.service.ServiceException: service [/gazebo/pause_physics] returned no response
+Traceback (most recent call last):
+  File "sac_discrete.py", line 275, in <module>
+    o, ep_ret, ep_len = env_.reset(), 0, 0
+  File "/home/jay/catkin_ws/src/social_navigation/scripts/gazebo_master.py", line 364, in reset
+    self.client_pause_()
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/impl/tcpros_service.py", line 442, in __call__
+    return self.call(*args, **kwds)
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/impl/tcpros_service.py", line 525, in call
+    raise ServiceException("service [%s] returned no response"%self.resolved_name)
+rospy.service.ServiceException: service [/gazebo/pause_physics] returned no response

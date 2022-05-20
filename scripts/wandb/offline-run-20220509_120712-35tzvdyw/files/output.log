@@ -1,0 +1,18 @@
+
+{'exp_name': 'pedsim', 'exp_epi_len': 200, 'pi_hidden_layers': [128, 128], 'pi_options': ['default', 'leaky-relu', 'default'], 'replay_size': 10000, 'gamma': 0.99, 'polyak': 0.995, 'alpha': 0.002, 'learning_rate': 0.0001, 'epochs': 1000, 'steps_per_epoch': 1000, 'batch_size': 256, 'n_log_epi': 10, 'start_steps': 1000, 'update_after': 1000, 'update_every': 200, 'save_interval': 10, 'plot_rendering': True, 'seed': 1}
+Traceback (most recent call last):
+  File "sac_discrete.py", line 49, in <module>
+    exp_obs_dim_, exp_act_dim_ = env_.get_dim()
+  File "/home/jay/catkin_ws/src/social_navigation/scripts/gazebo_master.py", line 472, in get_dim
+    o = self.reset()
+  File "/home/jay/catkin_ws/src/social_navigation/scripts/gazebo_master.py", line 357, in reset
+    self.pub_.publish(rt)
+AttributeError: 'dict' object has no attribute 'publish'
+Traceback (most recent call last):
+  File "sac_discrete.py", line 49, in <module>
+    exp_obs_dim_, exp_act_dim_ = env_.get_dim()
+  File "/home/jay/catkin_ws/src/social_navigation/scripts/gazebo_master.py", line 472, in get_dim
+    o = self.reset()
+  File "/home/jay/catkin_ws/src/social_navigation/scripts/gazebo_master.py", line 357, in reset
+    self.pub_.publish(rt)
+AttributeError: 'dict' object has no attribute 'publish'

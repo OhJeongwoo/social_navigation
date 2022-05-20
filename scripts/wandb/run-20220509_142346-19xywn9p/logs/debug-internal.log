@@ -1,0 +1,181 @@
+2022-05-09 14:23:46,921 INFO    MainThread:34930 [internal.py:wandb_internal():90] W&B internal server running at pid: 34930, started at: 2022-05-09 14:23:46.920965
+2022-05-09 14:23:46,921 INFO    WriterThread:34930 [datastore.py:open_for_write():75] open: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/run-19xywn9p.wandb
+2022-05-09 14:23:46,922 DEBUG   SenderThread:34930 [sender.py:send():232] send: header
+2022-05-09 14:23:46,922 DEBUG   SenderThread:34930 [sender.py:send():232] send: run
+2022-05-09 14:23:47,158 DEBUG   HandlerThread:34930 [handler.py:handle_request():141] handle_request: check_version
+2022-05-09 14:23:47,160 INFO    SenderThread:34930 [dir_watcher.py:__init__():197] watching files in: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files
+2022-05-09 14:23:47,160 INFO    SenderThread:34930 [sender.py:_start_run_threads():811] run started: 19xywn9p with start time 1652073826
+2022-05-09 14:23:47,160 DEBUG   SenderThread:34930 [sender.py:send():232] send: summary
+2022-05-09 14:23:47,160 INFO    SenderThread:34930 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-09 14:23:47,160 DEBUG   SenderThread:34930 [sender.py:send_request():246] send_request: check_version
+2022-05-09 14:23:47,188 DEBUG   HandlerThread:34930 [handler.py:handle_request():141] handle_request: run_start
+2022-05-09 14:23:47,191 DEBUG   HandlerThread:34930 [meta.py:__init__():35] meta init
+2022-05-09 14:23:47,191 DEBUG   HandlerThread:34930 [meta.py:__init__():49] meta init done
+2022-05-09 14:23:47,191 DEBUG   HandlerThread:34930 [meta.py:probe():209] probe
+2022-05-09 14:23:47,198 DEBUG   HandlerThread:34930 [meta.py:_setup_git():199] setup git
+2022-05-09 14:23:47,205 DEBUG   HandlerThread:34930 [meta.py:_setup_git():206] setup git done
+2022-05-09 14:23:47,205 DEBUG   HandlerThread:34930 [meta.py:_save_pip():53] save pip
+2022-05-09 14:23:47,205 DEBUG   HandlerThread:34930 [meta.py:_save_pip():67] save pip done
+2022-05-09 14:23:47,205 DEBUG   HandlerThread:34930 [meta.py:probe():247] probe done
+2022-05-09 14:23:47,207 DEBUG   SenderThread:34930 [sender.py:send():232] send: files
+2022-05-09 14:23:47,207 INFO    SenderThread:34930 [sender.py:_save_file():948] saving file wandb-metadata.json with policy now
+2022-05-09 14:23:47,210 DEBUG   HandlerThread:34930 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:23:47,210 DEBUG   SenderThread:34930 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:23:47,414 DEBUG   SenderThread:34930 [sender.py:send():232] send: telemetry
+2022-05-09 14:23:47,414 DEBUG   SenderThread:34930 [sender.py:send():232] send: telemetry
+2022-05-09 14:23:47,414 DEBUG   SenderThread:34930 [sender.py:send():232] send: run
+2022-05-09 14:23:47,897 INFO    Thread-11 :34930 [upload_job.py:push():132] Uploaded file /tmp/tmphe3_fz32wandb/171q0y5y-wandb-metadata.json
+2022-05-09 14:23:48,161 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/config.yaml
+2022-05-09 14:23:48,161 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_created():244] file/dir created: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/wandb-summary.json
+2022-05-09 14:23:48,161 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_created():244] file/dir created: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:23:48,161 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_created():244] file/dir created: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/requirements.txt
+2022-05-09 14:23:48,161 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_created():244] file/dir created: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/wandb-metadata.json
+2022-05-09 14:23:50,160 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:23:51,361 INFO    SenderThread:34930 [sender.py:send_run():707] updated run: 19xywn9p
+2022-05-09 14:24:02,162 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:02,425 DEBUG   HandlerThread:34930 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:24:02,425 DEBUG   SenderThread:34930 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:24:04,163 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:06,163 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:08,164 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:10,164 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:12,164 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:14,165 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:15,351 DEBUG   SenderThread:34930 [sender.py:send():232] send: stats
+2022-05-09 14:24:16,165 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:17,633 DEBUG   HandlerThread:34930 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:24:18,166 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:20,166 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:21,622 DEBUG   SenderThread:34930 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:24:22,166 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/config.yaml
+2022-05-09 14:24:22,167 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:24,167 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:26,167 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:28,168 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:30,168 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:32,168 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:34,169 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:36,169 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:36,942 DEBUG   HandlerThread:34930 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:24:36,942 DEBUG   SenderThread:34930 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:24:38,170 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:40,170 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:42,170 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:44,171 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:45,495 DEBUG   SenderThread:34930 [sender.py:send():232] send: stats
+2022-05-09 14:24:46,171 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:48,172 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:50,172 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:52,173 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:52,179 DEBUG   HandlerThread:34930 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:24:52,179 DEBUG   SenderThread:34930 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:24:54,173 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:56,173 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:24:58,174 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:00,174 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:02,175 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:04,175 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:06,175 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:07,388 DEBUG   HandlerThread:34930 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:25:07,388 DEBUG   SenderThread:34930 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:25:08,176 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:10,176 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:12,177 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:14,177 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:15,639 DEBUG   SenderThread:34930 [sender.py:send():232] send: stats
+2022-05-09 14:25:16,178 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:18,178 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:20,178 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:22,179 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:23,365 DEBUG   HandlerThread:34930 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:25:23,365 DEBUG   SenderThread:34930 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:25:24,179 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:26,179 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:28,180 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:30,180 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:32,181 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:34,181 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:38,182 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:38,594 DEBUG   HandlerThread:34930 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:25:38,595 DEBUG   SenderThread:34930 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:25:40,186 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:42,183 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:44,183 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:45,783 DEBUG   SenderThread:34930 [sender.py:send():232] send: stats
+2022-05-09 14:25:46,183 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:48,184 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:50,184 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:52,185 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:53,893 DEBUG   HandlerThread:34930 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:25:53,894 DEBUG   SenderThread:34930 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:25:54,185 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:56,186 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:25:58,186 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:00,186 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:02,187 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:04,187 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:06,187 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:08,188 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:09,503 DEBUG   HandlerThread:34930 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:26:09,503 DEBUG   SenderThread:34930 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:26:10,188 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:12,189 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:14,189 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:15,932 DEBUG   SenderThread:34930 [sender.py:send():232] send: stats
+2022-05-09 14:26:16,190 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:18,190 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:20,191 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:22,191 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:24,191 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:24,707 DEBUG   HandlerThread:34930 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:26:24,707 DEBUG   SenderThread:34930 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:26:27,192 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:29,192 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:31,193 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:33,193 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:35,194 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:37,194 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:39,194 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:39,907 DEBUG   HandlerThread:34930 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:26:39,907 DEBUG   SenderThread:34930 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:26:41,195 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:43,195 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:45,196 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:46,081 DEBUG   SenderThread:34930 [sender.py:send():232] send: stats
+2022-05-09 14:26:47,196 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:49,196 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:51,197 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:53,197 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:55,197 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:55,609 DEBUG   HandlerThread:34930 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:26:55,609 DEBUG   SenderThread:34930 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:26:57,198 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:26:59,198 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:27:01,199 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:27:03,199 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:27:05,199 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:27:07,200 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:27:09,200 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:27:10,831 DEBUG   HandlerThread:34930 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:27:10,831 DEBUG   SenderThread:34930 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:27:11,201 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:27:13,201 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:27:15,201 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:27:16,219 DEBUG   SenderThread:34930 [sender.py:send():232] send: stats
+2022-05-09 14:27:17,202 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:27:19,202 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:27:21,203 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:27:23,203 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:27:25,203 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:27:26,177 DEBUG   HandlerThread:34930 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:27:26,177 DEBUG   SenderThread:34930 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:27:27,204 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:27:29,204 INFO    Thread-7  :34930 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/files/output.log
+2022-05-09 14:27:29,923 WARNING MainThread:34930 [internal.py:wandb_internal():153] Internal process interrupt: 1
+2022-05-09 14:27:30,123 WARNING MainThread:34930 [internal.py:wandb_internal():153] Internal process interrupt: 2
+2022-05-09 14:27:30,123 ERROR   MainThread:34930 [internal.py:wandb_internal():156] Internal process interrupted.
+2022-05-09 14:27:30,606 INFO    SenderThread:34930 [sender.py:finish():1110] shutting down sender
+2022-05-09 14:27:30,606 INFO    WriterThread:34930 [datastore.py:close():279] close: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_142346-19xywn9p/run-19xywn9p.wandb
+2022-05-09 14:27:30,606 INFO    SenderThread:34930 [dir_watcher.py:finish():312] shutting down directory watcher
+2022-05-09 14:27:30,607 INFO    HandlerThread:34930 [handler.py:finish():806] shutting down handler
+2022-05-09 14:27:30,659 INFO    MainThread:34930 [internal.py:handle_exit():80] Internal process exited

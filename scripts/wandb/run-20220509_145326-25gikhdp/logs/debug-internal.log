@@ -1,0 +1,681 @@
+2022-05-09 14:53:26,478 INFO    MainThread:51279 [internal.py:wandb_internal():90] W&B internal server running at pid: 51279, started at: 2022-05-09 14:53:26.478786
+2022-05-09 14:53:26,479 INFO    WriterThread:51279 [datastore.py:open_for_write():75] open: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/run-25gikhdp.wandb
+2022-05-09 14:53:26,480 DEBUG   SenderThread:51279 [sender.py:send():232] send: header
+2022-05-09 14:53:26,480 DEBUG   SenderThread:51279 [sender.py:send():232] send: run
+2022-05-09 14:53:26,721 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: check_version
+2022-05-09 14:53:26,723 INFO    SenderThread:51279 [dir_watcher.py:__init__():197] watching files in: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files
+2022-05-09 14:53:26,723 INFO    SenderThread:51279 [sender.py:_start_run_threads():811] run started: 25gikhdp with start time 1652075606
+2022-05-09 14:53:26,723 DEBUG   SenderThread:51279 [sender.py:send():232] send: summary
+2022-05-09 14:53:26,723 INFO    SenderThread:51279 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-09 14:53:26,724 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: check_version
+2022-05-09 14:53:26,763 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: run_start
+2022-05-09 14:53:26,766 DEBUG   HandlerThread:51279 [meta.py:__init__():35] meta init
+2022-05-09 14:53:26,767 DEBUG   HandlerThread:51279 [meta.py:__init__():49] meta init done
+2022-05-09 14:53:26,767 DEBUG   HandlerThread:51279 [meta.py:probe():209] probe
+2022-05-09 14:53:26,773 DEBUG   HandlerThread:51279 [meta.py:_setup_git():199] setup git
+2022-05-09 14:53:26,780 DEBUG   HandlerThread:51279 [meta.py:_setup_git():206] setup git done
+2022-05-09 14:53:26,780 DEBUG   HandlerThread:51279 [meta.py:_save_pip():53] save pip
+2022-05-09 14:53:26,781 DEBUG   HandlerThread:51279 [meta.py:_save_pip():67] save pip done
+2022-05-09 14:53:26,781 DEBUG   HandlerThread:51279 [meta.py:probe():247] probe done
+2022-05-09 14:53:26,782 DEBUG   SenderThread:51279 [sender.py:send():232] send: files
+2022-05-09 14:53:26,783 INFO    SenderThread:51279 [sender.py:_save_file():948] saving file wandb-metadata.json with policy now
+2022-05-09 14:53:26,785 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:53:26,786 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:53:26,976 DEBUG   SenderThread:51279 [sender.py:send():232] send: telemetry
+2022-05-09 14:53:26,976 DEBUG   SenderThread:51279 [sender.py:send():232] send: telemetry
+2022-05-09 14:53:26,976 DEBUG   SenderThread:51279 [sender.py:send():232] send: run
+2022-05-09 14:53:27,197 INFO    SenderThread:51279 [sender.py:send_run():707] updated run: 25gikhdp
+2022-05-09 14:53:27,431 INFO    Thread-11 :51279 [upload_job.py:push():132] Uploaded file /tmp/tmpmqnybq2xwandb/3t161im8-wandb-metadata.json
+2022-05-09 14:53:27,724 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/config.yaml
+2022-05-09 14:53:27,724 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_created():244] file/dir created: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/wandb-summary.json
+2022-05-09 14:53:27,724 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_created():244] file/dir created: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 14:53:27,724 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_created():244] file/dir created: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/wandb-metadata.json
+2022-05-09 14:53:27,724 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_created():244] file/dir created: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/requirements.txt
+2022-05-09 14:53:29,724 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 14:53:41,977 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:53:41,977 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:53:54,924 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 14:53:57,228 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:53:57,228 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:53:57,728 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/config.yaml
+2022-05-09 14:54:12,443 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:54:12,443 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:54:25,067 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 14:54:27,677 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:54:27,677 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:54:43,428 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:54:43,428 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:54:55,210 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 14:54:55,738 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 14:54:58,668 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:54:58,669 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:55:13,867 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:55:13,867 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:55:25,354 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 14:55:29,061 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:55:29,061 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:55:44,422 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:55:44,422 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:55:55,504 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 14:55:59,647 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:55:59,648 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:56:01,750 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 14:56:14,861 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:56:14,861 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:56:25,647 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 14:56:30,338 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:56:30,338 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:56:45,562 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:56:45,563 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:56:45,757 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 14:56:55,787 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 14:57:00,840 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:57:00,840 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:57:16,086 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:57:16,086 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:57:25,925 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 14:57:31,334 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:57:31,334 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:57:47,499 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:57:47,499 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:57:56,064 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 14:58:02,753 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:58:02,754 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:58:15,772 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 14:58:18,010 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:58:18,010 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:58:26,202 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 14:58:33,291 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:58:33,291 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:58:33,775 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 14:58:48,525 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:58:48,525 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:58:56,347 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 14:59:03,843 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:59:03,844 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:59:19,058 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:59:19,058 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:59:26,486 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 14:59:34,293 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:59:34,294 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:59:49,556 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 14:59:49,556 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 14:59:56,623 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:00:02,791 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:00:04,817 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:00:04,818 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:00:20,062 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:00:20,062 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:00:26,761 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:00:35,317 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:00:35,318 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:00:50,518 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:00:50,519 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:00:56,902 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:01:02,801 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:01:08,593 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:01:08,593 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:01:23,833 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:01:23,833 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:01:27,042 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:01:28,806 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:01:39,063 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:01:39,063 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:01:54,693 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:01:54,694 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:01:57,178 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:02:09,924 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:02:09,924 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:02:25,188 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:02:25,188 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:02:27,323 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:02:40,397 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:02:40,398 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:02:55,631 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:02:55,631 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:02:57,468 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:03:02,822 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:03:10,857 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:03:10,857 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:03:26,064 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:03:26,064 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:03:27,607 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:03:41,379 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:03:41,379 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:03:56,631 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:03:56,631 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:03:57,747 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:04:11,823 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:04:11,824 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:04:21,554 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: partial_history
+2022-05-09 15:04:21,555 DEBUG   SenderThread:51279 [sender.py:send():232] send: history
+2022-05-09 15:04:21,555 DEBUG   SenderThread:51279 [sender.py:send():232] send: summary
+2022-05-09 15:04:21,555 INFO    SenderThread:51279 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-09 15:04:21,836 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/wandb-summary.json
+2022-05-09 15:04:27,048 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:04:27,048 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:04:28,004 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:04:42,306 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:04:42,306 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:04:57,569 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:04:57,569 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:04:58,438 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:05:02,843 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:05:12,858 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:05:12,858 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:05:28,083 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:05:28,083 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:05:28,600 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:05:43,338 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:05:43,339 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:05:58,583 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:05:58,583 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:05:58,786 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:06:13,788 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:06:13,788 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:06:13,855 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:06:29,008 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:06:29,008 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:06:29,265 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:06:44,311 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:06:44,311 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:06:59,321 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:06:59,540 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:06:59,540 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:07:14,898 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:07:14,899 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:07:29,473 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:07:30,117 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:07:30,117 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:07:32,145 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: partial_history
+2022-05-09 15:07:32,145 DEBUG   SenderThread:51279 [sender.py:send():232] send: history
+2022-05-09 15:07:32,146 DEBUG   SenderThread:51279 [sender.py:send():232] send: summary
+2022-05-09 15:07:32,146 INFO    SenderThread:51279 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-09 15:07:32,870 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/wandb-summary.json
+2022-05-09 15:07:41,871 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:07:45,730 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:07:45,731 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:07:59,609 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:08:00,964 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:08:00,964 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:08:16,230 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:08:16,230 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:08:29,751 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:08:31,495 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:08:31,495 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:08:46,727 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:08:46,727 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:08:47,883 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:08:59,892 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:09:01,951 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:09:01,951 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:09:17,226 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:09:17,226 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:09:30,033 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:09:34,486 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:09:34,487 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:09:49,755 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:09:49,756 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:10:00,173 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:10:04,964 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:10:04,964 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:10:20,168 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:10:20,168 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:10:30,328 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:10:35,380 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:10:35,381 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:10:42,918 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: partial_history
+2022-05-09 15:10:42,918 DEBUG   SenderThread:51279 [sender.py:send():232] send: history
+2022-05-09 15:10:42,919 DEBUG   SenderThread:51279 [sender.py:send():232] send: summary
+2022-05-09 15:10:42,919 INFO    SenderThread:51279 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-09 15:10:43,904 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/wandb-summary.json
+2022-05-09 15:10:47,905 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:10:50,606 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:10:50,606 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:11:00,475 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:11:05,846 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:11:05,846 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:11:21,193 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:11:21,193 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:11:30,613 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:11:36,457 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:11:36,457 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:11:51,692 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:11:51,692 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:11:55,917 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:12:00,750 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:12:06,982 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:12:06,982 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:12:22,215 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:12:22,215 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:12:30,888 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:12:37,453 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:12:37,453 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:12:52,944 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:12:52,944 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:12:57,928 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:13:01,038 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:13:08,200 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:13:08,200 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:13:23,416 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:13:23,417 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:13:31,185 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:13:38,630 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:13:38,631 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:13:53,839 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:13:53,840 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:13:58,209 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: partial_history
+2022-05-09 15:13:58,209 DEBUG   SenderThread:51279 [sender.py:send():232] send: history
+2022-05-09 15:13:58,217 DEBUG   SenderThread:51279 [sender.py:send():232] send: summary
+2022-05-09 15:13:58,217 INFO    SenderThread:51279 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-09 15:13:58,939 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/wandb-summary.json
+2022-05-09 15:14:01,327 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:14:09,057 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:14:09,057 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:14:24,303 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:14:24,303 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:14:31,468 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:14:39,569 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:14:39,569 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:14:54,784 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:14:54,785 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:15:01,613 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:15:10,003 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:15:10,003 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:15:14,952 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:15:25,335 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:15:25,336 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:15:31,756 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:15:40,587 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:15:40,587 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:15:55,826 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:15:55,826 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:16:01,907 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:16:11,086 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:16:11,086 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:16:24,964 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:16:26,299 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:16:26,299 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:16:32,046 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:16:41,541 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:16:41,541 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:16:56,807 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:16:56,808 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:17:02,209 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:17:09,184 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: partial_history
+2022-05-09 15:17:09,184 DEBUG   SenderThread:51279 [sender.py:send():232] send: history
+2022-05-09 15:17:09,184 DEBUG   SenderThread:51279 [sender.py:send():232] send: summary
+2022-05-09 15:17:09,185 INFO    SenderThread:51279 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-09 15:17:09,972 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/wandb-summary.json
+2022-05-09 15:17:12,059 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:17:12,059 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:17:27,317 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:17:27,317 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:17:32,349 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:17:42,593 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:17:42,593 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:17:57,811 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:17:57,811 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:18:02,490 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:18:13,100 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:18:13,101 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:18:28,345 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:18:28,346 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:18:32,626 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:18:38,987 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:18:43,560 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:18:43,560 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:18:58,766 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:18:58,767 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:19:02,817 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:19:14,004 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:19:14,004 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:19:29,283 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:19:29,283 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:19:33,223 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:19:44,482 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:19:44,483 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:19:59,724 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:19:59,724 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:20:03,359 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:20:13,483 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: partial_history
+2022-05-09 15:20:13,483 DEBUG   SenderThread:51279 [sender.py:send():232] send: history
+2022-05-09 15:20:13,483 DEBUG   SenderThread:51279 [sender.py:send():232] send: summary
+2022-05-09 15:20:13,484 INFO    SenderThread:51279 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-09 15:20:14,003 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/wandb-summary.json
+2022-05-09 15:20:14,922 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:20:14,922 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:20:27,005 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:20:30,154 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:20:30,154 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:20:33,502 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:20:45,388 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:20:45,388 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:21:00,654 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:21:00,654 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:21:03,665 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:21:15,899 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:21:15,899 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:21:31,133 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:21:31,133 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:21:33,967 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:21:46,347 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:21:46,347 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:21:55,020 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:22:02,061 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:22:02,061 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:22:04,102 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:22:17,328 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:22:17,328 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:22:32,569 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:22:32,569 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:22:34,276 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:22:47,794 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:22:47,794 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:23:03,320 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:23:03,320 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:23:04,422 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:23:18,538 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:23:18,538 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:23:26,521 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: partial_history
+2022-05-09 15:23:26,521 DEBUG   SenderThread:51279 [sender.py:send():232] send: history
+2022-05-09 15:23:26,521 DEBUG   SenderThread:51279 [sender.py:send():232] send: summary
+2022-05-09 15:23:26,521 INFO    SenderThread:51279 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-09 15:23:27,036 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/wandb-summary.json
+2022-05-09 15:23:33,941 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:23:33,941 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:23:34,608 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:23:49,229 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:23:49,229 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:24:04,439 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:24:04,439 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:24:04,760 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:24:19,689 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:24:19,689 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:24:32,047 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:24:34,897 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:24:34,897 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:24:35,214 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:24:50,266 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:24:50,266 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:25:05,061 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:25:05,576 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:25:05,577 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:25:20,850 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:25:20,850 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:25:26,056 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:25:35,208 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:25:36,061 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:25:36,061 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:25:51,366 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:25:51,366 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:26:05,350 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:26:06,565 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:26:06,565 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:26:21,761 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:26:21,761 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:26:35,489 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:26:36,953 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:26:36,953 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:26:38,079 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: partial_history
+2022-05-09 15:26:38,080 DEBUG   SenderThread:51279 [sender.py:send():232] send: history
+2022-05-09 15:26:38,080 DEBUG   SenderThread:51279 [sender.py:send():232] send: summary
+2022-05-09 15:26:38,080 INFO    SenderThread:51279 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-09 15:26:39,069 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/wandb-summary.json
+2022-05-09 15:26:52,191 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:26:52,192 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:27:05,630 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:27:07,407 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:27:07,407 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:27:22,597 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:27:22,597 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:27:26,078 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:27:35,781 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:27:37,822 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:27:37,822 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:27:53,048 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:27:53,048 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:28:05,930 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:28:08,264 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:28:08,264 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:28:23,534 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:28:23,534 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:28:36,082 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:28:39,141 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:28:39,141 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:28:54,361 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:28:54,361 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:29:06,360 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:29:09,585 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:29:09,585 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:29:24,794 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:29:24,794 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:29:36,529 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:29:39,986 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:29:39,987 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:29:43,182 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: partial_history
+2022-05-09 15:29:43,183 DEBUG   SenderThread:51279 [sender.py:send():232] send: history
+2022-05-09 15:29:43,183 DEBUG   SenderThread:51279 [sender.py:send():232] send: summary
+2022-05-09 15:29:43,183 INFO    SenderThread:51279 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-09 15:29:44,103 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/wandb-summary.json
+2022-05-09 15:29:55,199 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:29:55,199 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:30:00,105 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:30:06,730 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:30:10,433 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:30:10,433 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:30:25,659 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:30:25,659 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:30:36,881 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:30:40,919 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:30:40,920 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:30:56,986 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:30:56,987 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:31:07,080 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:31:07,116 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:31:12,255 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:31:12,256 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:31:27,514 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:31:27,514 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:31:37,394 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:31:42,755 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:31:42,755 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:31:58,011 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:31:58,011 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:32:07,561 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:32:13,236 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:32:13,236 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:32:28,453 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:32:28,453 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:32:37,952 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:32:43,644 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:32:43,645 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:32:49,609 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: partial_history
+2022-05-09 15:32:49,609 DEBUG   SenderThread:51279 [sender.py:send():232] send: history
+2022-05-09 15:32:49,617 DEBUG   SenderThread:51279 [sender.py:send():232] send: summary
+2022-05-09 15:32:49,617 INFO    SenderThread:51279 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-09 15:32:50,134 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/wandb-summary.json
+2022-05-09 15:32:59,209 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:32:59,210 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:33:01,136 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:33:08,086 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:33:15,040 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:33:15,040 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:33:30,276 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:33:30,276 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:33:38,249 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:33:45,513 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:33:45,514 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:34:00,707 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:34:00,707 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:34:08,393 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:34:13,148 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:34:16,103 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:34:16,104 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:34:31,340 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:34:31,340 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:34:38,539 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:34:46,535 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:34:46,535 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:35:01,765 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:35:01,765 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:35:08,684 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:35:17,026 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:35:17,026 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:35:32,233 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:35:32,233 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:35:38,834 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:35:47,456 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:35:47,456 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:36:02,644 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:36:02,645 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:36:04,596 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: partial_history
+2022-05-09 15:36:04,597 DEBUG   SenderThread:51279 [sender.py:send():232] send: history
+2022-05-09 15:36:04,597 DEBUG   SenderThread:51279 [sender.py:send():232] send: summary
+2022-05-09 15:36:04,597 INFO    SenderThread:51279 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-09 15:36:05,168 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/wandb-summary.json
+2022-05-09 15:36:08,979 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:36:13,170 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:36:17,875 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:36:17,875 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:36:33,119 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:36:33,119 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:36:39,127 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:36:48,325 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:36:48,325 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:37:03,555 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:37:03,555 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:37:09,271 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:37:18,829 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:37:18,829 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:37:34,063 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:37:34,064 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:37:39,414 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:37:40,185 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:37:49,323 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:37:49,323 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:38:04,546 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:38:04,546 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:38:09,562 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:38:19,810 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:38:19,810 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:38:35,029 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:38:35,029 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:38:39,711 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:38:50,232 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:38:50,232 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:39:05,472 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:39:05,473 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:39:09,866 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:39:16,426 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: partial_history
+2022-05-09 15:39:16,427 DEBUG   SenderThread:51279 [sender.py:send():232] send: history
+2022-05-09 15:39:16,427 DEBUG   SenderThread:51279 [sender.py:send():232] send: summary
+2022-05-09 15:39:16,427 INFO    SenderThread:51279 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-09 15:39:17,204 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/wandb-summary.json
+2022-05-09 15:39:20,720 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:39:20,720 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:39:37,899 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:39:37,899 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:39:40,010 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:39:40,208 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:39:53,100 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:39:53,100 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:40:08,367 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:40:08,367 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:40:10,154 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:40:23,566 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:40:23,566 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:40:38,792 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:40:38,792 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:40:40,311 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:40:55,341 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:40:55,341 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:41:10,459 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:41:10,553 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:41:10,553 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:41:25,806 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:41:25,806 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:41:36,229 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:41:40,604 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:41:41,013 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:41:41,013 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:41:56,238 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:41:56,238 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:42:10,759 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:42:11,613 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:42:11,613 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:42:26,820 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:42:26,820 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:42:35,999 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: partial_history
+2022-05-09 15:42:35,999 DEBUG   SenderThread:51279 [sender.py:send():232] send: history
+2022-05-09 15:42:35,999 DEBUG   SenderThread:51279 [sender.py:send():232] send: summary
+2022-05-09 15:42:36,000 INFO    SenderThread:51279 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-09 15:42:36,241 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/wandb-summary.json
+2022-05-09 15:42:40,913 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:42:42,047 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:42:42,047 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:42:57,281 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:42:57,281 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:43:11,056 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:43:12,527 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:43:12,527 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:43:27,749 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:43:27,749 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:43:41,207 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:43:43,008 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:43:43,009 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:43:58,634 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:43:58,634 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:44:11,366 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:44:13,884 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:44:13,884 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:44:29,089 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:44:29,089 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:44:41,523 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:44:44,292 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:44:44,292 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:44:45,265 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:44:59,519 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:44:59,519 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:45:11,676 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:45:14,738 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:45:14,738 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:45:29,940 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:45:29,940 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:45:41,842 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:45:44,959 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: partial_history
+2022-05-09 15:45:44,959 DEBUG   SenderThread:51279 [sender.py:send():232] send: history
+2022-05-09 15:45:44,959 DEBUG   SenderThread:51279 [sender.py:send():232] send: summary
+2022-05-09 15:45:44,959 INFO    SenderThread:51279 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-09 15:45:45,139 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:45:45,139 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:45:45,276 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/wandb-summary.json
+2022-05-09 15:46:00,421 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:46:00,421 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:46:11,984 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:46:15,641 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:46:15,641 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:46:30,852 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:46:30,852 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:46:42,129 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:46:46,098 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:46:46,098 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:46:57,288 INFO    Thread-7  :51279 [dir_watcher.py:_on_file_modified():257] file/dir modified: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/files/output.log
+2022-05-09 15:47:01,348 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:47:01,349 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:47:12,275 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:47:16,575 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:47:16,575 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:47:31,824 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:47:31,824 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:47:42,423 DEBUG   SenderThread:51279 [sender.py:send():232] send: stats
+2022-05-09 15:47:47,078 DEBUG   HandlerThread:51279 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-09 15:47:47,079 DEBUG   SenderThread:51279 [sender.py:send_request():246] send_request: stop_status
+2022-05-09 15:48:00,548 WARNING MainThread:51279 [internal.py:wandb_internal():153] Internal process interrupt: 1
+2022-05-09 15:48:00,707 WARNING MainThread:51279 [internal.py:wandb_internal():153] Internal process interrupt: 2
+2022-05-09 15:48:00,708 ERROR   MainThread:51279 [internal.py:wandb_internal():156] Internal process interrupted.
+2022-05-09 15:48:00,890 INFO    HandlerThread:51279 [handler.py:finish():806] shutting down handler
+2022-05-09 15:48:00,891 INFO    SenderThread:51279 [sender.py:finish():1110] shutting down sender
+2022-05-09 15:48:00,891 INFO    WriterThread:51279 [datastore.py:close():279] close: /home/jay/catkin_ws/src/social_navigation/scripts/wandb/run-20220509_145326-25gikhdp/run-25gikhdp.wandb
+2022-05-09 15:48:00,891 INFO    SenderThread:51279 [dir_watcher.py:finish():312] shutting down directory watcher
+2022-05-09 15:48:01,028 INFO    MainThread:51279 [internal.py:handle_exit():80] Internal process exited
