@@ -663,6 +663,8 @@ class PedSim:
             self.history_queue_.pop(0)
 
 
+
+
     def loop(self):
         # wait for publish interval
         if self.time_ - self.last_published_time_ < self.pub_interval_:
