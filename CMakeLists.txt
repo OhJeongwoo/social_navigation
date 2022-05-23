@@ -40,6 +40,8 @@ add_message_files(
   StateInfo.msg
   RRT.msg
   RRTresponse.msg
+  Trajectory.msg
+  TrajectoryArray.msg
 )
 
 add_service_files(
@@ -49,6 +51,7 @@ add_service_files(
   Reset.srv
   State.srv
   Jackal.srv
+  TrajectoryPredict.srv
 )
 
 generate_messages(DEPENDENCIES std_msgs geometry_msgs sensor_msgs)
@@ -93,6 +96,7 @@ add_dependencies(rrt ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGE
 
 catkin_install_python(PROGRAMS
   scripts/actor_scheduler.py
+  scripts/ynet/ynet.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

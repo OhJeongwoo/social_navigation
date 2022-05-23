@@ -1,4 +1,4 @@
-resize: 0.25  # resize factor
+resize: 0.15  # resize factor
 batch_size: 8
 
 viz_epoch: 10
