@@ -42,7 +42,6 @@ add_message_files(
   RRT.msg
   RRTresponse.msg
   Trajectory.msg
-  TrajectoryArray.msg
 )
 
 add_service_files(

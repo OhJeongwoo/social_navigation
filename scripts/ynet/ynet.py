@@ -1,12 +1,12 @@
 import yaml
 import torch
 from model import YNet
-import numpy as np
 import rospy
 import bisect
+import math
 from geometry_msgs.msg import Point
 from zed_interfaces.msg import ObjectsStamped, Object
-from social_navigation.msg import Trajectory, TrajectoryArray
+from social_navigation.msg import Trajectory
 from social_navigation.srv import TrajectoryPredict, TrajectoryPredictResponse
 
 CONFIG_FILE_PATH = 'config/sdd_trajnet.yaml'  # yaml config file containing all the hyperparameters
@@ -34,7 +34,7 @@ def interpolate(new_t, ts, traj):
     # datas : geometry_msgs/Point[]
     # return : geometry_msgs/Point
     if len(ts)<2:
-        rospy.logerr("can not interpolate traj with length %d", len(ts))
+        rospy.logwarn("can not interpolate traj with length %d", len(ts))
         return Point()
     bii = bisect.bisect(ts, new_t, lo=1, hi=len(ts) - 1)
     alpha = (ts[bii] - new_t).to_sec() / (ts[bii] - ts[bii - 1]).to_sec()
@@ -75,7 +75,9 @@ def trajectory_predict(req):
     trajs = PREDICTED_TRAJS.copy()
     new_ts = req.time_sequence
     trajectories = [interpolates(new_ts, traj) for traj in trajs]
-    res = TrajectoryPredictResponse(trajectories)
+    res = TrajectoryPredictResponse()
+    res.time_sequence = new_ts
+    res.trajectories = trajectories
     return res
 
 def is_tracked(objects, pedestrian_id):
@@ -91,22 +93,26 @@ def callback(msg):
     global PAST_TRAJS
     past_trajs = PAST_TRAJS.copy()
     # remove untracked trajectories
-    past_trajs = [traj for traj in past_trajs if is_tracked(traj)]
+    past_trajs = [traj for traj in past_trajs if is_tracked(msg.objects, traj.pedestrian_id)]
     for id, object in enumerate(msg.objects):
         if object.label_id != 0:
             continue
+        point = Point()
+        point.x = object.position[0]
+        point.y = object.position[1]
+        point.z = object.position[2]
         is_new = True
         for traj in past_trajs:
             if traj.pedestrian_id == id and object.tracking_state != 0:
                 is_new = False
                 traj.times.append(msg.header.stamp)
-                traj.trajectory.append(Point(object.position))
+                traj.trajectory.append(point)
                 break
         if is_new:
             traj = Trajectory()
             traj.pedestrian_id = id
             traj.times = [msg.header.stamp]
-            traj.trajectory = [Point(object.position)]
+            traj.trajectory = [point]
             past_trajs.append(traj)
     PAST_TRAJS = past_trajs
     global IS_PREDICTED
