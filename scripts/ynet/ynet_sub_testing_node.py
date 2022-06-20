@@ -23,7 +23,7 @@ def torch_to_trajs(torch_trajs, t0, dt):
 if __name__ == "__main__":
     rospy.init_node("ynet_sub_test")
     pub = rospy.Publisher('trajectories', TrajectoryArray, queue_size=2)
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(30)
     while not rospy.is_shutdown():
         trajs = torch.ones((4,8,2))
         t0 = rospy.Time.now()
