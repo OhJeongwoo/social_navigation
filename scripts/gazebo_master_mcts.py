@@ -16,6 +16,7 @@ from rosgraph_msgs.msg import Clock
 from geometry_msgs.msg import Twist, PoseStamped
 from sensor_msgs.msg import LaserScan
 from nav_msgs.msg import Odometry
+from zed_interfaces.msg import ObjectsStamped, Object
 
 from social_navigation.msg import RRT, Request
 
@@ -117,6 +118,12 @@ class PedSim:
 
         # parameter for env
         self.max_goal_dist = 5.0
+
+        # parameter for pseudo zed
+        self.last_zed_published_time_ = 0.0
+        self.zed_publish_interval_ = 0.1
+        self.zed_pose_ = {}
+        self.clock_ = Clock()
         
 
         # paramter for trajectory
@@ -171,6 +178,7 @@ class PedSim:
         # define ROS communicator
         self.sub_pose_ = rospy.Subscriber('/gazebo/model_states', ModelStates, self.callback_pose)
         self.pub_jackal_ = rospy.Publisher('/jackal_velocity_controller/cmd_vel', Twist, queue_size=10)
+        self.pub_zed_ = rospy.Publisher('/objects', ObjectsStamped, queue_size=10)
         self.set_model_ = rospy.ServiceProxy(gazebo_ns + '/set_model_state', SetModelState)
         self.sub_scan_ = rospy.Subscriber('/front/scan', LaserScan, self.callback_scan)
         self.client_pause_ = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
@@ -216,6 +224,28 @@ class PedSim:
 
 
     def callback_pose(self, msg):
+        rt = ObjectsStamped()
+        if self.time_ - self.last_zed_published_time_ > self.zed_publish_interval_:
+            self.last_zed_published_time_ = self.time_
+            rt.header.stamp = self.clock_
+            objects = []
+            for name in  self.actor_name_:
+                try:
+                    idx = msg.name.index(name)
+                    pos = msg.pose[idx].position
+                    obj = Object()
+                    obj.position = [pos.x, pos.y, pos.z]
+                    obj.label_id = -1
+                    obj.tracking_state = 0
+                    if name not in self.zed_pose_ or L2dist(pos, self.zed_pose_[name]) < 3.0:
+                        obj.label_id = 0
+                        obj.tracking_state = 1
+                        self.zed_pose_[name] = pos
+                    objects.append(obj)
+                    rt.objects = objects
+                except:
+                    print("no name")
+            self.pub_zed_.publish(rt)
         name_list = msg.name
         for name in self.actor_name_:
             try:
