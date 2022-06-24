@@ -65,40 +65,45 @@ for p in clusters[idx]:
     A[p[0]][p[1]] = 255
     B[p[0]][p[1]] = 0
 
-min_d = 7
-step_size = 0.04
-half_kernel = 33
+M = 1.0
+alpha = 0.025
+half_kernel = 100
 kernel_size = 2*half_kernel + 1
 kernel = np.zeros((kernel_size, kernel_size))
 for i in range(kernel_size):
     for j in range(kernel_size):
-        d = abs(i-half_kernel) + abs(j-half_kernel)
-        if d <= min_d:
-            kernel[i][j] = 255
-        else:
-            value = 1 - (d - min_d) * step_size
-            if value < 0:
-                continue
-            kernel[i][j] = int(255 * value)
-print(kernel)
+        d = ((i-half_kernel)**2 + (j-half_kernel)**2) ** 0.5
+        value = M * pow(2.0, -alpha * d)
+        kernel[i][j] = int(255 * value)
+
+# for i in range(kernel_size):
+#     print(" ")
+#     for j in range(kernel_size):
+#         print(kernel[i][j], end=' ')
 
 # B = np.full((w,h), 255, dtype=int)
+print(w)
 for i in range(w):
+    print(i)
     for j in  range(h):
         if A[i][j] == 0:
             continue
+        check = True
         for k in range(4):
             nx = i + dx[k]
             ny = j + dy[k]
-            if A[nx][ny] == 255:
-                continue
-            for ki in range(-half_kernel, half_kernel):
-                for kj in range(-half_kernel, half_kernel):
-                    ni = nx + ki
-                    nj = ny + kj
-                    if ni < 0 or ni >= w or nj < 0 or nj >= h:
-                        continue
-                    B[ni][nj] = max(B[ni][nj], kernel[ki + half_kernel][kj + half_kernel])
+            if A[nx][ny] != 255:
+                check = False
+                break
+        if check:
+            continue
+        for ki in range(-half_kernel, half_kernel+1):
+            for kj in range(-half_kernel, half_kernel+1):
+                ni = i + ki
+                nj = j + kj
+                if ni < 0 or ni >= w or nj < 0 or nj >= h:
+                    continue
+                B[ni][nj] = max(B[ni][nj], kernel[ki + half_kernel][kj + half_kernel])
 
 # f = open("collision_301_1f.txt", 'w')
 

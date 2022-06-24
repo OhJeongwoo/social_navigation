@@ -1,3 +1,4 @@
+from numpy import append
 import rospy
 import rospkg
 import numpy as np
@@ -15,24 +16,14 @@ from rosgraph_msgs.msg import Clock
 from geometry_msgs.msg import Twist, PoseStamped
 from sensor_msgs.msg import LaserScan
 from nav_msgs.msg import Odometry
-
-from social_navigation.msg import RRT, RRTresponse
-
+from zed_interfaces.msg import ObjectsStamped, Object
 
 from utils import *
-#from numba import njit
+from numba import njit
 
 class PedSim:
     
     def __init__(self, mode='safeRL', gazebo_ns='/gazebo'):
-
-        #Define RRT publisher and subscriber
-        self.rrt_pub = rospy.Publisher("/rrt", RRT, queue_size=10)
-        self.rrt_sub = rospy.Subscriber("/local_goal", RRTresponse, self.callback_rrt)
-        self.rrt_valid = False
-        self.rrt_lookahead_ = 5
-        self.rrt_stop_step_ = 0
-
         # parater for file
         # self.traj_file_ = "traj.json"
         self.traj_file_ = rospkg.RosPack().get_path("social_navigation") + "/config/ped_traj_candidate.json"
@@ -65,7 +56,7 @@ class PedSim:
         self.ped_cost_coeff_ = 1.0
         self.ped_collision_threshold_ = 0.3
         self.map_collision_threshold_ = 0.3
-        self.goal_threshold_ = 1.0
+        self.goal_threshold_ = 0.5
         self.action_limit_ = 1.0
         self.mode_ = mode
         self.collision_map_ = Image.open(self.collision_file_)
@@ -80,6 +71,14 @@ class PedSim:
         self.jackal_twist_ = Twist()
         self.accel_ = 0.0
         self.omega_ = 0.0
+
+        # parameter for pseudo zed
+        self.last_zed_published_time_ = 0.0
+        self.zed_publish_interval_ = 0.1
+        self.zed_pose_ = {}
+        self.clock_ = Clock()
+
+
         with open(self.spawn_file_, 'r') as jf:
             self.spawn_ = json.load(jf)
 
@@ -185,6 +184,7 @@ class PedSim:
         # define ROS communicator
         self.sub_pose_ = rospy.Subscriber('/gazebo/model_states', ModelStates, self.callback_pose)
         self.pub_jackal_ = rospy.Publisher('/jackal_velocity_controller/cmd_vel', Twist, queue_size=10)
+        self.pub_zed_ = rospy.Publisher('/objects', ObjectsStamped, queue_size=10)
         self.set_model_ = rospy.ServiceProxy(gazebo_ns + '/set_model_state', SetModelState)
         self.sub_scan_ = rospy.Subscriber('/front/scan', LaserScan, self.callback_scan)
         self.client_pause_ = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
@@ -195,23 +195,6 @@ class PedSim:
         self.sub_clock_ = rospy.Subscriber('/clock', Clock, self.callback_clock)
 
         time.sleep(1.0)
-
-    def callback_rrt(self, msg):
-        self.rrt_path = msg.path
-        self.rrt_stop = msg.stop
-        
-        if self.rrt_stop:
-            self.rrt_stop_step_ += 1
-        else:
-            self.rrt_stop_step_ = 0
-        if len(self.rrt_path) > self.rrt_lookahead_:
-            self.local_goal_ = self.rrt_path[self.rrt_lookahead_-1]
-        else:
-            self.local_goal_ = self.rrt_path[len(self.rrt_path)-1]
-        #print('rrt length :', len(self.rrt_path))
-        self.rrt_valid = True
-        #print(time.time() - self.origin_time)
-
 
 
     def callback_status(self, msg):
@@ -224,6 +207,36 @@ class PedSim:
 
 
     def callback_pose(self, msg):
+        # rt = object detection result
+        # for name in self.actor_name_:
+        #     if prev_pose[name] is None:
+        #         -> assign new id and append
+        #     else:
+        #         check if it is new
+        #         if new -> assign new id and append
+        #         else append
+        rt = ObjectsStamped()
+        if self.time_ - self.last_zed_published_time_ > self.zed_publish_interval_:
+            self.last_zed_published_time_ = self.time_
+            rt.header.stamp = self.clock_
+            objects = []
+            for name in  self.actor_name_:
+                try:
+                    idx = msg.name.index(name)
+                    pos = msg.pose[idx].position
+                    obj = Object()
+                    obj.position = [pos.x, pos.y, pos.z]
+                    obj.label_id = -1
+                    obj.tracking_state = 0
+                    if name not in self.zed_pose_ or L2dist(pos, self.zed_pose_[name]) < 3.0:
+                        obj.label_id = 0
+                        obj.tracking_state = 1
+                        self.zed_pose_[name] = pos
+                    objects.append(obj)
+                    rt.objects = objects
+                except:
+                    print("no name")
+            self.pub_zed_.publish(rt)
         name_list = msg.name
         for name in self.actor_name_:
             try:
@@ -241,6 +254,7 @@ class PedSim:
 
 
     def callback_clock(self, msg):
+        self.clock_ = msg.clock
         self.time_ = msg.clock.secs + msg.clock.nsecs * 1e-9
         self.pause_time_ = time.time()
         self.loop()
@@ -303,19 +317,6 @@ class PedSim:
                         pass
             else:
                 break
-
-        #Update rrt
-        self.rrt_valid = False
-        rt = RRT()
-        rt.root = self.jackal_pose_.position
-        rt.goal = Point(self.jackal_goal_[0], self.jackal_goal_[1], 0.0)
-        rt.option = False
-        if self.rrt_stop_step_ >= 100:
-            rt.option = True
-        self.rrt_pub.publish(rt)
-        while not self.rrt_valid:
-            time.sleep(0.001)
-        
         self.update_state()
         self.step_ = False
         return
@@ -360,7 +361,7 @@ class PedSim:
         self.jackal_goal_ = candidate['goal']
         
         #self.jackal_goal_ = [28.9,16.7]
-        #self.local_goal_ = self.jackal_goal_
+        self.local_goal_ = self.jackal_goal_
 
         # unpause gazebo
         self.is_pause_ = False
@@ -379,37 +380,12 @@ class PedSim:
         # pause gazebo
         time.sleep(2) # For stable state initilization
         self.client_pause_()
-        reset_flag = False
-
-        #Get initial rrt
-        while True:
-            start_time = time.time()
-            self.rrt_stop_step_ = 0
-            rt = RRT()
-            rt.root = self.jackal_pose_.position
-        
-            rt.goal = Point(self.jackal_goal_[0], self.jackal_goal_[1], 0.0)
-            rt.option = True
-            self.rrt_pub.publish(rt)
-            self.origin_time = time.time()
-
-            self.reset_ = False
-            self.target_time_ = self.time_
-            self.history_queue_ = []
-            while not self.rrt_valid:
-                time.sleep(0.001)
-                if time.time() - start_time > 1:
-                    reset_flag = True
-                    break
-            
-            self.prev_local_goal_ = self.local_goal_
-            if not reset_flag:
-                break
-
-        
+        self.reset_ = False
+        self.target_time_ = self.time_
+        self.history_queue_ = []
         self.update_state()
         self.prev_goal_distance = self.goal_distance
-        self.prev_local_goal_distance = self.local_goal_distance
+
         return self.obs2list(self.get_obs())
     
 
@@ -428,13 +404,7 @@ class PedSim:
 
         self.jackal_cmd(a)
         self.simulation()
-
-        
-        
-
-
         ns = self.get_obs()
-        #print(self.local_goal_)
 
         reward = 0.0
 
@@ -446,16 +416,12 @@ class PedSim:
         done = False
 
         # goal reward
-        #dist_reward = self.prev_goal_distance - self.goal_distance
-        
-        dist_reward = self.prev_local_goal_distance - self.dist_to_last_local_goal
-        #self.prev_goal_distance = self.goal_distance
-        self.prev_local_goal_distance = self.local_goal_distance
-        self.prev_local_goal_ = self.local_goal_
+        dist_reward = self.prev_goal_distance - self.goal_distance
+        self.prev_goal_distance = self.goal_distance
         #print(ns[0].goal_distance, goal_reward)
         if self.goal_distance < self.goal_threshold_:
             done = True
-            success_reward = 10.0
+            success_reward = 1.0
             print("goal reached!")
 
         '''
@@ -474,7 +440,7 @@ class PedSim:
         
         if min(self.lidar_state_) < self.map_collision_threshold_ or self.is_collision() == True:
             done = True
-            collision_reward = -10
+            collision_reward = -1
             collision_cost_total = 10
             if min(self.lidar_state_) < self.map_collision_threshold_:
                 print('lidar collision')
@@ -488,7 +454,7 @@ class PedSim:
         
 
 
-        if not done and self.timestep >= 1000:
+        if not done and self.timestep >= 200:
             print('timeout!')
         '''
         # peds cost
@@ -541,10 +507,9 @@ class PedSim:
             state.append(obs[i].lin_vel)
             state.append(obs[i].ang_vel)
             state.append(obs[i].accel)
-            
-            state.append(obs[0].goal.x)
-            state.append(obs[0].goal.y)
-            state.append(obs[0].goal_distance)
+            state.append(obs[i].goal.x)
+            state.append(obs[i].goal.y)
+            state.append(obs[i].goal_distance)
             state += obs[i].lidar
             '''
             for ped in obs[i].pedestrians:
@@ -631,27 +596,16 @@ class PedSim:
 
         
         # goal state
-        gx, gy = transform_coordinate(self.local_goal_.x - jx, self.local_goal_.y - jy, ct, st)
+        gx, gy = transform_coordinate(self.jackal_goal_[0] - jx, self.jackal_goal_[1] - jy, ct, st)
         state.goal_distance = (gx**2 + gy**2)**0.5
-        if state.goal_distance < 1e-6:
-            dir_gx = 0
-            dir_gy = 0
-        else:
-            dir_gx = gx / state.goal_distance
-            dir_gy = gy / state.goal_distance
+        dir_gx = gx / state.goal_distance
+        dir_gy = gy / state.goal_distance
         state.goal = Point(dir_gx, dir_gy, 0)
-        self.local_goal_distance = ((self.local_goal_.x - jx)**2 + (self.local_goal_.y-jy)**2)**0.5
-        self.dist_to_last_local_goal = ((self.prev_local_goal_.x - jx)**2 + (self.prev_local_goal_.y-jy)**2)**0.5
-
-        state.goal_distance = state.goal_distance if self.local_goal_distance < self.max_goal_dist else self.max_goal_dist 
         
 
         self.goal_distance = ((self.jackal_goal_[0] - jx)**2 + (self.jackal_goal_[1]-jy)**2)**0.5
 
-        #state.goal_distance = state.goal_distance if state.goal_distance < self.max_goal_dist else self.max_goal_dist #Clio goal distance going into
-
-        
-        
+        state.goal_distance = state.goal_distance if state.goal_distance < self.max_goal_dist else self.max_goal_dist #Clio goal distance going into
         
 
         # jackal state
@@ -751,6 +705,7 @@ class PedSim:
             self.history_queue_.pop(0)
 
 
+            
 
 
     def loop(self):

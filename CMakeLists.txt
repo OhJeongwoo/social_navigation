@@ -41,10 +41,11 @@ add_message_files(
   InstanceArray.msg
   PedestrianArray.msg
   StateInfo.msg
+  Request.msg
   RRT.msg
   RRTresponse.msg
   Trajectory.msg
-  TrajectoryArray.msg
+  # TrajectoryArray.msg
   Cluster.msg
   ClusterArray.msg
 )
