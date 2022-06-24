@@ -73,7 +73,7 @@ def trajectory_predict(req):
     # res.trajectories : Trajectory[]
     global PREDICTED_TRAJS
     trajs = PREDICTED_TRAJS.copy()
-    new_ts = req.time_sequence
+    new_ts = [rospy.Time.now() + rospy.Duration.from_sec(t) for t in req.times]
     trajectories = [interpolates(new_ts, traj) for traj in trajs]
     res = TrajectoryPredictResponse()
     res.time_sequence = new_ts
