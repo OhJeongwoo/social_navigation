@@ -2,10 +2,10 @@
 exp_name: 'pedsim'
 
 # environment description
-exp_epi_len: 1000
+exp_epi_len: 200
 
 # architecture description
-pi_hidden_layers: [128, 128]
+pi_hidden_layers: [256, 256]
 
 # option
 # 0-element: batchnorm ('batch-norm' means we use batch normalization)
@@ -23,11 +23,11 @@ alpha: 0.002
 # training hyperparameters
 learning_rate: 0.0001
 epochs: 1000
-steps_per_epoch: 4000
+steps_per_epoch: 1000
 batch_size: 512
 n_log_epi: 10
-start_steps: 1000
-update_after: 4000
+start_steps: 4000
+update_after: 1000
 update_every: 1000
 save_interval: 10
 plot_rendering: True

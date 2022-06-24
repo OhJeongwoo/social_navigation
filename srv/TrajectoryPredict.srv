@@ -1,0 +1,5 @@
+float64[] times
+---
+float64[] times # T
+float64[] velocity # P(size = # of ped)
+social_navigation/Trajectory[] trajectories # PxT

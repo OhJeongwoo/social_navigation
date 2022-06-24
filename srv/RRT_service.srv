@@ -1,0 +1,6 @@
+geometry_msgs/Point root
+geometry_msgs/Point goal
+bool option
+---
+geometry_msgs/Point[] path
+bool stop
