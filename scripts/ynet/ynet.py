@@ -109,3 +109,4 @@ if __name__ == "__main__":
     rospy.Service('trajectory_predict', TrajectoryPredict, trajectory_predict)
     rospy.Subscriber('trajectories', TrajectoryArray, callback)
     rospy.spin()
+

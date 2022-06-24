@@ -1,3 +1,3 @@
 int32 pedestrian_id
-time[] times
+float64[] times
 geometry_msgs/Point[] trajectory

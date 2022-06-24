@@ -1,3 +1,5 @@
-time[] time_sequence
+float64[] times
 ---
-social_navigation/Trajectory[] trajectories
+float64[] times # T
+float64[] velocity # P(size = # of ped)
+social_navigation/Trajectory[] trajectories # PxT
