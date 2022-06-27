@@ -72,6 +72,7 @@ class RRT{
     void make_local_map(const vector<point>& points);
     void drawing(const vector<node>& tree);
     void draw_diverse_path(const vector<vector<point>>& trees, int best_tree);
+    void draw_mcts_result(const vector<vector<point>>& trees, int best_tree, point global_goal, vector<vector<point>>& peds);
     bool is_collision(point p, point q);
     double get_cost(point p);
     double get_collision_cost(point p);

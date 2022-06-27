@@ -401,7 +401,8 @@ class GlobalPlanner{
         local_goal_ = tree_[best_cand].goal;
         jackal = paths[best_cand][max<int>(paths[best_cand].size() - 5, 0)];
         local_goal_.print();
-        rrt.draw_diverse_path(paths, best_cand);
+        // rrt.draw_diverse_path(paths, best_cand);
+        rrt.draw_mcts_result(paths, best_cand, global_goal_, ped_goals);
         
         geometry_msgs::Point rt;
         rt.x = local_goal_.x;
