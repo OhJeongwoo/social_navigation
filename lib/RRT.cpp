@@ -102,7 +102,7 @@ void RRT::make_local_map(const vector<point>& points){
 
 void RRT::drawing(const vector<node>& tree){
     Mat background = cost_map_;
-    string save_path = "/home/jeongwoooh/catkin_social/src/social_navigation/test.png";
+    string save_path = "/home/jay/catkin_ws/src/social_navigation/test.png";
     // cout << save_path << endl;
     
     // for(int i = 0; i < img_w_; i++){
@@ -129,7 +129,7 @@ void RRT::drawing(const vector<node>& tree){
 
 void RRT::draw_diverse_path(const vector<vector<point>>& trees, int best_tree){
     Mat background = cost_map_;
-    string save_path = "/home/jeongwoooh/catkin_social/src/social_navigation/diverse_test.png";
+    string save_path = "/home/jay/catkin_ws/src/social_navigation/diverse_test.png";
     // cout << save_path << endl;
     pixel root = transform_.xy2pixel(root_);
     cv::circle(background,  Point(root.y, root.x), 10.0, Scalar(0), -1);

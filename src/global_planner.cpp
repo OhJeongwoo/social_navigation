@@ -210,11 +210,6 @@ class GlobalPlanner{
     }
 
     void mcts(){
-        // point jackal = point(-29.38, -5.60);
-        // local_goal_ = jackal;
-        // for unit test
-        // point jackal = point(17.0, -5.0);
-        global_goal_ = point(31.0, -3.0);
         lidar_points_.clear();
 
         // fetch current status (lidar point clouds, jackal position)
