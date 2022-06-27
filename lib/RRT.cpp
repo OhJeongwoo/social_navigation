@@ -155,6 +155,40 @@ void RRT::draw_diverse_path(const vector<vector<point>>& trees, int best_tree){
     cv::imwrite(save_path, background);
 }
 
+void RRT::draw_mcts_result(const vector<vector<point>>& trees, int best_tree, point global_goal, vector<vector<point>>& peds){
+    Mat background = cost_map_;
+    string save_path = "/home/jeongwoooh/catkin_social/src/social_navigation/diverse_test.png";
+    // cout << save_path << endl;
+    pixel root = transform_.xy2pixel(root_);
+    cv::circle(background,  Point(root.y, root.x), 10.0, Scalar(0), -1);
+
+    pixel goal = transform_.xy2pixel(global_goal);
+    cv::circle(background,  Point(goal.y, goal.x), 10.0, Scalar(255), -1);
+    int idx = 0;
+    for(const vector<point>& tree: trees){
+        if(idx == best_tree){
+            pixel root = transform_.xy2pixel(tree[max<int>(tree.size() - 25, 0)]);
+            cv::circle(background,  Point(root.y, root.x), 5.0, Scalar(0), -1);
+        }
+        else{
+            pixel root = transform_.xy2pixel(tree[max<int>(tree.size() - 25, 0)]);
+            cv::circle(background,  Point(root.y, root.x), 5.0, Scalar(200), -1);
+        }
+        
+        idx ++;
+    }
+    int T = peds.size();
+    for(int t=0;t<T;t++){
+        int P = peds[t].size();
+        for(int i =0;i<P;i++){
+            pixel p = transform_.xy2pixel(peds[t][i]);
+            cv::circle(background,  Point(p.y, p.x), 10.0*(t+1)/T, Scalar(150), -1);
+        }
+    }
+    
+    cv::imwrite(save_path, background);
+}
+
 
 bool RRT::is_collision(point p, point q){
     for(int i = 0; i <= step_; i++){
