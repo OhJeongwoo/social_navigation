@@ -46,7 +46,9 @@ if __name__ == "__main__":
     # set environment
     env_ = PedSim(mode='RL')
     time.sleep(3.0)
+    print(1)
     exp_obs_dim_, exp_act_dim_ = env_.get_dim()
+    print(2)
     exp_epi_len_ = args['exp_epi_len']
     act_limit_ = env_.action_limit_
     
@@ -207,19 +209,20 @@ if __name__ == "__main__":
 
     score_logger = []
     cost_logger = []
-
+    print("start sac")
     # Main loop: collect experience in env and update/log each epoch
     for t in range(total_steps):
+        print(t)
         # Until start_steps have elapsed, randomly sample actions
         # from a uniform distribution for better exploration. Afterwards, 
         # use the learned policy. 
         
         
-        if t >= 0:
+        # if t >= 0:
          
-            a = get_action(o)
-        else:
-            a = env_.get_random_action()
+        #     a = get_action(o)
+        # else:
+        a = env_.get_random_action()
         # Step the env
 
         #print(a)
@@ -246,6 +249,7 @@ if __name__ == "__main__":
         if d or (ep_len == exp_epi_len_):
             score_logger.append(ep_ret)
             cost_logger.append(ep_cost)
+            env_.send_flag()
             o, ep_ret, ep_len, ep_cost = env_.reset(), 0, 0, 0
         
         # # Update handling

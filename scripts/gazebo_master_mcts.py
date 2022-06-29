@@ -103,7 +103,7 @@ class PedSim:
 
 
         # parameter for actor
-        self.n_actor_ = 0 # 10
+        self.n_actor_ = 10 # 10
         self.actor_name_ = []
         self.group_id_ = {}
         self.r_pos_ = {}
@@ -170,6 +170,7 @@ class PedSim:
             self.actor_name_.append(name)
             self.group_id_[name] = g_ids[seq]
             self.r_pos_[name] = r_pos[seq]
+            self.pose_[name] = Point()
             self.actor_status_[name] = WAIT
             # self.status_[name] = WAIT
             # self.status_time_[name] = self.time_
@@ -183,6 +184,7 @@ class PedSim:
         self.sub_pose_ = rospy.Subscriber('/gazebo/model_states', ModelStates, self.callback_pose)
         self.pub_jackal_ = rospy.Publisher('/jackal_velocity_controller/cmd_vel', Twist, queue_size=10)
         self.pub_zed_ = rospy.Publisher('/objects', ObjectsStamped, queue_size=10)
+        self.pub_flag_ = rospy.Publisher('/flag', Bool, queue_size=10)
         self.set_model_ = rospy.ServiceProxy(gazebo_ns + '/set_model_state', SetModelState)
         self.sub_scan_ = rospy.Subscriber('/front/scan', LaserScan, self.callback_scan)
         self.client_pause_ = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
@@ -288,6 +290,12 @@ class PedSim:
         self.lidar_state_ = lidar_state
         
 
+    def send_flag(self):
+        rt = Bool()
+        rt.data = True
+        self.pub_flag_.publish(rt) 
+
+
     def simulation(self):
         self.target_time_ = self.time_ + self.dt_
         self.is_pause_ = False
@@ -371,7 +379,7 @@ class PedSim:
 
         
         # pause gazebo
-        time.sleep(6) # For stable state initilization
+        time.sleep(6.0) # For stable state initilization
         self.client_pause_()
 
         #self.received_time_ = 0
@@ -382,13 +390,12 @@ class PedSim:
         mcts.reset = True
 
 
-        import ipdb;ipdb.set_trace()
         self.rrt_pub.publish(mcts)
 
         self.published_time_ = time.time()
 
-        while True:
-            pass
+        # while True:
+        #     pass
 
         
             #print('sent : ', time.time())
@@ -401,15 +408,7 @@ class PedSim:
             
                 print('reset time : ', time.time() - a)
                 break
-        
 
-
-
-
-        
-
-
-                
 
         
         self.update_state()
@@ -502,6 +501,7 @@ class PedSim:
 
     def get_dim(self):
         o = self.reset()
+        self.send_flag()
         return o.shape[0], 2
 
 

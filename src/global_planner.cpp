@@ -114,6 +114,7 @@ class GlobalPlanner{
         alpha_visit_ = 1.0;
         distance_threshold_ = 1.0;
         time_limit_ = 1.0;
+        ignore_ = false;
 
         for(int i = 0; i < max_depth_ + 1; i++) time_array_.push_back(dt_ * i);
 
@@ -129,7 +130,7 @@ class GlobalPlanner{
         ignore_ = true;
         clock_t init_time = clock();
         while(1){
-            if(double(clock() - init_time) / CLOCKS_PER_SEC > 5.0) break;
+            if(double(clock() - init_time) / CLOCKS_PER_SEC > 4.0) break;
         }
         ignore_ = false;
         return;
@@ -137,12 +138,18 @@ class GlobalPlanner{
 
     void callback_request(const social_navigation::Request::ConstPtr& msg){
         clock_t init_time = clock();
-        if(ignore_ && !msg->reset) return;
+        cout << "start request" << endl;
+        if(ignore_ && !msg->reset) {
+            cout << "ignore" << endl;
+            return;
+        }
         global_goal_ = point(msg->goal.x, msg->goal.y);
         if(msg->reset){
             local_goal_ = point(msg->jackal.x, msg->jackal.y);
         }
+        cout << "start mcts" << endl;
         mcts();
+        cout << "end mcts" << endl;
         clock_t end_time = clock();
         cout << "elapsed time: " << double(end_time-init_time)/CLOCKS_PER_SEC << endl;
     }
