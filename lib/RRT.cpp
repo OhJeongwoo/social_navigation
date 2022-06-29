@@ -184,6 +184,7 @@ void RRT::draw_mcts_result(const vector<vector<point>>& trees, int best_tree, po
             pixel p = transform_.xy2pixel(peds[t][i]);
             cv::circle(background,  Point(p.y, p.x), 10.0*(t+1)/T, Scalar(150), -1);
         }
+        cout << P << endl;
     }
     
     cv::imwrite(save_path, background);
