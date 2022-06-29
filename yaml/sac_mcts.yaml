@@ -1,0 +1,36 @@
+# experiment description
+exp_name: 'pedsim'
+
+# environment description
+exp_epi_len: 1000
+
+# architecture description
+pi_hidden_layers: [256, 256]
+
+# option
+# 0-element: batchnorm ('batch-norm' means we use batch normalization)
+# 1-element: activation function ('relu', 'leaky-relu', 'sigmoid', 'tanh')
+# 2-element: last activation function ('default' means nothing, 'sigmoid', 'tanh')
+pi_options: ['default', 'leaky-relu', 'default']
+
+
+# SAC hyperparameters
+replay_size: 10000
+gamma: 0.99
+polyak: 0.995
+alpha: 0.002
+
+# training hyperparameters
+learning_rate: 0.0001
+epochs: 1000
+steps_per_epoch: 1000
+batch_size: 512
+n_log_epi: 10
+start_steps: 4000
+update_after: 1000
+update_every: 1000
+save_interval: 10
+plot_rendering: True
+
+# seed
+seed: 1

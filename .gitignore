@@ -1,3 +1,7 @@
 scripts/wandb/*
 policy/*
 wandb/*
+scripts/ynet/data/*
+scripts/ynet/pretrained_models/*
+scripts/ynet/segmentation_models/*
+

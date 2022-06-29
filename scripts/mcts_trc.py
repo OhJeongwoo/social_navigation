@@ -13,7 +13,7 @@ from model import TRCCore
 import torch.nn
 from utils import *
 from replay_buffer import ReplayBufferTRC
-from gazebo_master import PedSim
+from gazebo_master_mcts import PedSim
 #import wandb
 from torch.distributions import Normal
 from scipy.stats import norm
@@ -89,7 +89,7 @@ if __name__ == "__main__":
 
     # create model and replay buffer
     ac_ = TRCCore(exp_obs_dim_, exp_act_dim_, hidden_layers_, learning_rate_, act_limit_, device_, options_).to(device_)
-    ac_weights = torch.load(POLICY_PATH + exp_name_ + "/trc_medium_ped625.pt")
+    ac_weights = torch.load(POLICY_PATH + exp_name_ + "/trc_medium369.pt")
     ac_.load_state_dict(ac_weights.state_dict(), strict=False)
 
     replay_buffer_ = ReplayBufferTRC(exp_obs_dim_, exp_act_dim_, replay_size_, device_)

@@ -42,6 +42,7 @@ class GlobalPlanner{
     ros::Publisher pub_flag_;
     ros::Subscriber sub_;
     ros::Subscriber sub_flag_;
+    ros::Subscriber sub_signal_;
     ros::Subscriber sub_lidar_;
     ros::Subscriber sub_jackal_;
     ros::ServiceClient srv_pedestrian_;
@@ -80,6 +81,7 @@ class GlobalPlanner{
     double time_limit_;
 
     vector<double> time_array_; // 0.0 0.5 ... 10.0
+    bool ignore_;
 
     RRT rrt;
 
@@ -117,17 +119,32 @@ class GlobalPlanner{
 
         pub_ = nh_.advertise<geometry_msgs::Point>("/local_goal", 1000);
         sub_flag_ = nh_.subscribe("/request", 1, &GlobalPlanner::callback_request, this);
+        sub_signal_ = nh_.subscribe("/flag", 1, &GlobalPlanner::callback_flag, this);
         sub_lidar_ = nh_.subscribe("/front/scan", 1, &GlobalPlanner::callback_lidar, this);
         sub_jackal_ = nh_.subscribe("/gazebo/model_states", 1, &GlobalPlanner::callback_jackal, this);
         srv_pedestrian_ = nh_.serviceClient<social_navigation::TrajectoryPredict>("/trajectory_predict");
     }
 
+    void callback_flag(const std_msgs::Bool::ConstPtr& msg){
+        ignore_ = true;
+        clock_t init_time = clock();
+        while(1){
+            if(double(clock() - init_time) / CLOCKS_PER_SEC > 5.0) break;
+        }
+        ignore_ = false;
+        return;
+    }
+
     void callback_request(const social_navigation::Request::ConstPtr& msg){
+        clock_t init_time = clock();
+        if(ignore_ && !msg->reset) return;
         global_goal_ = point(msg->goal.x, msg->goal.y);
         if(msg->reset){
             local_goal_ = point(msg->jackal.x, msg->jackal.y);
         }
         mcts();
+        clock_t end_time = clock();
+        cout << "elapsed time: " << double(end_time-init_time)/CLOCKS_PER_SEC << endl;
     }
 
     void callback_jackal(const gazebo_msgs::ModelStates::ConstPtr& msg){

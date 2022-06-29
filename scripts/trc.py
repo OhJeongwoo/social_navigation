@@ -24,7 +24,7 @@ PROJECT_PATH = os.path.abspath("..")
 POLICY_PATH = PROJECT_PATH + "/policy/"
 YAML_PATH = PROJECT_PATH + "/yaml/"
 
-wandb.init(project='starlab4')
+wandb.init(project='starlab5')
 wandb.run.name = 'trc_medium_ped'
 
 EPS = 1e-8
@@ -91,8 +91,8 @@ if __name__ == "__main__":
     ac_ = TRCCore(exp_obs_dim_, exp_act_dim_, hidden_layers_, learning_rate_, act_limit_, device_, options_).to(device_)
     # ac_weights = torch.load(POLICY_PATH + exp_name_ + "/trc_medium_ped625.pt")
     # ac_.load_state_dict(ac_weights.state_dict(), strict=False)
-    ac_weights = torch.load(POLICY_PATH + exp_name_ + "/trc_medium369.pt")
-    ac_.load_state_dict(ac_weights.state_dict(), strict=False)
+    #ac_weights = torch.load(POLICY_PATH + exp_name_ + "/trc_medium369.pt")
+    #ac_.load_state_dict(ac_weights.state_dict(), strict=False)
 
     replay_buffer_ = ReplayBufferTRC(exp_obs_dim_, exp_act_dim_, replay_size_, device_)
 
@@ -492,19 +492,19 @@ if __name__ == "__main__":
             cost_logger.append(ep_cost)
             o, ep_ret, ep_len, ep_cost = env_.reset(), 0, 0, 0
         
-        # # Update handling
-        # if (t+1) >= update_after_ and (t+1) % update_every_ == 0:
-        #     for j in range(1):
-        #         batch = replay_buffer_.sample_batch()
-        #         log_infos = update(data=batch, t = t)
-        #     log_infos['time steps']  = t
-        #     log_infos['reward'] = np.mean(score_logger[-3:])
-        #     log_infos['cost'] = np.mean(cost_logger[-3:])
-        #     print('updated')
-        #     wandb.log(log_infos)
+        # Update handling
+        if (t+1) >= update_after_ and (t+1) % update_every_ == 0:
+            for j in range(1):
+                batch = replay_buffer_.sample_batch()
+                log_infos = update(data=batch, t = t)
+            log_infos['time steps']  = t
+            log_infos['reward'] = np.mean(score_logger[-3:])
+            log_infos['cost'] = np.mean(cost_logger[-3:])
+            print('updated')
+            wandb.log(log_infos)
         
          
         
-        # if (t+1) % steps_per_epoch_ == 0:
-        #     epoch = (t+1) // steps_per_epoch_
-        #     torch.save(ac_, POLICY_PATH + exp_name_ + "/trc_medium_ped" + str(epoch).zfill(3)+".pt")
+        if (t+1) % steps_per_epoch_ == 0:
+            epoch = (t+1) // steps_per_epoch_
+            torch.save(ac_, POLICY_PATH + exp_name_ + "/trc_medium_v4_" + str(epoch).zfill(3)+".pt")
