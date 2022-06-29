@@ -13,15 +13,15 @@ from model import SACCore
 import torch.nn
 from utils import *
 from replay_buffer import ReplayBuffer
-from gazebo_master_old import PedSim
+from gazebo_master_mcts import PedSim
 import wandb
 
 PROJECT_PATH = os.path.abspath("..")
 POLICY_PATH = PROJECT_PATH + "/policy/"
 YAML_PATH = PROJECT_PATH + "/yaml/"
 
-wandb.init(project='starlab5')
-wandb.run.name = 'sac_medium'
+# wandb.init(project='starlab5')
+# wandb.run.name = 'sac_medium'
 
 if __name__ == "__main__":
     rospy.init_node("sac")
@@ -29,7 +29,7 @@ if __name__ == "__main__":
     device_ = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     parser = argparse.ArgumentParser(description='Soft Actor-Critic (SAC)')
-    parser.add_argument('--yaml', default='sac', type=str)
+    parser.add_argument('--yaml', default='sac_mcts', type=str)
     args = parser.parse_args()
 
     YAML_FILE = YAML_PATH + args.yaml + ".yaml"
@@ -79,9 +79,9 @@ if __name__ == "__main__":
     # create model and replay buffer
     ac_ = SACCore(exp_obs_dim_, exp_act_dim_, hidden_layers_, learning_rate_, act_limit_, device_, options_).to(device_)
     ac_tar_ = deepcopy(ac_)
-    ac_weights = torch.load(POLICY_PATH + exp_name_ + "/sac_v4_072.pt")
+    ac_weights = torch.load(POLICY_PATH + exp_name_ + "/sac_v4_069.pt")
     ac_.load_state_dict(ac_weights.state_dict(), strict=False)
-    replay_buffer_ = ReplayBuffer(exp_obs_dim_, exp_act_dim_, replay_size_, device_)
+    #replay_buffer_ = ReplayBuffer(exp_obs_dim_, exp_act_dim_, replay_size_, device_)
 
     # target network doesn't have gradient
     for p in ac_tar_.parameters():
@@ -221,6 +221,8 @@ if __name__ == "__main__":
         else:
             a = env_.get_random_action()
         # Step the env
+
+        #print(a)
         
         o2, r, d, info = env_.step(a)
     
@@ -234,7 +236,7 @@ if __name__ == "__main__":
         d = False if ep_len == exp_epi_len_ else d
 
         # Store experience to replay buffer
-        replay_buffer_.store(o, a, r, o2, d)
+        #replay_buffer_.store(o, a, r, o2, d)
 
         # Super critical, easy to overlook step: make sure to update 
         # most recent observation!
@@ -246,17 +248,17 @@ if __name__ == "__main__":
             cost_logger.append(ep_cost)
             o, ep_ret, ep_len, ep_cost = env_.reset(), 0, 0, 0
         
-        # Update handling
-        if (t+1) >= update_after_ and (t+1) % update_every_ == 0:
-            for j in range(update_every_):
-                batch = replay_buffer_.sample_batch(batch_size_)
-                log_infos = update(data=batch)
-            log_infos['time steps']  = t
-            log_infos['reward'] = np.mean(score_logger[-3:])
-            log_infos['cost'] = np.mean(cost_logger[-3:])
-            wandb.log(log_infos)
-            print('updated')
+        # # Update handling
+        # if (t+1) >= update_after_ and (t+1) % update_every_ == 0:
+        #     for j in range(update_every_):
+        #         batch = replay_buffer_.sample_batch(batch_size_)
+        #         log_infos = update(data=batch)
+        #     log_infos['time steps']  = t
+        #     log_infos['reward'] = np.mean(score_logger[-3:])
+        #     log_infos['cost'] = np.mean(cost_logger[-3:])
+        #     wandb.log(log_infos)
+        #     print('updated')
 
-        if (t+1) % steps_per_epoch_ == 0:
-            epoch = (t+1) // steps_per_epoch_
-            torch.save(ac_, POLICY_PATH + exp_name_ + "/sac_v4_" + str(epoch).zfill(3)+".pt")
+        # if (t+1) % steps_per_epoch_ == 0:
+        #     epoch = (t+1) // steps_per_epoch_
+        #     torch.save(ac_, POLICY_PATH + exp_name_ + "/sac_v4_" + str(epoch).zfill(3)+".pt")

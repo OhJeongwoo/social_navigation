@@ -29,16 +29,19 @@ class PedSim:
     def __init__(self, mode='safeRL', gazebo_ns='/gazebo'):
 
         #Define RRT publisher and subscriber
-        self.rrt_pub = rospy.Publisher("/request", Bool, queue_size=10)
+        self.rrt_pub = rospy.Publisher("/request", Request, queue_size=1)
         self.rrt_sub = rospy.Subscriber("/local_goal", Point, self.callback_rrt)
+        self.sig_pub = rospy.Publisher("/signal", Bool, queue_size = 1)
         self.rrt_valid = False
-        self.rrt_lookahead_ = 5
-        self.rrt_stop_step_ = 0
+
 
         # parater for file
         # self.traj_file_ = "traj.json"
         self.traj_file_ = rospkg.RosPack().get_path("social_navigation") + "/config/ped_traj_candidate.json"
-        self.spawn_file_ = "goal.json"
+        #self.spawn_file_ = "goal.json"
+        self.spawn_file_ = "goal_mcts_example_v2.json"
+        #self.spawn_file_ = "goal.json"
+        #self.spawn_file_ = "goal_medium.json"
         self.collision_file_ = rospkg.RosPack().get_path("social_navigation") + "/config/free_space_301_1f.png"
 
         # parameter for time
@@ -56,7 +59,7 @@ class PedSim:
         self.spawn_threshold_ = 3.0
         self.lookahead_time_ = 1.0
         self.actor_prob_ = 1.0
-        self.history_rollout_ = 1 # 5
+        self.history_rollout_ = 1
         self.history_queue_ = []
         self.timestep = 0
 
@@ -96,11 +99,11 @@ class PedSim:
 
         # parameter for lidar
         self.scan_size_ = 1081
-        self.scan_dim_ = 30
+        self.scan_dim_ = 60
 
 
         # parameter for actor
-        self.n_actor_ = 0
+        self.n_actor_ = 0 # 10
         self.actor_name_ = []
         self.group_id_ = {}
         self.r_pos_ = {}
@@ -124,6 +127,7 @@ class PedSim:
         self.zed_publish_interval_ = 0.1
         self.zed_pose_ = {}
         self.clock_ = Clock()
+
         
 
         # paramter for trajectory
@@ -190,27 +194,28 @@ class PedSim:
 
         time.sleep(1.0)
 
-        self.received_flag = False
+
+        #self.received_flag = False
 
     def callback_rrt(self, msg):
-
-        self.local_goal = Point(msg.x, msg.y, 0)
-        self.received_flag = True
-        self.received_time = time.time()
-        # self.rrt_path = msg.path
-        # self.rrt_stop = msg.stop
         
-        # if self.rrt_stop:
-        #     self.rrt_stop_step_ += 1
-        # else:
-        #     self.rrt_stop_step_ = 0
-        # if len(self.rrt_path) > self.rrt_lookahead_:
-        #     self.local_goal_ = self.rrt_path[self.rrt_lookahead_-1]
-        # else:
-        #     self.local_goal_ = self.rrt_path[len(self.rrt_path)-1]
-        # #print('rrt length :', len(self.rrt_path))
-        # self.rrt_valid = True
-        # #print(time.time() - self.origin_time)
+        print('callback_rrt')
+        print(time.time() - self.published_time_)
+
+        self.published_time_ = time.time()
+        self.local_goal_ = Point(msg.x, msg.y, 0)
+        
+        print('new request')
+        mcts = Request()
+        mcts.jackal = Point(self.jackal_pose_.position.x, self.jackal_pose_.position.y, 0)
+        mcts.goal = Point(self.jackal_goal_[0], self.jackal_goal_[1], 0.0)
+        mcts.reset = False
+        self.rrt_pub.publish(mcts)
+        self.mcts_initialized_ = True
+        
+        print('____________________________')
+
+
 
 
 
@@ -263,6 +268,7 @@ class PedSim:
 
 
     def callback_clock(self, msg):
+        self.clock_ = msg.clock
         self.time_ = msg.clock.secs + msg.clock.nsecs * 1e-9
         self.pause_time_ = time.time()
         self.loop()
@@ -296,6 +302,9 @@ class PedSim:
                         pass
             else:
                 break
+        self.update_state()
+        self.step_ = False
+        return
 
 
     def jackal_cmd(self, a):
@@ -307,9 +316,10 @@ class PedSim:
     def reset(self):
         self.reset_ = True
         
-
+        
+        self.jackal_cmd([0, 0])
         time.sleep(5)
-        self.received_flag = False
+        self.mcts_initialized_ = False
 
         #Initialize prev values
         self.prev_vel = 0
@@ -325,18 +335,24 @@ class PedSim:
         candidates = []
         for pos in self.spawn_:
             check = True
-            for name in self.actor_name_:
-                if self.actor_status_[name] != MOVE:
-                    continue
-                if get_length(pos['spawn'], [self.pose_[name].x, self.pose_[name].y]) < self.spawn_threshold_:
-                    check = False
-                    break
+            # for name in self.actor_name_:
+            #     if self.actor_status_[name] != MOVE:
+            #         continue
+            #     if get_length(pos['spawn'], [self.pose_[name].x, self.pose_[name].y]) < self.spawn_threshold_:
+            #         check = False
+            #         break
             if check:
                 candidates.append(pos)
+
+        print('list of candidates')
+        print(candidates)
 
         # randomly choice
         candidate = random.choice(candidates)
         self.jackal_goal_ = candidate['goal']
+
+
+
         
 
         # unpause gazebo
@@ -350,24 +366,42 @@ class PedSim:
 
         # print(candidate['goal'])
         self.jackal_cmd([0,0])
+
+        self.sig_pub.publish(True)
+
         
         # pause gazebo
-        time.sleep(2) # For stable state initilization
+        time.sleep(6) # For stable state initilization
         self.client_pause_()
-        reset_flag = False
+
+        #self.received_time_ = 0
+        #while True:
+        mcts = Request()
+        mcts.jackal = Point(self.jackal_pose_.position.x, self.jackal_pose_.position.y, 0)
+        mcts.goal = Point(self.jackal_goal_[0], self.jackal_goal_[1], 0.0)
+        mcts.reset = True
+
+
+        import ipdb;ipdb.set_trace()
+        self.rrt_pub.publish(mcts)
+
+        self.published_time_ = time.time()
 
         while True:
-            mcts = Request()
-            mcts.jackal = Point(self.jackal_pose_.position)
-            mcts.goal = Point(self.jackal_goal_[0], self.jackal_goal_[1], 0.0)
-            mcts.reset = True
-            self.rrt_pub.publish(mcts)
-            time.sleep(3)
+            pass
 
-            if self.received_flag:
+        
+            #print('sent : ', time.time())
+        a = time.time()
+        time.sleep(3)
+        while True:
+            if self.mcts_initialized_:
                 self.prev_local_goal_ = self.local_goal_
                 print("finished initial mcts")
+            
+                print('reset time : ', time.time() - a)
                 break
+        
 
 
 
@@ -387,17 +421,11 @@ class PedSim:
     def step(self, a):
         
         self.timestep += 1
-        
-
-        if self.received_flag or time.time() - self.received_time > 5:
-            self.received_flag = False
-            mcts = Request()
-            mcts.jackal = Point(self.jackal_pose_.position)
-            mcts.goal = Point(self.jackal_goal_[0], self.jackal_goal_[1], 0.0)
-            mcts.reset = False
-            self.rrt_pub.publish(mcts)
 
         s = self.get_obs()
+
+ 
+
 
       
 
@@ -411,6 +439,8 @@ class PedSim:
         self.jackal_cmd(a)
         self.simulation()
         ns = self.get_obs()
+        #print(self.local_goal_)
+        #print(self.jackal_goal_)
 
         reward = 0.0
 
@@ -422,7 +452,7 @@ class PedSim:
         dist_reward = self.prev_local_goal_distance - self.dist_to_last_local_goal
         self.prev_local_goal_distance = self.local_goal_distance
         self.prev_local_goal_ = self.local_goal_
-        #self.prev_goal_distance = self.goal_distance
+        self.prev_goal_distance = self.goal_distance
         if self.goal_distance < self.goal_threshold_:
             done = True
             success_reward = 10.0
@@ -541,6 +571,7 @@ class PedSim:
         st = qy / (qx ** 2 + qy ** 2) ** 0.5
         
         # goal state
+        #gx, gy = transform_coordinate(self.jackal_goal_[0] - jx, self.jackal_goal_[1] - jy, ct, st)
         gx, gy = transform_coordinate(self.local_goal_.x - jx, self.local_goal_.y - jy, ct, st)
         state.goal_distance = (gx**2 + gy**2)**0.5
         if state.goal_distance < 1e-6:
@@ -550,13 +581,15 @@ class PedSim:
             dir_gx = gx / state.goal_distance
             dir_gy = gy / state.goal_distance
         state.goal = Point(dir_gx, dir_gy, 0)
+        self.goal_distance = ((self.jackal_goal_[0] - jx)**2 + (self.jackal_goal_[1]-jy)**2)**0.5
         self.local_goal_distance = ((self.local_goal_.x - jx)**2 + (self.local_goal_.y-jy)**2)**0.5
         self.dist_to_last_local_goal = ((self.prev_local_goal_.x - jx)**2 + (self.prev_local_goal_.y-jy)**2)**0.5
+        #self.dist_to_last_local_goal = ((self.prev_local_goal_[0] - jx)**2 + (self.prev_local_goal_[1]-jy)**2)**0.5
+
 
         state.goal_distance = state.goal_distance if self.local_goal_distance < self.max_goal_dist else self.max_goal_dist 
         
 
-        self.goal_distance = ((self.jackal_goal_[0] - jx)**2 + (self.jackal_goal_[1]-jy)**2)**0.5
 
         #state.goal_distance = state.goal_distance if state.goal_distance < self.max_goal_dist else self.max_goal_dist #Clio goal distance going into
 

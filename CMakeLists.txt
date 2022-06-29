@@ -24,11 +24,11 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   tf2
 )
-# find_package(gazebo 11 REQUIRED)
-find_package(gazebo 9 REQUIRED)
+find_package(gazebo 11 REQUIRED)
+#find_package(gazebo 9 REQUIRED)
 #find_package(ignition-msgs1 REQUIRED)
-# find_package(OpenCV 4 REQUIRED)
-find_package(OpenCV 3 REQUIRED)
+find_package(OpenCV 4 REQUIRED)
+#find_package(OpenCV 3 REQUIRED)
 find_package(Eigen3)
 find_package(PCL 1.8 REQUIRED)
 
@@ -126,9 +126,9 @@ add_executable(rrt src/rrt.cpp ${HEADERS} ${SOURCES})
 target_link_libraries(rrt ${catkin_LIBRARIES} ${CV_LIBRARIES} ${OpenCV_LIBS} ${PCL_LIBRARIES} ${EIGEN_LIBRARIES})
 add_dependencies(rrt ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-add_executable(rrt_2 src/rrt_2.cpp ${HEADERS} ${SOURCES})
-target_link_libraries(rrt_2 ${catkin_LIBRARIES} ${CV_LIBRARIES} ${OpenCV_LIBS} ${PCL_LIBRARIES} ${EIGEN_LIBRARIES})
-add_dependencies(rrt_2 ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+#add_executable(rrt_2 src/rrt_2.cpp ${HEADERS} ${SOURCES})
+#target_link_libraries(rrt_2 ${catkin_LIBRARIES} ${CV_LIBRARIES} ${OpenCV_LIBS} ${PCL_LIBRARIES} ${EIGEN_LIBRARIES})
+#add_dependencies(rrt_2 ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 add_executable(global_planner src/global_planner.cpp ${HEADERS} ${SOURCES})
 target_link_libraries(global_planner ${catkin_LIBRARIES} ${CV_LIBRARIES} ${OpenCV_LIBS} ${PCL_LIBRARIES} ${EIGEN_LIBRARIES})

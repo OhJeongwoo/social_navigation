@@ -157,7 +157,7 @@ void RRT::draw_diverse_path(const vector<vector<point>>& trees, int best_tree){
 
 void RRT::draw_mcts_result(const vector<vector<point>>& trees, int best_tree, point global_goal, vector<vector<point>>& peds){
     Mat background = cost_map_;
-    string save_path = "/home/jeongwoooh/catkin_social/src/social_navigation/diverse_test.png";
+    string save_path = "/home/jay/catkin_ws/src/social_navigation/diverse_test.png";
     // cout << save_path << endl;
     pixel root = transform_.xy2pixel(root_);
     cv::circle(background,  Point(root.y, root.x), 10.0, Scalar(0), -1);

@@ -88,7 +88,7 @@ class PedSim:
 
         # parameter for lidar
         self.scan_size_ = 1081
-        self.scan_dim_ = 30
+        self.scan_dim_ = 60
 
         #Lidar sin, cos, angles
         self.lidar_angles = np.linspace(-np.pi/4, 5 * np.pi/4, 1081)

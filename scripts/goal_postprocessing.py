@@ -4,9 +4,9 @@ import numpy as np
 
 
 
-traj_dict = joblib.load('goal_7_5m.gz')
+traj_dict = joblib.load('goal_mcts_example.gz')
 N = len(traj_dict.keys())
-
+import ipdb;ipdb.set_trace()
 cx = -59.361
 tx = 2.494
 cy = 30.199
@@ -21,5 +21,5 @@ for seq in range(N):
     print(traj)
     save_dict.append(traj)
 
-with open('goal_7_5m.json', 'w') as jf:
+with open('goal_mcts_example.json', 'w') as jf:
     json.dump(save_dict, jf, indent=4)
