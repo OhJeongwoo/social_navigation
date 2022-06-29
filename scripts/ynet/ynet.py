@@ -137,7 +137,11 @@ def torch_to_trajs(torch_trajs, t0, dt):
 
 
 def loop():
+    rospy.sleep(0.0)
+    while rospy.Time.now().to_sec() <= 0.4*OBS_LEN:
+        rospy.sleep(0.4)
     while not rospy.is_shutdown():
+        rospy.sleep(0.01)
         global IS_PREDICTED
         if IS_PREDICTED != 0:
             continue

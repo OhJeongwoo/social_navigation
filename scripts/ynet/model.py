@@ -445,7 +445,7 @@ class YNet:
 										  use_TTST=True, use_CWS=True if len(params['waypoints']) > 1 else False,
 										  # use_TTST=False, use_CWS=False,
 										  rel_thresh=params['rel_threshold'], CWS_params=params['CWS_params'])
-		return waypoint_samples, future_samples
+		return waypoint_samples.detach().cpu().numpy(), future_samples.detach().cpu().numpy()
 
 	def load(self, path):
 		print(self.model.load_state_dict(torch.load(path)))

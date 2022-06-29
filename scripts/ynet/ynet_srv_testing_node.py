@@ -11,9 +11,8 @@ if __name__ == "__main__":
     while not rospy.is_shutdown():
         rospy.wait_for_service('trajectory_predict')
         t0 = rospy.Time.now()
-        dt = rospy.Duration.from_sec(0.4)
         tp = TrajectoryPredictRequest()
-        tp.time_sequence = [t0 + dt * i for i in range(45)]
+        tp.times = [0.0 + 0.4 * i for i in range(45)]
 
         try:
             sp = rospy.ServiceProxy('trajectory_predict', TrajectoryPredict)
