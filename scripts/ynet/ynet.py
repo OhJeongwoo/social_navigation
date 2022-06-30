@@ -17,6 +17,11 @@ PRED_LEN = 12  # in timesteps
 NUM_GOALS = 3  # K_e
 NUM_TRAJ = 1  # K_a
 
+sy_ = -0.05
+sx_ = 0.05
+cy_ = 30.0
+cx_ = -59.4
+
 with open(CONFIG_FILE_PATH) as file:
     params = yaml.load(file, Loader=yaml.FullLoader)
 experiment_name = CONFIG_FILE_PATH.split('.yaml')[0].split('config/')[1]
@@ -157,11 +162,15 @@ def loop():
         input_ts = [t0 + dt * (i + 1 - OBS_LEN) for i in range(OBS_LEN)]
         input_trajs = [interpolates_to_torch(input_ts, past_traj) for past_traj in past_trajs]
         input_trajs = torch.stack(input_trajs, dim=0)
-        # TODO: transform
+
+        input_trajs[:, :, 0] = (input_trajs[:, :, 0] - cx_) / sx_ * params["resize"]
+        input_trajs[:, :, 1] = (input_trajs[:, :, 1] - cy_) / sy_ * params["resize"]
         _, future_trajs = model.predict(input_trajs, params,
                                         num_goals=NUM_GOALS, num_traj=NUM_TRAJ, device=None)
         future_trajs = future_trajs[0, :, :]
-        # TODO: transform
+        future_trajs[:, :, 0] = future_trajs[:, :, 0] * sx_ / params["resize"] + cx_
+        future_trajs[:, :, 1] = future_trajs[:, :, 1] * sy_ / params["resize"] + cy_
+
         global PREDICTED_TRAJS
         PREDICTED_TRAJS = torch_to_trajs(future_trajs, t0, dt)
 
