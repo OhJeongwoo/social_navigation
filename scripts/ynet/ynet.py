@@ -49,6 +49,10 @@ def interpolate(new_t, ts, traj):
         return new_point
     bii = bisect.bisect(ts, new_t, lo=1, hi=len(ts) - 1)
     alpha = (ts[bii] - new_t).to_sec() / (ts[bii] - ts[bii - 1]).to_sec()
+    if alpha > 6.0:
+        alpha = 6.0
+    elif alpha < -5.0:
+        alpha = -5.0
     new_point = Point()
     new_point.x = traj[bii - 1].x * alpha + traj[bii].x * (1 - alpha)
     new_point.y = traj[bii - 1].y * alpha + traj[bii].y * (1 - alpha)
@@ -117,6 +121,12 @@ def callback(msg):
         for traj in past_trajs:
             if traj.pedestrian_id == id and object.tracking_state != 0:
                 is_new = False
+                last_point = traj.trajectory[-1]
+                last_time = traj.times[-1]
+                if math.hypot(last_point.x - point.x, last_point.y - point.y) > \
+                        5.0 * (msg.header.stamp - last_time).to_sec():
+                    traj.times.clear()
+                    traj.trajectory.clear()
                 traj.times.append(msg.header.stamp)
                 traj.trajectory.append(point)
                 break
@@ -168,7 +178,6 @@ def loop():
         input_ts = [t0 + dt * (i + 1 - OBS_LEN) for i in range(OBS_LEN)]
         input_trajs = [interpolates_to_torch(input_ts, past_traj) for past_traj in past_trajs]
         input_trajs = torch.stack(input_trajs, dim=0)
-
         input_trajs[:, :, 0] = (input_trajs[:, :, 0] - cx_) / sx_ * params["resize"]
         input_trajs[:, :, 1] = (input_trajs[:, :, 1] - cy_) / sy_ * params["resize"]
         _, future_trajs = model.predict(input_trajs, params,

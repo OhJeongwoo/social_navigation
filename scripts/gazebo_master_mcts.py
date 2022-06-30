@@ -242,12 +242,12 @@ class PedSim:
                     pos = msg.pose[idx].position
                     obj = Object()
                     obj.position = [pos.x, pos.y, pos.z]
-                    obj.label_id = -1
-                    obj.tracking_state = 0
-                    if name not in self.zed_pose_ or L2dist(pos, self.zed_pose_[name]) < 3.0:
-                        obj.label_id = 0
-                        obj.tracking_state = 1
-                        self.zed_pose_[name] = pos
+                    obj.label_id = 0
+                    obj.tracking_state = 1
+                    # if name not in self.zed_pose_ or L2dist(pos, self.zed_pose_[name]) < 3.0:
+                    #     obj.label_id = 0
+                    #     obj.tracking_state = 1
+                    #     self.zed_pose_[name] = pos
                     objects.append(obj)
                     rt.objects = objects
                 except:
