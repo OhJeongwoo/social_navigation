@@ -36,11 +36,17 @@ PREDICTED_TRAJS = []  # social_navigation/Trajectory[]
 def interpolate(new_t, ts, traj):
     # new_t : (ros)time
     # ts : (ros)time[]
-    # datas : geometry_msgs/Point[]
+    # trajs : geometry_msgs/Point[]
     # return : geometry_msgs/Point
+    assert len(ts)==len(traj)
     if len(ts)<2:
         rospy.logwarn("can not interpolate traj with length %d", len(ts))
-        return Point()
+        new_point = Point()
+        if len(ts)>0:
+            new_point.x = traj[0].x
+            new_point.y = traj[0].y
+            new_point.z = traj[0].z
+        return new_point
     bii = bisect.bisect(ts, new_t, lo=1, hi=len(ts) - 1)
     alpha = (ts[bii] - new_t).to_sec() / (ts[bii] - ts[bii - 1]).to_sec()
     new_point = Point()
@@ -167,7 +173,7 @@ def loop():
         input_trajs[:, :, 1] = (input_trajs[:, :, 1] - cy_) / sy_ * params["resize"]
         _, future_trajs = model.predict(input_trajs, params,
                                         num_goals=NUM_GOALS, num_traj=NUM_TRAJ, device=None)
-        future_trajs = future_trajs[0, :, :]
+        future_trajs = future_trajs[0, :, :, :]
         future_trajs[:, :, 0] = future_trajs[:, :, 0] * sx_ / params["resize"] + cx_
         future_trajs[:, :, 1] = future_trajs[:, :, 1] * sy_ / params["resize"] + cy_
 
