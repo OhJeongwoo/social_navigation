@@ -157,6 +157,7 @@ void RRT::draw_diverse_path(const vector<vector<point>>& trees, int best_tree){
     cv::imwrite(save_path, background);
 }
 
+
 void RRT::draw_mcts_result(const vector<vector<point>>& trees, int best_tree, point global_goal, vector<vector<point>>& peds){
     Mat background = cost_map_;
     // Mat background = local_map_;
@@ -234,7 +235,7 @@ double RRT::get_edge_cost(point p, point q){
 }
 
 
-double RRT::get_state_cost(point robot, point prev_robot, point goal, const vector<point>& peds){
+double RRT::get_state_reward(point robot, point prev_robot, point goal, const vector<point>& peds){
     pixel p = transform_.xy2pixel(robot);
     double static_cost = cost_map_.at<uchar>(p.x, p.y);
     static_cost = max<uchar>(static_cost, local_map_.at<uchar>(p.x, p.y));
@@ -245,8 +246,12 @@ double RRT::get_state_cost(point robot, point prev_robot, point goal, const vect
         ped_cost = max<double>(ped_cost, M_ped_ * exp(- alpha_ped_ * d * d));
         // if(d < 3.0)cout << "d: " << d << ", cost: " << ped_cost << endl;
     }
-    double delta = dist(robot, goal) - dist(prev_robot, goal);
-    return lambda_static_ * static_cost + lambda_ped_ * ped_cost + lambda_dist_ * delta + slack_cost_;
+    double delta = dist(prev_robot, goal) - dist(robot, goal);
+    double forward_reward = lambda_dist_ * delta;
+
+    double rewards = forward_reward;
+    double costs = lambda_static_ * static_cost + lambda_ped_ * ped_cost + slack_cost_;
+    return rewards - costs;
 }
 
 

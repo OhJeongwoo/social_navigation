@@ -270,8 +270,8 @@ def pedestrian_controller(peds, goals, jackal=None):
     N = len(peds)
     rt = {}
     rt_v = {}
-    c1 = 6.0 # for goal
-    c2 = 0.5 # for social force
+    c1 = 2.0 # for goal
+    c2 = 0.2 # for social force
     actor_name_ = peds.keys()
     for name in actor_name_:
         ped = peds[name]
@@ -284,9 +284,13 @@ def pedestrian_controller(peds, goals, jackal=None):
         g = Point(rpos.x + goal.x, rpos.y + goal.y, 0.0)
         r = Point(g.x - ppos.x, g.y - ppos.y, 0.0)
         v = (r.x ** 2 + r.y ** 2) ** 0.5
-        if v < 0.01:
+        if v < 0.1:
             continue
+        flag = False
+        if v < 1.0:
+            flag = True
         r = Point(r.x / v * c1, r.y / v * c1, 0.0)
+        v = max(min(1.0, v), 0.3)
         f = Point(0.0, 0.0, 0.0)
         for q_name in actor_name_:
             q = peds[q_name]
@@ -298,7 +302,7 @@ def pedestrian_controller(peds, goals, jackal=None):
             c = 3.0 - d
             u = Point(ppos.x - q['pos'].x, ppos.y - q['pos'].y, 0.0)
             nu = norm_2d(u)
-            if nu < 0.01:
+            if nu < 0.1:
                 continue
             f.x += u.x / nu * c * c2
             f.y += u.y / nu * c * c2
@@ -310,13 +314,22 @@ def pedestrian_controller(peds, goals, jackal=None):
             if nu > 0.01:
                 f.x += 3.0 * u.x / nu * c * c2
                 f.y += 3.0 * u.y / nu * c * c2
+        if flag and (f.x > 0.1 or f.y > 0.1):
+            v = 0.2
+            f.x = 0.0
+            f.y = 0.0
         # dir = Point(r.x + f.x, r.y + f.y, 0.0)
         # if norm_2d(dir) < 0.01:
         #     continue
         # dir = Point(ppos.x + v * dir.x / norm_2d(dir), ppos.y + v * dir.y / norm_2d(dir), 0.0)
-        dir = Point(g.x + f.x, g.y + f.y, 0.0)
-        rt[name] = dir
-        rt_v[name] = L2dist(dir, ppos)
+        dir = Point(r.x + f.x, r.y + f.y, 0.0)
+        dir_norm = norm_2d(dir)
+        dir = Point(dir.x / dir_norm, dir.y / dir_norm, 0.0)
+        rt_v[name] = v
+        rt[name] = Point(ppos.x + dir.x * v, ppos.y + dir.y * v, 0.0)
+        # dir = Point(g.x + f.x, g.y + f.y, 0.0)
+        # rt[name] = dir
+        # rt_v[name] = min(L2dist(dir, ppos), 1.0)
     return rt, rt_v
     # for ped in peds:
     #     g_id = ped['group']

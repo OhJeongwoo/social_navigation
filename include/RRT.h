@@ -77,7 +77,7 @@ class RRT{
     double get_cost(point p);
     double get_collision_cost(point p);
     double get_edge_cost(point p, point q);
-    double get_state_cost(point robot, point prev_robot, point goal, const vector<point>& peds);
+    double get_state_reward(point robot, point prev_robot, point goal, const vector<point>& peds);
     vector<point> rrt(point root, point goal);
     vector<point> rrt_star(point root, point goal);
     vector<point> carrt(point root, point goal);

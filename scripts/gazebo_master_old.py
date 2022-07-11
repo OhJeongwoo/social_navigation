@@ -97,7 +97,7 @@ class PedSim:
 
 
         # parameter for actor
-        self.n_actor_ = 0
+        self.n_actor_ = 10
         self.actor_name_ = []
         self.group_id_ = {}
         self.r_pos_ = {}
@@ -278,7 +278,9 @@ class PedSim:
 
         # randomly choice
         candidate = random.choice(candidates)
-        self.jackal_goal_ = candidate['goal']
+        # self.jackal_goal_ = candidate['goal']
+        # self.jackal_goal_ = [10,-3]
+        self.jackal_goal_ = [-20,0]
         
         #self.jackal_goal_ = [28.9,16.7]
         self.local_goal_ = self.jackal_goal_
@@ -289,8 +291,9 @@ class PedSim:
         time.sleep(0.1)
 
         # replace jackal
-        self.replace_jackal(candidate['spawn'])
-
+        # self.replace_jackal(candidate['spawn'])
+        # self.replace_jackal([-26,-3])
+        self.replace_jackal([-20,-7.5])
         time.sleep(0.1)
 
         # print(candidate['goal'])
@@ -408,7 +411,9 @@ class PedSim:
     def replace_jackal(self, pose):
         req = SetModelStateRequest()
         req.model_state.model_name = 'jackal'
-        yaw = random.uniform(0.0, 2 *np.pi)
+        # yaw = random.uniform(0.0, 2 *np.pi)
+        # yaw = 0.0
+        yaw = np.pi / 2
         req.model_state.pose = Pose(position=Point(pose[0],pose[1],1.0), orientation=y2q(yaw))
         try:
             res = self.set_model_(req)
@@ -553,6 +558,9 @@ class PedSim:
                 self.pub_[name].publish(rt)
             elif self.status_[g] == INIT:
                 traj_num = self.traj_idx_[g]
+                pq = Point(self.traj_[traj_num]['waypoints'][0][0] + self.r_pos_[name].x, self.traj_[traj_num]['waypoints'][0][1] + self.r_pos_[name].y, 0.0)
+                if L2dist(pq, jackal) < 1.0:
+                    continue
                 rt = Command()
                 rt.name = name
                 rt.status = INIT

@@ -26,7 +26,7 @@ struct Tnode{
     point goal;
     vector<point> peds;
     double value;
-    double cost;
+    double reward;
     double weight;
     int n_visit;
     bool is_leaf;
@@ -34,7 +34,7 @@ struct Tnode{
     vector<int> childs;
     int depth;
 
-    Tnode(): value(0.0), cost(0.0), weight(0.0), n_visit(0), is_leaf(true), parent(-1) {}
+    Tnode(): value(0.0), reward(0.0), weight(0.0), n_visit(0), is_leaf(true), parent(-1) {}
 };
 
 double norm(point p);

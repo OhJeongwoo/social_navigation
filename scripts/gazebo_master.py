@@ -543,8 +543,6 @@ class PedSim:
                 self.jackal_pose_.position.x = pose[0]
                 self.jackal_pose_.position.y = pose[1]
                 self.jackal_pose.orientation = y2q(yaw)
-            
-
         except:
             pass
 

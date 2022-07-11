@@ -173,18 +173,22 @@ class GlobalPlanner{
     }
 
     void callback_lidar(const sensor_msgs::LaserScan::ConstPtr& msg){
+        double jt = jt_;
+        double jx = jx_;
+        double jy = jy_;
         vector<point> pts; 
         int n_points = msg->ranges.size();
         double w = msg->angle_min;
         double dw = msg->angle_increment;
         for(int k = 0; k < n_points; k++){
             if(isinf(msg->ranges[k])||isnan(msg->ranges[k])) continue;
-            double a = jt_ + w + dw * k;
-            double x = jx_ + msg->ranges[k] * cos(a);
-            double y = jy_ + msg->ranges[k] * sin(a);
+            double a = jt + w + dw * k;
+            double x = jx + msg->ranges[k] * cos(a);
+            double y = jy + msg->ranges[k] * sin(a);
             pts.push_back(point(x,y));
         }
         lidar_points_ = pts;
+
     }
 
     int rsample(int idx){
@@ -234,8 +238,6 @@ class GlobalPlanner{
     }
 
     void mcts(){
-        lidar_points_.clear();
-
         // fetch current status (lidar point clouds, jackal position)
         // fetch global pedestrian trajectory (time: 0.0 sec ~ 2.0 sec, 0.1 sec interval)
         vector<point> pts = lidar_points_;
@@ -262,10 +264,12 @@ class GlobalPlanner{
             for(int i = 0; i < P; i++){
                 geometry_msgs::Point q = pedestrians.response.trajectories[i].trajectory[t];
                 ped_goal.push_back(point(q.x, q.y));
+                if(t==0) cout << q.x << " " << q.y << endl;
             }
             ped_goals.push_back(ped_goal);
         }
-        
+        cout << "processing lidar" << endl;
+        cout << pts.size() << endl;
         for(point p : pts){
             bool check = true;
             for(int i = 0; i < P; i++) {
@@ -295,8 +299,8 @@ class GlobalPlanner{
             nnode.jackal = jackal;
             nnode.goal = candidates[i];
             nnode.peds = ped_goals[0];
-            nnode.cost = rrt.get_state_cost(jackal, jackal, nnode.goal, ped_goals[0]);
-            nnode.value = -nnode.cost;
+            nnode.reward = rrt.get_state_reward(jackal, jackal, nnode.goal, ped_goals[0]);
+            nnode.value = nnode.reward;
             nnode.weight = 0.0;
             nnode.n_visit = 0;
             nnode.is_leaf = false;
@@ -311,8 +315,8 @@ class GlobalPlanner{
                 nnode.jackal = jackal + actions_[j];
                 nnode.goal = tree_[i].goal;
                 nnode.peds = get_next_pedestrians(jackal, ped_goals[0], ped_goals[1], pedestrians.response.velocity);
-                nnode.cost = rrt.get_state_cost(nnode.jackal, jackal, nnode.goal, nnode.peds);
-                nnode.value = -nnode.cost;
+                nnode.reward = rrt.get_state_reward(nnode.jackal, jackal, nnode.goal, nnode.peds);
+                nnode.value = nnode.reward;
                 nnode.weight = exp(nnode.value + alpha_visit_);
                 nnode.n_visit = 0;
                 nnode.is_leaf = true;
@@ -349,8 +353,8 @@ class GlobalPlanner{
                     nnode.goal = tree_[cur_idx].goal;
                     nnode.depth = tree_[cur_idx].depth + 1;
                     nnode.peds = get_next_pedestrians(jackal, ped_goals[nnode.depth - 1], ped_goals[nnode.depth], pedestrians.response.velocity);
-                    nnode.cost = rrt.get_state_cost(nnode.jackal, tree_[cur_idx].jackal, nnode.goal, nnode.peds);
-                    nnode.value = -nnode.cost;
+                    nnode.reward = rrt.get_state_reward(nnode.jackal, tree_[cur_idx].jackal, nnode.goal, nnode.peds);
+                    nnode.value = nnode.reward;
                     nnode.weight = exp(nnode.value + alpha_visit_);
                     nnode.n_visit = 0;
                     nnode.is_leaf = true;
@@ -363,7 +367,7 @@ class GlobalPlanner{
                 cur_idx = tree_[cur_idx].childs[rsample(cur_idx)];
             }
 
-            double tot_value = -tree_[cur_idx].cost;
+            double tot_value = -tree_[cur_idx].reward;
             double discounted_factor = gamma_;
             vector<point> peds = tree_[cur_idx].peds;
             point robot = tree_[cur_idx].jackal;
@@ -373,7 +377,7 @@ class GlobalPlanner{
                 // calculate cost by each action
                 vector<double> value_list;
                 peds = get_next_pedestrians(robot, peds, ped_goals[i], pedestrians.response.velocity);
-                for(int j = 0; j < n_actions_; j++) value_list.push_back(-rrt.get_state_cost(robot + actions_[j], robot, goal, peds));
+                for(int j = 0; j < n_actions_; j++) value_list.push_back(rrt.get_state_reward(robot + actions_[j], robot, goal, peds));
                 // sample action
                 int a_idx = softmax_sample(value_list);
                 // execute action and add cost
@@ -401,7 +405,7 @@ class GlobalPlanner{
                     n_value += tree_[idx].value * tree_[idx].weight;
                 }
                 n_value /= w_sum;
-                tree_[cur_idx].value = -tree_[cur_idx].cost + gamma_ * n_value;
+                tree_[cur_idx].value = tree_[cur_idx].reward + gamma_ * n_value;
                 tree_[cur_idx].n_visit ++;
                 tree_[cur_idx].weight = exp(tree_[cur_idx].value + alpha_visit_ / tree_[cur_idx].n_visit);
             }
@@ -425,7 +429,6 @@ class GlobalPlanner{
         local_goal_ = tree_[best_cand].goal;
         jackal = paths[best_cand][max<int>(paths[best_cand].size() - 5, 0)];
         local_goal_.print();
-        // rrt.draw_diverse_path(paths, best_cand);
         rrt.draw_mcts_result(paths, best_cand, global_goal_, ped_goals);
         
         geometry_msgs::Point rt;
