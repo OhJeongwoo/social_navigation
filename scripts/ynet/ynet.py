@@ -4,7 +4,8 @@ from model import YNet
 import rospy
 import bisect
 import math
-from geometry_msgs.msg import Point
+import tf
+from geometry_msgs.msg import PointStamped, Point
 from zed_interfaces.msg import ObjectsStamped, Object
 from social_navigation.msg import Trajectory
 from social_navigation.srv import TrajectoryPredict, TrajectoryPredictResponse
@@ -98,7 +99,7 @@ def trajectory_predict(req):
 
 def is_tracked(objects, pedestrian_id):
     for id, object in enumerate(objects):
-        if object.label_id != 0:
+        if object.label != 'Person':
             continue
         if id == pedestrian_id and object.tracking_state != 0:
             return True
@@ -106,17 +107,24 @@ def is_tracked(objects, pedestrian_id):
 
 def callback(msg):
     # msg : ObjectsStamped
+    
+    # tf
     global PAST_TRAJS
     past_trajs = PAST_TRAJS.copy()
     # remove untracked trajectories
     past_trajs = [traj for traj in past_trajs if is_tracked(msg.objects, traj.pedestrian_id)]
     for id, object in enumerate(msg.objects):
-        if object.label_id != 0:
+        if object.label != 'Person':
             continue
-        point = Point()
-        point.x = object.position[0]
-        point.y = object.position[1]
-        point.z = object.position[2]
+        point_msg = PointStamped()
+        point_msg.header = msg.header
+        point_msg.point.x = object.position[0]
+        point_msg.point.y = object.position[1]
+        point_msg.point.z = object.position[2]
+        try:
+            point = listener.transformPoint('map',point_msg).point
+        except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+            continue
         is_new = True
         for traj in past_trajs:
             if traj.pedestrian_id == id and object.tracking_state != 0:
@@ -194,6 +202,7 @@ def loop():
 
 if __name__ == "__main__":
     rospy.init_node("ynet")
+    listener = tf.TransformListener()
     rospy.Service('trajectory_predict', TrajectoryPredict, trajectory_predict)
     rospy.Subscriber('objects', ObjectsStamped, callback, queue_size=2)
     loop()
