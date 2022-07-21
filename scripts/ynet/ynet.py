@@ -85,8 +85,9 @@ def interpolates_to_torch(new_ts, traj):
 def speed(traj, ts):
     dx = traj[-1].x - traj[0].x
     dy = traj[-1].y - traj[0].y
-    dt = ts[-1] - ts[0]
-    return math.hypot(dx, dy)
+    dt = (ts[-1] - ts[0]).to_sec()
+    v = math.hypot(dx, dy)/dt
+    return min(v, 1.0)
 
 def trajectory_predict(req):
     # res : TrajectoryPredictResponse()
