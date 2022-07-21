@@ -82,6 +82,11 @@ def interpolates_to_torch(new_ts, traj):
     new_traj = [interpolate_to_torch(new_t, traj.times, traj.trajectory) for new_t in new_ts]
     return torch.stack(new_traj, dim=0)
 
+def speed(traj, ts):
+    dx = traj[-1].x - traj[0].x
+    dy = traj[-1].y - traj[0].y
+    dt = ts[-1] - ts[0]
+    return math.hypot(dx, dy)
 
 def trajectory_predict(req):
     # res : TrajectoryPredictResponse()
@@ -92,9 +97,10 @@ def trajectory_predict(req):
     trajectories = [interpolates(new_ts, traj) for traj in trajs]
     res = TrajectoryPredictResponse()
     res.times = req.times
-    res.velocity = [1.0 for t in trajectories]
+    res.velocity = [speed(traj.trajectory, new_ts) for traj in trajectories]
     res.trajectories = trajectories
     return res
+
 
 def is_tracked(objects, pedestrian_id):
     for id, object in enumerate(objects):
