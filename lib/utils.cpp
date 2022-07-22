@@ -14,7 +14,7 @@ using namespace std;
 double V = 1.0;
 double alpha_goal_ = 1.0;
 double alpha_robot_ = 0.1;
-double dt = 0.5;
+double dt = 0.2;
 
 
 double norm(point p){return sqrt(p.x*p.x + p.y*p.y);}
@@ -65,7 +65,7 @@ vector<point> get_next_pedestrians(point robot, vector<point> peds, vector<point
         point vg = goal[i] - peds[i];
         vg = vg * (alpha_goal_ / norm(vg));
         point vr = peds[i] - robot;
-        vr = vr * (alpha_robot_ / max(norm(vr), 0.5));
+        vr = vr * (alpha_robot_ / max(norm(vr), 1.0));
         point v = normalize(vg + vr) * velocity[i] * dt;
         rt.push_back(peds[i] + v);
     }

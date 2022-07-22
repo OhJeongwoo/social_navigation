@@ -20,11 +20,11 @@ void RRT::initialize(){
     local_map_ = Mat(img_w_, img_h_, CV_8UC1, Scalar(0));
     path_map_ = Mat(img_w_, img_h_, CV_8UC1, Scalar(0));
     M_ = 200;
-    M_path_ = 200;
+    M_path_ = 100;
     M_ped_ = 1.0;
     alpha_ = 0.05;
     alpha_path_ = 0.01;
-    alpha_ped_ = 0.05;
+    alpha_ped_ = 1.4;
     kernel_size_ = 30;
     kernel_path_half_ = 100;
     kernel_ped_half_ = 30;
@@ -33,19 +33,20 @@ void RRT::initialize(){
     kernel_path_ = Kernel(M_path_, alpha_path_, kernel_path_half_);
     kernel_ped_ = Kernel(M_ped_, alpha_ped_, kernel_ped_half_);
     cost_path_ = 3.0;
-    lambda_ped_ = 10.0;
-    lambda_static_ = 10.0;
-    lambda_dist_ = 0.1;
+    lambda_ped_ = 3.0;
+    lambda_static_ = 0.5;
+    lambda_dist_ = 2.0;
+    MAX_COST_ = lambda_ped_ + lambda_static_;
 
-    max_step_ = 20000; // maximum number of rrt sampling trial
-    max_samples_ = 10000;
+    max_step_ = 100000; // maximum number of rrt sampling trial
+    max_samples_ = 50000;
     step_ = 10; // step size for ege cost estimation
     tau_ = 0.2; // tree expansion length
     lambda_ = 0.01;
     coeff_tau_ = 2.0; // distance for rewiring
-    collision_threshold_ = 0.85; // collision cost threshold
+    collision_threshold_ = 0.80; // collision cost threshold
     goal_threshold_ = 1.0;
-    slack_cost_ = 0.1;
+    slack_cost_ = 0.0;
     time_limit_ = 0.2;
 }
 
@@ -128,10 +129,28 @@ void RRT::drawing(const vector<node>& tree){
     cv::imwrite(save_path, background);
 }
 
+void RRT::draw_diverse_result(const vector<vector<point>>& trees){
+    Mat background = cost_map_;
+    string save_path = "/home/jeongwoooh/catkin_social/src/social_navigation/diverse_test.png";
+    
+    for(const vector<point>& tree: trees){
+        int sz = tree.size();
+        for(int i = 0; i < sz - 1; i++){
+            pixel cur = transform_.xy2pixel(tree[i]);
+            pixel par = transform_.xy2pixel(tree[i+1]);
+            cv::line(background, Point(cur.y, cur.x), Point(par.y, par.x), Scalar(255), 5);
+        }        
+    }
+    
+    // pixel root = transform_.xy2pixel(trees[0][0].p);
+    // cv::circle(background,  Point(root.y, root.x), 10.0, Scalar(280), -1);
+    cv::imwrite(save_path, background);
+}
 
 void RRT::draw_diverse_path(const vector<vector<point>>& trees, int best_tree){
     Mat background = cost_map_;
     string save_path = "/home/jay/catkin_ws/src/social_navigation/diverse_test.png";
+    // string save_path = "/home/jeongwoooh/catkin_social/src/social_navigation/diverse_test.png";
     // cout << save_path << endl;
     pixel root = transform_.xy2pixel(root_);
     cv::circle(background,  Point(root.y, root.x), 10.0, Scalar(0), -1);
@@ -196,6 +215,54 @@ void RRT::draw_mcts_result(const vector<vector<point>>& trees, int best_tree, po
 }
 
 
+void RRT::draw_global_result(int seq, point jackal, point global_goal, int best_cand, const vector<point>& candidates, vector<vector<point>>& peds, vector<geometry_msgs::Point>& global_path, vector<vector<double>>& scores){
+    Mat background;
+    cvtColor(cost_map_, background, CV_GRAY2RGB);
+
+    string save_path = "/home/jeongwoooh/catkin_social/src/social_navigation/result/"+to_string(seq)+".png";
+    
+    for(int i = 0; i < global_path.size(); i++){
+        pixel p = transform_.xy2pixel(point(global_path[i].x, global_path[i].y));
+        cv::circle(background, Point(p.y, p.x), 1.0, Scalar(100, 100, 100), -1);
+    }
+    
+    int T = peds.size();
+    for(int t=0;t<T;t++){
+        int P = peds[t].size();
+        for(int i =0;i<P;i++){
+            pixel p = transform_.xy2pixel(peds[t][i]);
+            cv::circle(background,  Point(p.y, p.x), 5.0*(t+1)/T, Scalar(0,255,0), -1);
+        }
+    }
+
+
+    // cout << save_path << endl;
+    pixel root = transform_.xy2pixel(jackal);
+    cv::circle(background,  Point(root.y, root.x), 10.0, Scalar(255,0,0), -1);
+
+    pixel goal = transform_.xy2pixel(global_goal);
+    cv::circle(background,  Point(goal.y, goal.x), 10.0, Scalar(0,0,255), -1);
+
+    int idx = 0;
+    for(int i = 0; i < candidates.size(); i++){
+        pixel p = transform_.xy2pixel(candidates[i]);
+        if(i==best_cand) cv::circle(background,  Point(p.y, p.x), 5.0, Scalar(0,0,0), -1);
+        else cv::circle(background,  Point(p.y, p.x), 5.0, Scalar(0,255,255), -1);
+        cv::putText(background, to_string(i+1), Point(p.y, p.x), cv::FONT_HERSHEY_DUPLEX, 0.3, CV_RGB(0,0,0), 1);
+    }
+
+    
+    
+
+    for(int i = 0; i < scores.size(); i++){
+        if(i == best_cand) for(int j = 0; j < 4; j++) cv::putText(background, to_string(i+1) + ": " + format("%.3f",scores[i][j]), Point(200 + 500 * j, 200 + 50 * i), cv::FONT_HERSHEY_DUPLEX, 1.5, CV_RGB(255,0,0), 2);
+        else for(int j = 0; j < 4; j++) cv::putText(background, to_string(i+1) + ": " + format("%.3f",scores[i][j]), Point(200 + 500 * j, 200 + 50 * i), cv::FONT_HERSHEY_DUPLEX, 1.5, CV_RGB(0,0,0), 2);
+    }
+    
+    cv::imwrite(save_path, background);
+}
+
+
 bool RRT::is_collision(point p, point q){
     for(int i = 0; i <= step_; i++){
         if(get_collision_cost(interpolate(p,q,1.0*i/step_)) > collision_threshold_) return true; 
@@ -235,23 +302,25 @@ double RRT::get_edge_cost(point p, point q){
 }
 
 
-double RRT::get_state_reward(point robot, point prev_robot, point goal, const vector<point>& peds){
+pb RRT::get_state_reward(point robot, point prev_robot, point goal, const vector<point>& peds){
+    bool done = false;
     pixel p = transform_.xy2pixel(robot);
     double static_cost = cost_map_.at<uchar>(p.x, p.y);
     static_cost = max<uchar>(static_cost, local_map_.at<uchar>(p.x, p.y));
     static_cost /= 255.0;
+    if(static_cost > 0.95) done = true;
     double ped_cost = 0.0;
     for(point ped : peds){
         double d = dist(robot, ped);
-        ped_cost = max<double>(ped_cost, M_ped_ * exp(- alpha_ped_ * d * d));
-        // if(d < 3.0)cout << "d: " << d << ", cost: " << ped_cost << endl;
+        if(d < 0.4) done = true;
+        ped_cost = max<double>(ped_cost, M_ped_ * exp(- alpha_ped_ * d));
     }
     double delta = dist(prev_robot, goal) - dist(robot, goal);
     double forward_reward = lambda_dist_ * delta;
 
     double rewards = forward_reward;
     double costs = lambda_static_ * static_cost + lambda_ped_ * ped_cost + slack_cost_;
-    return rewards - costs;
+    return pb(point(rewards, costs),done);
 }
 
 
@@ -400,13 +469,12 @@ vector<point> RRT::rrt_star(point root, point goal){
 
 
 vector<point> RRT::carrt(point root, point goal){
-    clock_t init_time = clock();
     root_ = root;
     goal_ = goal;
-    double x_min = min<double>(goal_.x, root_.x) - 10.0;
-    double x_max = max<double>(goal_.x, root_.x) + 10.0;
-    double y_min = min<double>(goal_.y, root_.y) - 10.0;
-    double y_max = max<double>(goal_.y, root_.y) + 10.0;
+    double x_min = min<double>(goal_.x, root_.x) - 15.0;
+    double x_max = max<double>(goal_.x, root_.x) + 15.0;
+    double y_min = min<double>(goal_.y, root_.y) - 15.0;
+    double y_max = max<double>(goal_.y, root_.y) + 15.0;
 
     vector<node> tree;
     tree.push_back(node(root_));
@@ -416,6 +484,7 @@ vector<point> RRT::carrt(point root, point goal){
     double goal_dist = dist(root_, goal_);
     int leaf_index = 0;
     double rrt_sum = 0.0;
+    clock_t init_time = clock();
     while(1){
         step += 1;
         if(step > max_step_) break;
@@ -580,18 +649,23 @@ vector<point> RRT::carrt(point root, point goal){
     // drawing(tree);
     clock_t end_time = clock();
     // cout << "elapsed time: " << double(end_time - init_time) / CLOCKS_PER_SEC << endl;
+    // cout << "# of sampels: " << sz << endl;
+    // cout << "# of path: " << path.size() << endl;
     return path;
 }
 
 
 vector<vector<point>> RRT::diverse_rrt(point root, point goal, int K){
     vector<vector<point>> rt;
+    int n = 0;
     for(int k = 0; k < K; k++){
         vector<point> path = carrt(root, goal);
         update_path_cost_map(path);
         rt.push_back(path);
+        n += path.size();
     }
-    // draw_diverse_path(rt,-1);
+    // draw_diverse_result(rt);
+    // cout << "# of points: " << n << endl;
     return rt;
 }
 
