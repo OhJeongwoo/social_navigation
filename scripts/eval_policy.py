@@ -27,11 +27,10 @@ if __name__ == "__main__":
     device_ = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     parser = argparse.ArgumentParser(description='Evaluation')
-    parser.add_argument('--eval_name', default='sac', type=str)
     parser.add_argument('--ped_mode', default=True, type=bool)
     parser.add_argument('--terminal_condition', default='goal', type=str)
     parser.add_argument('--high_level_controller', default=False, type=bool)
-    parser.add_argument('--low_level_controller', default='trc', type=str)
+    parser.add_argument('--low_level_controller', default='ppo', type=str)
     parser.add_argument('--eval_type', default='general', type=str)
     parser.add_argument('--epi_len', default=1000, type=int)
     parser.add_argument('--n_episode', default=100, type=int)
@@ -40,12 +39,12 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # set hyperparameters
-    policy_file_ = POLICY_PATH + args.eval_name + "/best.pt"
+    policy_file_ = POLICY_PATH + args.low_level_controller + "/best.pt"
 
     social_models = ['cadrl', 'sarl']
 
 
-    if args.eval_name in social_models:
+    if args.low_level_controller in social_models:
         policy_ = torch.load(policy_file_)
     else:
         pol_parser = argparse.ArgumentParser(description='TRC')
@@ -57,10 +56,10 @@ if __name__ == "__main__":
         
         pol_args = pol_parser.parse_args()
         pol_args.device = 'cuda:0'
-        if args.eval_name == 'sac':
+        if args.low_level_controller == 'sac':
             from sac_models import Policy
             policy_ = Policy(pol_args).to(device=device_)
-        elif args.eval_name == 'ppo':
+        elif args.low_level_controller == 'ppo':
             from ppo_models import Policy
             policy_ = Policy(pol_args).to(device=device_)
         else:
@@ -79,14 +78,12 @@ if __name__ == "__main__":
     def get_action(o, remove_grad=True, train=True):
         # a = [[0,0]]
 
-        print(args.eval_name)
-        print("--------")
 
-        if args.eval_name in social_models:
+        if args.low_level_controller in social_models:
             a, log_prob = policy_.act(torch.unsqueeze(torch.as_tensor(o, dtype=torch.float32), dim=0).to(device=device_))
             if remove_grad:
                 return a.detach().cpu().numpy()[0]
-        elif args.eval_name == 'sac':
+        elif args.low_level_controller == 'sac':
             a, _, _ = policy_.sample(torch.unsqueeze(torch.tensor(o, dtype=torch.float32), dim=0).to(device=device_))
             return a[0].detach().cpu().numpy()
             
