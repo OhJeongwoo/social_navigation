@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import argparse
 import rospy
 import rospkg
-from trc_models import Policy
+#from trc_models import Policy
 import json
 
 import torch.nn
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     device_ = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     parser = argparse.ArgumentParser(description='Evaluation')
-    parser.add_argument('--eval_name', default='trc', type=str)
+    parser.add_argument('--eval_name', default='sac', type=str)
     parser.add_argument('--ped_mode', default=True, type=bool)
     parser.add_argument('--terminal_condition', default='goal', type=str)
     parser.add_argument('--high_level_controller', default=False, type=bool)
@@ -42,7 +42,10 @@ if __name__ == "__main__":
     # set hyperparameters
     policy_file_ = POLICY_PATH + args.eval_name + "/best.pt"
 
-    if args.eval_name is not 'trc':
+    social_models = ['cadrl', 'sarl']
+
+
+    if args.eval_name in social_models:
         policy_ = torch.load(policy_file_)
     else:
         pol_parser = argparse.ArgumentParser(description='TRC')
@@ -51,8 +54,18 @@ if __name__ == "__main__":
         pol_parser.add_argument('--hidden_dim', default=512, type=int)
         pol_parser.add_argument('--log_std_init', default=-1.0, type=float)
         pol_parser.add_argument('--activation', default='ReLU', type=str)
+        
         pol_args = pol_parser.parse_args()
-        policy_ = Policy(pol_args).to(device=device_)
+        pol_args.device = 'cuda:0'
+        if args.eval_name == 'sac':
+            from sac_models import Policy
+            policy_ = Policy(pol_args).to(device=device_)
+        elif args.eval_name == 'ppo':
+            from ppo_models import Policy
+            policy_ = Policy(pol_args).to(device=device_)
+        else:
+            from trc_models import Policy
+            policy_ = Policy(pol_args).to(device=device_)
         policy_.load_state_dict(torch.load(policy_file_)['policy'])
 
 
@@ -66,10 +79,17 @@ if __name__ == "__main__":
     def get_action(o, remove_grad=True, train=True):
         # a = [[0,0]]
 
-        if args.eval_name is not 'trc':
+        print(args.eval_name)
+        print("--------")
+
+        if args.eval_name in social_models:
             a, log_prob = policy_.act(torch.unsqueeze(torch.as_tensor(o, dtype=torch.float32), dim=0).to(device=device_))
             if remove_grad:
                 return a.detach().cpu().numpy()[0]
+        elif args.eval_name == 'sac':
+            a, _, _ = policy_.sample(torch.unsqueeze(torch.tensor(o, dtype=torch.float32), dim=0).to(device=device_))
+            return a[0].detach().cpu().numpy()
+            
         else:
             a, _, _ = policy_(torch.unsqueeze(torch.tensor(o, dtype=torch.float32), dim=0).to(device=device_))
             a = a * 2 - 1 # unnormalize
