@@ -93,6 +93,8 @@ class GlobalPlanner{
     bool has_local_goal_;
     int age_;
     double cost_cut_threshold_;
+    bool mcts_mode_;
+    bool const_vel_mode_;
 
     RRT rrt;
 
@@ -101,6 +103,9 @@ class GlobalPlanner{
         // set random seed
         srand(time(NULL));
         
+        mcts_mode_ = true;
+        const_vel_mode_ = false;
+
         // load cost map
         pkg_path_ << ros::package::getPath("social_navigation") << "/";
         cost_map_file_ = pkg_path_.str() + "config/costmap_301_1f.png";
@@ -109,7 +114,8 @@ class GlobalPlanner{
         rrt = RRT(cost_map_file_);
 
         // set hyperparameter
-        n_cand_ = 1;
+        if(mcts_mode_) n_cand_ = 5;
+        else n_cand_ = 1;
         lookahead_distance_ = 5.0;
         V_ = 1.5;
         dt_ = 0.2;
@@ -145,6 +151,9 @@ class GlobalPlanner{
         srv_pedestrian_ = nh_.serviceClient<social_navigation::TrajectoryPredict>("/trajectory_predict");
         
         cout << "initialize completed" << endl;
+        if(mcts_mode_) cout << "MCTS Mode" << endl;
+        else cout << "Not MCTS Mode" << endl;
+        if(const_vel_mode_) cout << "Constant Velocity Mode" << endl;
     }
 
 
@@ -286,15 +295,34 @@ class GlobalPlanner{
         vector<vector<point>> ped_goals;
         int T = pedestrians.response.times.size();
         int P = pedestrians.response.velocity.size();
-        for(int t = 0; t < T; t++){
-            vector<point> ped_goal;
-            for(int i = 0; i < P; i++){
-                geometry_msgs::Point q = pedestrians.response.trajectories[i].trajectory[t];
-                ped_goal.push_back(point(q.x, q.y));
+        if(const_vel_mode_){
+            vector<double> ped_vel;
+            for(int i = 0; i < P; i++) ped_vel.push_back(1.5);
+            pedestrians.response.velocity = ped_vel;
+            for(int t = 0; t < T; t++){
+                vector<point> ped_goal;
+                for(int i = 0; i < P; i++){
+                    geometry_msgs::Point q0 = pedestrians.response.trajectories[i].trajectory[0];
+                    geometry_msgs::Point q1 = pedestrians.response.trajectories[i].trajectory[1];
+                    point dir = normalize(point(q1.x, q1.y) - point(q0.x, q0.y));
+                    double x = q0.x + 1.5 * dt_ * dir.x;
+                    double y = q0.y + 1.5 * dt_ * dir.y;
+                    ped_goal.push_back(point(x,y));
+                }
+                ped_goals.push_back(ped_goal);
             }
-            ped_goals.push_back(ped_goal);
         }
-
+        else{
+            for(int t = 0; t < T; t++){
+                vector<point> ped_goal;
+                for(int i = 0; i < P; i++){
+                    geometry_msgs::Point q = pedestrians.response.trajectories[i].trajectory[t];
+                    ped_goal.push_back(point(q.x, q.y));
+                }
+                ped_goals.push_back(ped_goal);
+            }
+        }
+        
         for(point p : pts){
             bool check = true;
             for(int i = 0; i < P; i++) {
@@ -404,7 +432,7 @@ class GlobalPlanner{
                 Tnode nnode = Tnode();
                 nnode.jackal = jackal + actions_[j];
                 nnode.goal = tree_[i].goal;
-                nnode.peds = get_next_pedestrians(jackal, ped_goals[0], ped_goals[1], pedestrians.response.velocity);
+                nnode.peds = get_next_pedestrians(jackal, ped_goals[0], ped_goals[1], pedestrians.response.velocity, const_vel_mode_);
                 pb simul_result = rrt.get_state_reward(nnode.jackal, jackal, nnode.goal, nnode.peds);
                 point return_value = simul_result.first;
                 bool done = simul_result.second;
@@ -447,7 +475,7 @@ class GlobalPlanner{
                     nnode.jackal = tree_[cur_idx].jackal + actions_[i];
                     nnode.goal = tree_[cur_idx].goal;
                     nnode.depth = tree_[cur_idx].depth + 1;
-                    nnode.peds = get_next_pedestrians(jackal, ped_goals[nnode.depth - 1], ped_goals[nnode.depth], pedestrians.response.velocity);
+                    nnode.peds = get_next_pedestrians(jackal, ped_goals[nnode.depth - 1], ped_goals[nnode.depth], pedestrians.response.velocity, const_vel_mode_);
                     pb simul_result = rrt.get_state_reward(nnode.jackal, tree_[cur_idx].jackal, nnode.goal, nnode.peds);
                     point return_value = simul_result.first;
                     bool done = simul_result.second;
@@ -475,13 +503,14 @@ class GlobalPlanner{
             point goal = tree_[cur_idx].goal;
             depth_maximum = max<int>(tree_[cur_idx].depth, depth_maximum);
             int cur_depth = tree_[cur_idx].depth;
+            bool success = false;
             for(int i = tree_[cur_idx].depth; i < max_depth_; i++){
                 // calculate cost by each action
                 vector<double> sample_list;
                 vector<double> value_list;
                 vector<double> cost_list;
                 vector<double> done_list;
-                peds = get_next_pedestrians(robot, peds, ped_goals[i], pedestrians.response.velocity);
+                peds = get_next_pedestrians(robot, peds, ped_goals[i], pedestrians.response.velocity, const_vel_mode_);
                 for(int j = 0; j < n_actions_; j++){
                     pb simul_result = rrt.get_state_reward(robot + actions_[j], robot, goal, peds);
                     point return_value = simul_result.first;
@@ -499,11 +528,14 @@ class GlobalPlanner{
                 discounted_factor *= gamma_;
                 robot = robot + actions_[a_idx];
                 cur_depth ++;
-                if(dist(robot, goal) < distance_threshold_) break;
                 if(done_list[a_idx]) break;
+                if(dist(robot, goal) < distance_threshold_) {
+                    success = true;
+                    break;
+                }
             }
             if(dist(robot, goal) > distance_threshold_) tot_value += -1.0 * dist(robot, goal) * discounted_factor;
-            if(cur_depth < max_depth_) tot_cost += rrt.MAX_COST_ * discounted_factor;
+            if(!success && cur_depth < max_depth_) tot_cost += rrt.MAX_COST_ * discounted_factor;
             // update leaf node info
             tree_[cur_idx].value = (tree_[cur_idx].value * tree_[cur_idx].n_visit + tot_value) / (tree_[cur_idx].n_visit + 1);
             tree_[cur_idx].cvalue = (tree_[cur_idx].cvalue * tree_[cur_idx].n_visit + tot_cost) / (tree_[cur_idx].n_visit + 1);
@@ -574,15 +606,11 @@ class GlobalPlanner{
         
         bool estop = false;
         if(best_cand == -1) {
-            // if(tree_[n_cand_ - 1].cvalue > 8.0) {
-            //     best_cand = n_cand_ - 1;
-            //     local_goal_ = jackal; // all of candidates are dangerous
-            // }
             estop = true;
             has_local_goal_ = false;
             age_ = 0;
         }
-        else if(best_cand == n_cand_ - 1){
+        else if(has_local_goal_ && best_cand == n_cand_ - 1){
             age_++;
             if(age_ > 20) has_local_goal_ = false;
         }
@@ -591,8 +619,7 @@ class GlobalPlanner{
             has_local_goal_ = true;
             age_ = 0;
         }
-        // if(best_cand == n_cand_ -1) cout << "maintain local goal" << endl;
-        rrt.draw_global_result(record_num_, jackal, goal, best_cand, candidates, ped_goals, global_path, scores);
+        // rrt.draw_global_result(record_num_, jackal, goal, best_cand, candidates, ped_goals, global_path, scores);
         
         social_navigation::GlobalPlannerResponse rt;
         rt.id = id;

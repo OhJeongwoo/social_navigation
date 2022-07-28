@@ -66,7 +66,10 @@ for p in clusters[idx]:
     B[p[0]][p[1]] = 0
 
 M = 1.0
-alpha = 0.025
+# previous
+# alpha = 0.025
+# 220726
+alpha = 0.035
 half_kernel = 100
 kernel_size = 2*half_kernel + 1
 kernel = np.zeros((kernel_size, kernel_size))

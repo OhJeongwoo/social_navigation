@@ -88,6 +88,7 @@ class GlobalPathGenerator{
 
     void callback_goal(const social_navigation::GlobalPathRequest::ConstPtr& msg){
         cout << "callback goal" << endl;
+        cout << msg->id << endl;
         if(msg->type == 2 && lock_) return;
         if(msg->type == 1){
             cout << "type 1 start" << endl;
@@ -109,6 +110,14 @@ class GlobalPathGenerator{
         for(const vector<point>& path: paths){
             int sz = path.size();
             double d = 0.0;
+            if(sz>0) {
+                d = dist(path[0], goal);
+                geometry_msgs::Point pt;
+                pt.x = goal.x;
+                pt.y = goal.y;
+                pt.z = 0.0;
+                pts.push_back(pt);
+            }
             for(int i = 0; i<sz-1;i++){
                 geometry_msgs::Point pt;
                 pt.x = path[i].x;
@@ -128,58 +137,10 @@ class GlobalPathGenerator{
         lock_ = false;
     }
 
-    // void callback_jackal(const gazebo_msgs::ModelStates::ConstPtr& msg){
-    //     int idx = -1;
-    //     for(int i = 0; i < msg->name.size(); i++){
-    //         if(msg->name[i].compare("jackal") == 0) idx = i;
-    //     }
-    //     if(idx == -1) {
-    //         cout << "Jackal does not exist!!" << endl;
-    //         return;
-    //     }
-    //     jackal_ = point(msg->pose[idx].position.x, msg->pose[idx].position.y);
-    //     j_enable_ = true;
-    // }
-
-    // void publish_topic(const vector<vector<point>>& paths){
-    //     social_navigation::PathArray rt;
-    //     vector<social_navigation::Path> rt_path;
-    //     for(const vector<point>& path: paths){
-    //         int sz = path.size();
-    //         vector<geometry_msgs::Point> pts;
-    //         double d = 0.0;
-    //         for(int i = 0; i<sz-1;i++){
-    //             geometry_msgs::Point pt;
-    //             pt.x = path[i].x;
-    //             pt.y = path[i].y;
-    //             pt.z = d;
-    //             pts.push_back(pt);
-    //             d += dist(path[i], path[i+1]);
-    //         }
-    //         social_navigation::Path path_tmp;
-    //         path_tmp.path = pts;
-    //         path_tmp.n_points = pts.size();
-    //         rt_path.push_back(path_tmp);
-    //     }
-    //     rt.paths = rt_path;
-    //     rt.n_paths = rt_path.size();
-    //     pub_.publish(rt);
-    // }
-
-
-
-    // void loop(){
-    //     lock_ = true;
-    //     rrt.reset();
-    //     vector<vector<point>> paths = rrt.diverse_rrt(jackal_, global_goal_, n_path_);
-    //     publish_topic(paths);
-    //     lock_ = false;
-    // } 
-
 };
  
 int main(int argc,char** argv){
-  ros::init(argc, argv, "global_planner");
+  ros::init(argc, argv, "global_path_generator");
   GlobalPathGenerator global_planner = GlobalPathGenerator();
   ros::spin();
 }

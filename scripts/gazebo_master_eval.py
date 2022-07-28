@@ -37,8 +37,10 @@ class PedSim:
         self.config_path_ = self.package_path_ + "/config/"
 
         self.traj_file_ = self.config_path_ + "ped_traj_candidate.json" # pedestrian trajectory database
-        self.spawn_file_ = self.config_path_ + "general_scenario_extra.json" # jackal root-goal database
-
+        self.spawn_file_ = self.config_path_ + "general_scenario_easy.json" # jackal root-goal database
+        self.density = True
+        print(self.spawn_file_)
+        print(self.density)
         # parameter for time
         self.time_ = 0.0 # current time
         self.target_time_ = -1.0 # for simulation step, if time reach to target time, pause simulation
@@ -64,7 +66,7 @@ class PedSim:
         self.map_cost_coeff_ = 1.0
         self.ped_cost_coeff_ = 1.0
         self.ped_collision_threshold_ = 0.3
-        self.map_collision_threshold_ = 0.2
+        self.map_collision_threshold_ = 0.3
         self.goal_threshold_ = 1.0
         self.action_limit_ = 1.0
         self.mode_ = mode
@@ -102,7 +104,10 @@ class PedSim:
 
 
         # parameter for actor
-        self.n_actor_ = 15
+        if self.density:
+            self.n_actor_ = 30
+        else:
+            self.n_actor_ = 15
         self.actor_name_ = []
         self.group_id_ = {}
         self.r_pos_ = {}
@@ -170,6 +175,7 @@ class PedSim:
         self.global_path_flag_ = True
         self.scenario_num = 0
         self.estop_ = False
+        self.vision_threshold_ = 20.0
 
         # define ROS communicator
         self.sub_pose_ = rospy.Subscriber('/gazebo/model_states', ModelStates, self.callback_pose)
@@ -200,7 +206,21 @@ class PedSim:
             self.last_zed_published_time_ = self.time_
             rt.header.stamp = self.clock_
             objects = []
-            for name in  self.actor_name_:
+            candidates = []
+            for name in self.actor_name_:
+                try:
+                    idx = msg.name.index(name)
+                    pos = msg.pose[idx].position
+                    d = L2dist(pos, self.jackal_pose_.position)
+                    if d > self.vision_threshold_:
+                        continue
+                    candidates.append({'name':name, 'd':d})
+                except:
+                    print("no name")
+            candidates = sorted(candidates, key=lambda x: x['d'])
+            candidates = candidates[:min(len(candidates), 10)]
+            for cand in candidates:
+                name = cand['name']
                 try:
                     idx = msg.name.index(name)
                     pos = msg.pose[idx].position
@@ -209,10 +229,25 @@ class PedSim:
                     obj.label_id = 0
                     obj.tracking_state = 1
                     objects.append(obj)
-                    rt.objects = objects
                 except:
                     print("no name")
+            rt.objects = objects
             self.pub_zed_.publish(rt)
+            # for name in  self.actor_name_:
+            #     try:
+            #         idx = msg.name.index(name)
+            #         pos = msg.pose[idx].position
+            #         if L2dist(pos, self.jackal_pose_.position) < self.vision_threshold:
+            #             candidates.append([])
+            #         obj = Object()
+            #         obj.position = [pos.x, pos.y, pos.z]
+            #         obj.label_id = 0
+            #         obj.tracking_state = 1
+            #         objects.append(obj)
+            #         rt.objects = objects
+            #     except:
+            #         print("no name")
+            # self.pub_zed_.publish(rt)
         name_list = msg.name
         for name in self.actor_name_:
             try:
@@ -400,7 +435,9 @@ class PedSim:
     def reset(self):
         self.reset_ = True
         self.scenario_num += 1
+        self.tot_moving_dist = 0
         self.travel_dist = 0.0
+        self.moving_dist = [0.0]
 
         #Initialize prev values
         self.prev_vel = 0
@@ -412,21 +449,32 @@ class PedSim:
 
         # check valid starting point
         candidates = []
-        for pos in self.spawn_:
-            check = True
-            for name in self.actor_name_:
-                if get_length(pos['spawn'], [self.pose_[name].x, self.pose_[name].y]) < self.spawn_threshold_:
-                    check = False
-                    break
-            if check:
-                candidates.append(pos)
-
+        while True:
+            candidates = []
+            for pos in self.spawn_:
+                check = True
+                for name in self.actor_name_:
+                    if get_length(pos['spawn'], [self.pose_[name].x, self.pose_[name].y]) < self.spawn_threshold_:
+                        check = False
+                        break
+                if check:
+                    candidates.append(pos)
+            if len(candidates) > 0:
+                break
+            else:
+                print("empty candidate")
+                self.is_pause_ = False
+                self.client_unpause_()
+                time.sleep(10.0)
+                self.client_pause_()
+        
         # randomly choice
         candidate = random.choice(candidates)
-        # candidate['spawn'] = [-29.0, -0.5]
-        # candidate['goal'] = [-15.0, -8.0]
+        # candidate['spawn'] = [0.0, -1.0]
+        # candidate['goal'] = [-10.0, -5.0]
         self.jackal_goal_ = candidate['goal']
         self.local_goal_ = self.jackal_goal_
+        self.global_path_ = candidate['path']
 
         # publish global goal
         self.pub_global_goal_.publish(Point(self.jackal_goal_[0], self.jackal_goal_[1], 0.0))
@@ -450,17 +498,6 @@ class PedSim:
         self.jackal_cmd([0,0])
         
         # For stable state initilization
-        # global_path_request = GlobalPathRequest()
-        # global_path_request.id = self.scenario_num
-        # global_path_request.type = 2
-        # global_path_request.n_path = 5
-        # global_path_request.root = Point(candidate['spawn'][0], candidate['spawn'][1], 0.0)
-        # global_path_request.goal = Point(candidate['goal'][0], candidate['goal'][1], 0.0)
-        # self.global_path_flag_ = False
-        # self.pub_global_path_.publish(global_path_request)
-        # while True:
-        #     if self.global_path_flag_:
-        #         break
         global_planner_request = GlobalPlannerRequest()
         global_planner_request.id = self.scenario_num
         global_planner_request.seq = 0
@@ -503,6 +540,7 @@ class PedSim:
             a = [np.clip(self.recent_action[0] + np.clip(a[0], -1.0, 1.0) * 1.5 / 10, 0, 1.5), self.recent_action[1]  * self.action_weight_ + (1- self.action_weight_) * np.clip(a[1], -1.0, 1.0) *1.5]
         if self.estop_:
             a = [0.0, 0.1]
+        # a = [0.0, 0.1]
         self.recent_action = a
         self.jackal_cmd(a)
         self.simulation()
@@ -519,7 +557,8 @@ class PedSim:
 
         jx = self.jackal_pose_.position.x
         jy = self.jackal_pose_.position.y
-        self.travel_dist += get_length([jx,jy],self.prev_jackal)
+        self.tot_moving_dist += get_length([jx,jy],self.prev_jackal)
+        self.moving_dist.append(self.tot_moving_dist)
         self.prev_jackal = [jx, jy]
         if ((self.jackal_goal_[0] - jx)**2 + (self.jackal_goal_[1]-jy)**2)**0.5 < self.goal_threshold_:
             done = True
@@ -541,22 +580,35 @@ class PedSim:
             success = False
             step_type = 3
             print('timeout!')
+
+        if self.timestep > 100:
+            if self.moving_dist[self.timestep] - self.moving_dist[self.timestep-100] < 1.0:
+                done = True
+                success = False
+                step_type = 4
+                print('stuck!')
         
-        if d < 2.0:
+        if d < 1.5:
             is_dangerous = True
         if d < 1.0:
             collision_cost = 1.0
         if d < 0.5:
             collision_cost = 2.0
-        if d < 0.2:
-            collision_cost = 5.0
 
+        cur_travel_length = 0.0
+        min_dist = 1000
+        for p in self.global_path_:
+            if get_length([jx,jy], p) < min_dist:
+                min_dist = get_length([jx,jy], p)
+                cur_travel_length = p[2]
+        self.travel_dist = max(self.travel_dist, cur_travel_length)
+        
         info = {'success': success,
                 'is_dangerous': is_dangerous, 
                 'collision_cost': collision_cost, 
+                'moving_dist': self.tot_moving_dist,
                 'travel_dist': self.travel_dist, 
-                'travel_time': travel_time, 
-                'jerk_cost': jerk_cost,
+                'travel_time': travel_time,
                 'step_type': step_type}
         
         return self.obs2list(ns), None, done, info

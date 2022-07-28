@@ -56,7 +56,7 @@ vector<int> get_near(const vector<node>& tree, point p, double d, bool option){
 }
 
 
-vector<point> get_next_pedestrians(point robot, vector<point> peds, vector<point> goal, vector<double> velocity){
+vector<point> get_next_pedestrians(point robot, vector<point> peds, vector<point> goal, vector<double> velocity, bool const_vel_mode){
     if(peds.size() != goal.size()) cout << "ERROR! number of pedestrians are different." << endl;
 
     vector<point> rt;
@@ -65,7 +65,10 @@ vector<point> get_next_pedestrians(point robot, vector<point> peds, vector<point
         point vg = goal[i] - peds[i];
         vg = vg * (alpha_goal_ / norm(vg));
         point vr = peds[i] - robot;
-        vr = vr * (alpha_robot_ / max(norm(vr), 1.0));
+        double d = norm(vr);
+        if(d<3.0) vr = vr * ((3.0 - d) * alpha_robot_ / max(norm(vr), 0.1));
+        else vr = point(0,0);
+        if(const_vel_mode) vr = point(0,0);
         point v = normalize(vg + vr) * velocity[i] * dt;
         rt.push_back(peds[i] + v);
     }

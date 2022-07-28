@@ -48,6 +48,6 @@ point interpolate(point p, point q, double alpha);
 int find_nearest(const vector<node>& tree, point p, bool option);
 point get_candidate(point p, point q, double d);
 vector<int> get_near(const vector<node>& tree, point p, double d, bool option);
-vector<point> get_next_pedestrians(point robot, vector<point> peds, vector<point> goal, vector<double> velocity);
+vector<point> get_next_pedestrians(point robot, vector<point> peds, vector<point> goal, vector<double> velocity, bool const_vel_mode);
 
 #endif
