@@ -31,6 +31,7 @@ class PedSim:
         self.terminal_cond_ = args.terminal_condition # 'goal' or 'time'
         self.high_level_controller_ = args.high_level_controller # exist: True
         self.low_level_controller_ = args.low_level_controller
+        self.social_models = ['cadrl', 'sarl']
 
         # parater for file
         self.package_path_ = rospkg.RosPack().get_path("social_navigation")
@@ -70,10 +71,8 @@ class PedSim:
         self.goal_threshold_ = 1.0
         self.action_limit_ = 1.0
         self.mode_ = mode
-        if self.low_level_controller_ == 'sac':
-            self.action_weight_ = 0.6
-        else:
-            self.action_weight_ = 0.5
+        
+        self.action_weight_ = 0.5
 
         # parameter for jackal
         self.jackal_pose_ = Pose()
@@ -534,9 +533,9 @@ class PedSim:
         s = self.get_obs()
         # action smoothing
 
-        if self.low_level_controller_ == 'sac':
+        if self.low_level_controller_ in self.social_models:
             a = [self.recent_action[0] * self.action_weight_ + np.clip(a[0], 0.0, 1.0) * (1-self.action_weight_), self.recent_action[1] * self.action_weight_ + (1-self.action_weight_) * np.clip(a[1], -1.0, 1.0)]
-        elif self.low_level_controller_ == 'trc':
+        else :
             a = [np.clip(self.recent_action[0] + np.clip(a[0], -1.0, 1.0) * 1.5 / 10, 0, 1.5), self.recent_action[1]  * self.action_weight_ + (1- self.action_weight_) * np.clip(a[1], -1.0, 1.0) *1.5]
         if self.estop_:
             a = [0.0, 0.1]
