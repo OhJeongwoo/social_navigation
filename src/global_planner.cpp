@@ -95,6 +95,7 @@ class GlobalPlanner{
     double cost_cut_threshold_;
     bool mcts_mode_;
     bool const_vel_mode_;
+    bool carrt_mode_;
 
     RRT rrt;
 
@@ -103,8 +104,14 @@ class GlobalPlanner{
         // set random seed
         srand(time(NULL));
         
+<<<<<<< HEAD
         mcts_mode_ = true;
         const_vel_mode_ = true;
+=======
+        mcts_mode_ = false;
+        const_vel_mode_ = false;
+        carrt_mode_ = true;
+>>>>>>> 66d66aea99b6445e4817cc234685f1121dc763a8
 
         // load cost map
         pkg_path_ << ros::package::getPath("social_navigation") << "/";
@@ -343,26 +350,29 @@ class GlobalPlanner{
         // vector<vector<point>> paths = rrt.diverse_rrt(local_goal_, global_goal_, n_cand_);
         vector<vector<point>> paths;
         if(n_cand_ == 1){
-            cout << "carrt version" << endl;
-            paths = rrt.diverse_rrt(jackal, goal, n_cand_);
-            for(const vector<point>& path : paths) {
-                int sz = path.size();
-                bool check = true;
-                for(int i = sz-1; i --; i>=0){
-                    if(dist(jackal, path[i]) > lookahead_distance_){
-                        candidates.push_back(path[i]);
-                        check = false;
-                        break;
-                    }
+            vector<point> path;
+            cout << "replanning mode" << endl;
+            if(carrt_mode_) cout << "carrt mode" << endl;
+            else cout << "rrt star mode" << endl;
+            if(carrt_mode_) path = rrt.carrt(jackal, goal);
+            else path = rrt.rrt_star(jackal, goal);
+            int sz = path.size();
+            bool check = true;
+            point candidate;
+            for(int i = sz-1; i --; i>=0){
+                if(dist(jackal, path[i]) > lookahead_distance_){
+                    candidate = path[i];
+                    check = false;
+                    break;
                 }
-                if(check) candidates.push_back(path[0]);
             }
+            if(check) candidate = path[0];
             social_navigation::GlobalPlannerResponse rt;
             rt.id = id;
             rt.seq = seq;
             geometry_msgs::Point rt_local_goal;
-            rt_local_goal.x = candidates[0].x;
-            rt_local_goal.y = candidates[0].y;
+            rt_local_goal.x = candidate.x;
+            rt_local_goal.y = candidate.y;
             rt.local_goal = rt_local_goal;
             pub_.publish(rt);
             return;

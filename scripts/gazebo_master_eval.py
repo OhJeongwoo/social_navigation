@@ -38,7 +38,11 @@ class PedSim:
         self.config_path_ = self.package_path_ + "/config/"
 
         self.traj_file_ = self.config_path_ + "ped_traj_candidate.json" # pedestrian trajectory database
+<<<<<<< HEAD
         self.spawn_file_ = self.config_path_ + "general_scenario_hard.json" # jackal root-goal database
+=======
+        self.spawn_file_ = self.config_path_ + "general_scenario_medium.json" # jackal root-goal database
+>>>>>>> 66d66aea99b6445e4817cc234685f1121dc763a8
         self.density = True
         print(self.spawn_file_)
         print(self.density)
