@@ -106,7 +106,7 @@ class GlobalPlanner{
         
         mcts_mode_ = false;
         const_vel_mode_ = false;
-        carrt_mode_ = true;
+        carrt_mode_ = false;
 
         // load cost map
         pkg_path_ << ros::package::getPath("social_navigation") << "/";
