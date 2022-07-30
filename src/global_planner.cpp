@@ -104,14 +104,9 @@ class GlobalPlanner{
         // set random seed
         srand(time(NULL));
         
-<<<<<<< HEAD
         mcts_mode_ = true;
         const_vel_mode_ = true;
-=======
-        mcts_mode_ = false;
-        const_vel_mode_ = false;
-        carrt_mode_ = true;
->>>>>>> 66d66aea99b6445e4817cc234685f1121dc763a8
+        carrt_mode_ = false;
 
         // load cost map
         pkg_path_ << ros::package::getPath("social_navigation") << "/";

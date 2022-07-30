@@ -30,7 +30,7 @@ if __name__ == "__main__":
     parser.add_argument('--ped_mode', default=True, type=bool)
     parser.add_argument('--terminal_condition', default='goal', type=str)
     parser.add_argument('--high_level_controller', default=False, type=bool)
-    parser.add_argument('--low_level_controller', default='ppo', type=str)
+    parser.add_argument('--low_level_controller', default='trc', type=str)
     parser.add_argument('--eval_type', default='general', type=str)
     parser.add_argument('--epi_len', default=1000, type=int)
     parser.add_argument('--n_episode', default=100, type=int)
@@ -122,7 +122,7 @@ if __name__ == "__main__":
         rt['dangerous'] = ep_dan_case
         rt['collision_cost'] = ep_col_cost
         rt['type'] = ep_type
-        print(rt)
+        # print(rt)
         return rt
 
     start_time = time.time()
@@ -145,7 +145,7 @@ if __name__ == "__main__":
     stable_weight = 100.0
     collision_weight = 100.0
     init_time = time.time()
-    exp_name = "SAN-MCTS_TRC_DENSE_EASY"
+    exp_name = "MCTS-CV_TRC_DENSE_HARD"
     print(exp_name)
     save_dict = {}
     epi_info = []
