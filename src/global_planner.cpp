@@ -96,6 +96,7 @@ class GlobalPlanner{
     bool mcts_mode_;
     bool const_vel_mode_;
     bool carrt_mode_;
+    bool mpc_mode_;
 
     RRT rrt;
 
@@ -107,6 +108,7 @@ class GlobalPlanner{
         mcts_mode_ = false;
         const_vel_mode_ = false;
         carrt_mode_ = true;
+        mpc_mode_ = true;
 
         // load cost map
         pkg_path_ << ros::package::getPath("social_navigation") << "/";
@@ -185,7 +187,8 @@ class GlobalPlanner{
             has_local_goal_ = false;
             age_ = 0;
         }
-        mcts(msg->id, msg->seq);
+        if(mpc_mode_) mpc(msg->id, msg->seq);
+        else mcts(msg->id, msg->seq);
     }
 
     void callback_jackal(const gazebo_msgs::ModelStates::ConstPtr& msg){
@@ -571,7 +574,7 @@ class GlobalPlanner{
 
         // select the best candidate and publish
         double best_value = -INF;
-        double best_cand = -1;
+        int best_cand = -1;
         vector<vector<double>> scores;
         for(int i = 0; i < n_cand_; i++){
             bool is_dangerous = false;
@@ -653,6 +656,188 @@ class GlobalPlanner{
         tree_.clear();
     }
         
+    void mpc(int id, int seq){
+        cout << "mpc mode" << endl;
+        record_num_ ++;
+        // fetch current status (lidar point clouds, jackal position)
+        // fetch global pedestrian trajectory (time: 0.0 sec ~ 2.0 sec, 0.1 sec interval)
+        vector<point> pts = lidar_points_;
+        point jackal = point(jx_, jy_);
+        point goal = global_goal_;
+        vector<geometry_msgs::Point> global_path = global_path_;
+
+        // call service
+        social_navigation::TrajectoryPredict pedestrians;
+        pedestrians.request.times = time_array_;
+        
+        bool success = true;
+        if(!srv_pedestrian_.call(pedestrians)){
+            cout << "error" << endl;
+            success = false;
+        }
+        
+
+        // generate cost map
+        // remove point clouds which are near to pedestrians
+        vector<point> static_points;
+        vector<vector<point>> ped_goals;
+        int T = pedestrians.response.times.size();
+        int P = pedestrians.response.velocity.size();
+        for(int t = 0; t < T; t++){
+            vector<point> ped_goal;
+            for(int i = 0; i < P; i++){
+                geometry_msgs::Point q = pedestrians.response.trajectories[i].trajectory[t];
+                ped_goal.push_back(point(q.x, q.y));
+            }
+            ped_goals.push_back(ped_goal);
+        }
+        
+        for(point p : pts){
+            bool check = true;
+            for(int i = 0; i < P; i++) {
+                if(dist(p, ped_goals[0][i]) < 0.5) {
+                    check = false;
+                    break;
+                }
+            }
+            if(check) static_points.push_back(p);
+        }
+        rrt.reset();
+        rrt.set_pedestrians(ped_goals[0]);
+        rrt.make_local_map(static_points);
+
+
+        // generate local goal candidate
+        vector<point> candidates;
+        vector<vector<point>> paths;
+
+        paths = rrt.diverse_rrt(jackal, goal, n_cand_);
+        for(const vector<point>& path : paths) {
+            int sz = path.size();
+            bool check = true;
+            for(int i = sz-1; i --; i>=0){
+                if(dist(jackal, path[i]) > lookahead_distance_){
+                    candidates.push_back(path[i]);
+                    check = false;
+                    break;
+                }
+            }
+            if(check) candidates.push_back(path[0]);
+        }
+        
+
+        // generate tree root nodes
+        vector<double> values;
+        for(int i = 0; i < n_cand_; i++) values.push_back(-1000);
+        vector<double> auxilary_values;
+        for(int i = 0; i < n_cand_; i++){
+            double val = 0.0;
+            point cur_goal = candidates[i];
+            if (has_local_goal_) {
+                val += -0.2 * dist(cur_goal, local_goal_);
+            }
+            if (global_path.size() > 0){
+                double min_d = INF;
+                double remain_d;
+                for(int j = 0; j < global_path.size(); j++){
+                    if(min_d > dist(cur_goal, point(global_path[j].x, global_path[j].y))){
+                        min_d = dist(cur_goal, point(global_path[j].x, global_path[j].y));
+                        remain_d = min_d + global_path[j].z;
+                    }
+                }
+                val += -0.1 * remain_d;
+            }
+            auxilary_values.push_back(val);
+        }
+        
+        int best_cand = -1;
+        double best_value = -1000;
+        clock_t  init_time = clock();
+        while(1){
+            if(double(clock() - init_time) / CLOCKS_PER_SEC > time_limit_) break;
+            // select candidate uniformly
+            int goal_index = rand() % n_cand_;
+            
+            double tot_value = 0;
+            double tot_cost = 0;
+            double discounted_factor = 1.0;
+            vector<point> peds = ped_goals[0];
+            point robot = jackal;
+            point goal = candidates[goal_index];
+            int cur_depth = 1;
+            bool success = false;
+            for(int i = cur_depth; i < max_depth_; i++){
+                // calculate cost by each action
+                peds = get_next_pedestrians(robot, peds, ped_goals[i], pedestrians.response.velocity, const_vel_mode_);
+                double x = V_ * 2.0 * (rand() / RAND_MAX - 0.5);
+                double y = V_ * 2.0 * (rand() / RAND_MAX - 0.5);
+                point action = point(x,y);
+                pb simul_result = rrt.get_state_reward(robot + action, robot, goal, peds);
+                point return_value = simul_result.first;
+                double reward = return_value.x;
+                double cost = return_value.y;
+                bool done = simul_result.second;
+                
+                // execute action and add cost
+                tot_value += reward * discounted_factor;
+                tot_cost += cost * discounted_factor;
+                discounted_factor *= gamma_;
+                robot = robot + action;
+                cur_depth ++;
+                if(done) break;
+                if(dist(robot, goal) < distance_threshold_) {
+                    success = true;
+                    break;
+                }
+            }
+            if(dist(robot, goal) > distance_threshold_) tot_value += -1.0 * dist(robot, goal) * discounted_factor;
+            if(!success && cur_depth < max_depth_) tot_cost += rrt.MAX_COST_ * discounted_factor;
+            if(tot_cost > cost_cut_threshold_) continue;
+            if(values[goal_index] < tot_value) {
+                values[goal_index] = tot_value;
+                if(best_cand == -1 || best_value < tot_value + auxilary_values[goal_index]){
+                    best_value = tot_value + auxilary_values[goal_index];
+                    best_cand = goal_index;
+                }
+            }
+        }
+
+        bool estop = false;
+        if(best_cand == -1) {
+            estop = true;
+            has_local_goal_ = false;
+        }
+        else {
+            has_local_goal_ = true;
+            local_goal_ = candidates[best_cand];
+        }
+
+        social_navigation::GlobalPlannerResponse rt;
+        rt.id = id;
+        rt.seq = seq;
+        geometry_msgs::Point rt_local_goal;
+        rt_local_goal.x = local_goal_.x;
+        rt_local_goal.y = local_goal_.y;
+        rt.local_goal = rt_local_goal;
+        rt.estop = estop;
+        pub_.publish(rt);
+
+        social_navigation::GlobalPathRequest req;
+        req.id = id;
+        req.type = 1;
+        req.n_path = 5;
+        geometry_msgs::Point req_root;
+        req_root.x = jackal.x;
+        req_root.y = jackal.y;
+        req.root = req_root;
+        geometry_msgs::Point req_goal;
+        req_goal.x = goal.x;
+        req_goal.y = goal.y;
+        req.goal = req_goal;
+        pub_path_.publish(req);
+
+        tree_.clear();
+    }
 
 };
  
