@@ -125,7 +125,7 @@ if __name__ == "__main__":
         rt['dangerous'] = ep_dan_case
         rt['collision_cost'] = ep_col_cost
         rt['type'] = ep_type
-        print(rt)
+        # print(rt)
         return rt
 
     start_time = time.time()
