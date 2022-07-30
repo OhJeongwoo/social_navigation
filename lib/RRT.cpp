@@ -396,9 +396,11 @@ vector<point> RRT::rrt_star(point root, point goal){
     int sz = 1;
     double goal_dist = dist(root_, goal_);
     int leaf_index = 0;
+    clock_t init_time = clock();
     while(1){
         step += 1;
         if(step > max_step_) break;
+        if(double(clock()-init_time)/CLOCKS_PER_SEC > time_limit_) break;
 
         // sample random point
         double x = x_min + (x_max - x_min) * ((double)rand() / (double) RAND_MAX);

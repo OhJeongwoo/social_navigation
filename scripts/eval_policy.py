@@ -30,7 +30,7 @@ if __name__ == "__main__":
     parser.add_argument('--ped_mode', default=True, type=bool)
     parser.add_argument('--terminal_condition', default='goal', type=str)
     parser.add_argument('--high_level_controller', default=False, type=bool)
-    parser.add_argument('--low_level_controller', default='ppo', type=str)
+    parser.add_argument('--low_level_controller', default='trc', type=str)
     parser.add_argument('--eval_type', default='general', type=str)
     parser.add_argument('--epi_len', default=1000, type=int)
     parser.add_argument('--n_episode', default=100, type=int)
@@ -59,12 +59,15 @@ if __name__ == "__main__":
         if args.low_level_controller == 'sac':
             from sac_models import Policy
             policy_ = Policy(pol_args).to(device=device_)
+            print("sac policy")
         elif args.low_level_controller == 'ppo':
             from ppo_models import Policy
             policy_ = Policy(pol_args).to(device=device_)
+            print("ppo policy")
         else:
             from trc_models import Policy
             policy_ = Policy(pol_args).to(device=device_)
+            print("trc policy")
         policy_.load_state_dict(torch.load(policy_file_)['policy'])
 
 
@@ -145,7 +148,7 @@ if __name__ == "__main__":
     stable_weight = 100.0
     collision_weight = 100.0
     init_time = time.time()
-    exp_name = "SAN-MCTS_TRC_DENSE_EASY"
+    exp_name = "CARRT_TRC_SPARSE_HARD"
     print(exp_name)
     save_dict = {}
     epi_info = []
