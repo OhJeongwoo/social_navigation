@@ -148,7 +148,7 @@ if __name__ == "__main__":
     stable_weight = 100.0
     collision_weight = 100.0
     init_time = time.time()
-    exp_name = "MCTS-CV_TRC_DENSE_HARD"
+    exp_name = "RRT_TRC_DENSE_HARD"
     print(exp_name)
     save_dict = {}
     epi_info = []
