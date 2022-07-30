@@ -39,7 +39,10 @@ class PedSim:
 
         self.traj_file_ = self.config_path_ + "ped_traj_candidate.json" # pedestrian trajectory database
         self.spawn_file_ = self.config_path_ + "general_scenario_hard.json" # jackal root-goal database
-        self.density = True
+        self.density = False
+        self.replan = False
+        self.rrt = False
+
         print(self.spawn_file_)
         print(self.density)
         # parameter for time
@@ -175,6 +178,7 @@ class PedSim:
         self.scenario_num = 0
         self.estop_ = False
         self.vision_threshold_ = 20.0
+        self.lookahead_distance_ = 5.0
 
         # define ROS communicator
         self.sub_pose_ = rospy.Subscriber('/gazebo/model_states', ModelStates, self.callback_pose)
@@ -373,6 +377,25 @@ class PedSim:
             pass
 
 
+    def set_local_goal(self):
+        try:
+            jx = self.jackal_pose_.position.x
+            jy = self.jackal_pose_.position.y
+            N = len(self.global_path_)
+            idx = -1
+            for i in range(N):
+                if get_length([jx,jy], self.global_path_[i]) < self.lookahead_distance_:
+                    idx = i
+                    break
+            if idx == -1:
+                local_goal = self.jackal_goal_
+            else:
+                local_goal = self.global_path_[idx][0:2]
+        except:
+            local_goal = self.jackal_goal_    
+        self.local_goal_ = local_goal
+
+
     def update_state(self):
         state = StateInfo()
         jx = self.jackal_pose_.position.x
@@ -473,7 +496,10 @@ class PedSim:
         # candidate['goal'] = [-10.0, -5.0]
         self.jackal_goal_ = candidate['goal']
         self.local_goal_ = self.jackal_goal_
-        self.global_path_ = candidate['path']
+        if not self.replan and self.rrt:
+            self.global_path_ = candidate['rrt_path']
+        else:
+            self.global_path_ = candidate['path']
 
         # publish global goal
         self.pub_global_goal_.publish(Point(self.jackal_goal_[0], self.jackal_goal_[1], 0.0))
@@ -618,6 +644,9 @@ class PedSim:
         if self.time_ - self.last_published_time_ < self.pub_interval_:
             return
         
+        if not self.replan:
+            self.set_local_goal()
+
         # control pedestrian
         peds = {}
         goals = []

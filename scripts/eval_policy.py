@@ -59,12 +59,15 @@ if __name__ == "__main__":
         if args.low_level_controller == 'sac':
             from sac_models import Policy
             policy_ = Policy(pol_args).to(device=device_)
+            print("sac policy")
         elif args.low_level_controller == 'ppo':
             from ppo_models import Policy
             policy_ = Policy(pol_args).to(device=device_)
+            print("ppo policy")
         else:
             from trc_models import Policy
             policy_ = Policy(pol_args).to(device=device_)
+            print("trc policy")
         policy_.load_state_dict(torch.load(policy_file_)['policy'])
 
 
