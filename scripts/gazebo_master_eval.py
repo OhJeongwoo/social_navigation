@@ -59,6 +59,7 @@ class PedSim:
         self.dt_ = 0.1
         self.spawn_threshold_ = 3.0
         self.lookahead_time_ = 1.0
+        self.lookahead_count_ = 5
         self.actor_prob_ = 1.0
         self.history_rollout_ = 1
         self.history_queue_ = []
@@ -328,15 +329,41 @@ class PedSim:
 
 
     def get_goal(self, g):
+        x = 0.0
+        y = 0.0
+        ng = 0
+        for name in self.actor_name_:
+            if self.group_id_[name] == g:
+                pos = self.pose_[name]
+                rpos = self.r_pos_[name]
+                x += pos.x - rpos.x
+                y += pos.y - rpos.y
+                ng += 1
+        x = x / ng
+        y = y / ng
         traj = self.traj_[self.traj_idx_[g]]
-        time = min(self.time_ - self.status_time_[g] + self.lookahead_time_, traj['time'] - EPS)
-        interval = traj['interval']
-        k = int(time // interval)
-        A = traj['waypoints'][k]
-        B = traj['waypoints'][k+1]
-        alpha = (time - interval * k) / interval
-        goal = interpolate(A,B,alpha)
+        N = len(traj['waypoints'])
+        d = 1000.0
+        idx = -1
+        for i in range(N):
+            nd = get_length([x,y], traj['waypoints'][i])
+            if nd < d:
+                d = nd
+                idx = i
+        if idx == -1:
+            idx = N-1
+        idx = min(idx+self.lookahead_count_, N-1)
+        goal = traj['waypoints'][idx]
         return Point(goal[0], goal[1], 2.0)
+        # traj = self.traj_[self.traj_idx_[g]]
+        # time = min(self.time_ - self.status_time_[g] + self.lookahead_time_, traj['time'] - EPS)
+        # interval = traj['interval']
+        # k = int(time // interval)
+        # A = traj['waypoints'][k]
+        # B = traj['waypoints'][k+1]
+        # alpha = (time - interval * k) / interval
+        # goal = interpolate(A,B,alpha)
+        # return Point(goal[0], goal[1], 2.0)
 
 
     def check_reach(self, g):
