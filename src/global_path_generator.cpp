@@ -102,6 +102,37 @@ class GlobalPathGenerator{
         rrt.reset();
         point root = point(msg->root.x, msg->root.y);
         point goal = point(msg->goal.x, msg->goal.y);
+
+        // vector<point> path = rrt.rrt_star(root, goal);
+        // social_navigation::GlobalPathResponse rt;
+        // vector<geometry_msgs::Point> pts;
+        // double rt_dist = 1000.0;
+        // int sz = path.size();
+        // double d = 0.0;
+        // if(sz>0) {
+        //     d = dist(path[0], goal);
+        //     geometry_msgs::Point pt;
+        //     pt.x = goal.x;
+        //     pt.y = goal.y;
+        //     pt.z = 0.0;
+        //     pts.push_back(pt);
+        // }
+        // for(int i = 0; i<sz-1;i++){
+        //     geometry_msgs::Point pt;
+        //     pt.x = path[i].x;
+        //     pt.y = path[i].y;
+        //     pt.z = d;
+        //     pts.push_back(pt);
+        //     d += dist(path[i], path[i+1]);
+        // }
+        // rt_dist = min(rt_dist, d);
+        // rt.points = pts;
+        // rt.n_points = pts.size();
+        // rt.id = msg->id;
+        // rt.type = msg->type;
+        // rt.distance = rt_dist;
+        // pub_.publish(rt);
+        
         vector<vector<point>> paths = rrt.diverse_rrt(root, goal, msg->n_path);
 
         social_navigation::GlobalPathResponse rt;
@@ -134,6 +165,7 @@ class GlobalPathGenerator{
         rt.type = msg->type;
         rt.distance = rt_dist;
         pub_.publish(rt);
+        
         lock_ = false;
     }
 

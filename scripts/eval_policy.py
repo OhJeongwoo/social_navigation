@@ -100,6 +100,7 @@ if __name__ == "__main__":
 
     def run_episode():
         o, d, success, ep_len, ep_col_cost, ep_dan_case, ep_type, moving_dist, travel_dist, travel_time = env_.reset(), False, False, 0, 0, 0, 0, 0, 0, 0
+        log = []
         while not(d or (ep_len == args.epi_len)):
             o, r, d, info = env_.step(get_action(o))
             ep_len += 1
@@ -110,6 +111,7 @@ if __name__ == "__main__":
             travel_dist = info['travel_dist']
             travel_time = info['travel_time']
             ep_type = info['step_type']
+            log.append({'position': info['jackal'], 'd': info['d']})
             if d:
                 if info['success']:
                     success = True
@@ -117,6 +119,7 @@ if __name__ == "__main__":
                     success = False
                 break
         rt = {}
+        rt['log'] = log
         rt['success'] = success
         rt['timestep'] = ep_len
         rt['moving_dist'] = moving_dist
@@ -125,7 +128,6 @@ if __name__ == "__main__":
         rt['dangerous'] = ep_dan_case
         rt['collision_cost'] = ep_col_cost
         rt['type'] = ep_type
-        # print(rt)
         return rt
 
     start_time = time.time()
@@ -148,7 +150,7 @@ if __name__ == "__main__":
     stable_weight = 100.0
     collision_weight = 100.0
     init_time = time.time()
-    exp_name = "MPC_TRC_SPARSE_MEDIUM"
+    exp_name = "test"
     print(exp_name)
     save_dict = {}
     epi_info = []

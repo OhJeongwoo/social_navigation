@@ -38,10 +38,10 @@ class PedSim:
         self.config_path_ = self.package_path_ + "/config/"
 
         self.traj_file_ = self.config_path_ + "ped_traj_candidate.json" # pedestrian trajectory database
-        self.spawn_file_ = self.config_path_ + "general_scenario_medium.json" # jackal root-goal database
+        self.spawn_file_ = self.config_path_ + "general_scenario_easy.json" # jackal root-goal database
         self.density = False
         self.replan = True
-        self.rrt = True
+        self.rrt = False
 
         print(self.spawn_file_)
         print(self.density)
@@ -339,6 +339,19 @@ class PedSim:
         return Point(goal[0], goal[1], 2.0)
 
 
+    def check_reach(self, g):
+        traj = self.traj_[self.traj_idx_[g]]
+        goal = traj['waypoints'][-1]
+        for name in self.actor_name_:
+            if self.group_id_[name] == g:
+                pos = self.pose_[name]
+                rpos = self.r_pos_[name]
+                goal_pose = Point(rpos.x + goal[0], rpos.y + goal[1], 0.0)
+                d = L2dist(goal_pose, pos)
+                if d > 1.0:
+                    return False
+        return True
+
     def obs2list(self, obs):
         state = []
         for i in range(len(obs)):
@@ -378,6 +391,7 @@ class PedSim:
 
 
     def set_local_goal(self):
+        print("set local goal")
         try:
             jx = self.jackal_pose_.position.x
             jy = self.jackal_pose_.position.y
@@ -499,7 +513,7 @@ class PedSim:
         if not self.replan and self.rrt:
             self.global_path_ = candidate['rrt_path']
         else:
-            self.global_path_ = candidate['path']
+            self.global_path_ = candidate['carrt_path']
 
         # publish global goal
         self.pub_global_goal_.publish(Point(self.jackal_goal_[0], self.jackal_goal_[1], 0.0))
@@ -518,6 +532,7 @@ class PedSim:
         # replace jackal
         self.replace_jackal(candidate['spawn'])
         self.prev_jackal = candidate['spawn']
+        self.epi_path_len_ = get_length(candidate['spawn'], candidate['goal'])
         time.sleep(0.1)
 
         self.jackal_cmd([0,0])
@@ -564,7 +579,7 @@ class PedSim:
         else :
             a = [np.clip(self.recent_action[0] + np.clip(a[0], -1.0, 1.0) * 1.5 / 10, 0, 1.5), self.recent_action[1]  * self.action_weight_ + (1- self.action_weight_) * np.clip(a[1], -1.0, 1.0) *1.5]
         if self.estop_:
-            a = [0.0, 0.1]
+            a = [0.0, 0.3]
         # a = [0.0, 0.1]
         self.recent_action = a
         self.jackal_cmd(a)
@@ -620,16 +635,19 @@ class PedSim:
         if d < 0.5:
             collision_cost = 2.0
 
-        cur_travel_length = 0.0
-        min_dist = 1000
-        for p in self.global_path_:
-            if get_length([jx,jy], p) < min_dist:
-                min_dist = get_length([jx,jy], p)
-                cur_travel_length = p[2]
-        self.travel_dist = max(self.travel_dist, cur_travel_length)
+        # cur_travel_length = 0.0
+        # min_dist = 1000
+        # for p in self.global_path_:
+        #     if get_length([jx,jy], p) < min_dist:
+        #         min_dist = get_length([jx,jy], p)
+        #         cur_travel_length = p[2]
+        # self.travel_dist = max(self.travel_dist, cur_travel_length)
+        self.travel_dist = self.epi_path_len_ - get_length(self.jackal_goal_, [jx, jy])
         
         info = {'success': success,
                 'is_dangerous': is_dangerous, 
+                'jackal': [jx, jy],
+                'd': d,
                 'collision_cost': collision_cost, 
                 'moving_dist': self.tot_moving_dist,
                 'travel_dist': self.travel_dist, 
@@ -656,14 +674,15 @@ class PedSim:
         for g in range(self.n_groups_):
             if self.status_[g] == MOVE:
                 traj_num = self.traj_idx_[g]
-                if self.time_ - self.status_time_[g] > self.traj_[traj_num]['time']:
+                goal = self.get_goal(g)
+                if self.check_reach(g):
+                # if self.time_ - self.status_time_[g] > self.traj_[traj_num]['time']:
                     goal = None
                     self.status_[g] = WAIT
                     for name in self.actor_name_:
                         if self.group_id_[name] == g:
                             self.actor_status_[name] = WAIT
                         continue
-                goal = self.get_goal(g)
             elif self.status_[g] == WAIT:
                 if self.waypoint_idx_[g] == -1:
                     traj_num = random.randint(0, self.n_traj_-1)
@@ -707,11 +726,20 @@ class PedSim:
                 pq = Point(self.traj_[traj_num]['waypoints'][0][0] + self.r_pos_[name].x, self.traj_[traj_num]['waypoints'][0][1] + self.r_pos_[name].y, 0.0)
                 if L2dist(pq, jackal) < 1.0:
                     continue
-                rt = Command()
-                rt.name = name
-                rt.status = INIT
-                rt.goal = Pose(position=Point(self.traj_[traj_num]['waypoints'][0][0] + self.r_pos_[name].x, self.traj_[traj_num]['waypoints'][0][1] + self.r_pos_[name].y, 0.0))
-                self.pub_[name].publish(rt)
+                goal = Point(self.traj_[traj_num]['waypoints'][0][0] + self.r_pos_[name].x, self.traj_[traj_num]['waypoints'][0][1] + self.r_pos_[name].y, 0.0)
+                if L2dist(goal, self.pose_[name]) < 5.0:
+                    rt = Command()
+                    rt.name = name
+                    rt.status = MOVE
+                    rt.goal = Pose(position = goal)
+                    rt.velocity  = 1.5
+                    self.pub_[name].publish(rt)
+                else:
+                    rt = Command()
+                    rt.name = name
+                    rt.status = INIT
+                    rt.goal = Pose(position=goal)
+                    self.pub_[name].publish(rt)
 
 
         # control jackal

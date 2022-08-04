@@ -97,6 +97,8 @@ class GlobalPlanner{
     bool const_vel_mode_;
     bool carrt_mode_;
     bool mpc_mode_;
+    
+    double lambda_;
 
     RRT rrt;
 
@@ -105,10 +107,10 @@ class GlobalPlanner{
         // set random seed
         srand(time(NULL));
         
-        mcts_mode_ = false;
-        const_vel_mode_ = false;
+        mcts_mode_ = true;
+        const_vel_mode_ = true;
         carrt_mode_ = true;
-        mpc_mode_ = true;
+        mpc_mode_ = false;
 
         // load cost map
         pkg_path_ << ros::package::getPath("social_navigation") << "/";
@@ -142,6 +144,7 @@ class GlobalPlanner{
         has_local_goal_ = false;
         age_ = 0;
         cost_cut_threshold_ = 8.0;
+        lambda_ = 0.0;
 
         for(int i = 0; i < max_depth_ + 1; i++) time_array_.push_back(dt_ * i);
 
@@ -448,7 +451,7 @@ class GlobalPlanner{
                 nnode.cost = return_value.y;
                 nnode.value = nnode.reward;
                 nnode.cvalue = nnode.cost;
-                nnode.weight = exp(nnode.value + alpha_visit_);
+                nnode.weight = exp(nnode.value - lambda_ * nnode.cost + alpha_visit_);
                 nnode.n_visit = 0;
                 nnode.is_leaf = true;
                 nnode.parent = i;
@@ -491,7 +494,7 @@ class GlobalPlanner{
                     nnode.cost = return_value.y;
                     nnode.value = nnode.reward;
                     nnode.cvalue = nnode.cost;
-                    nnode.weight = exp(nnode.value + alpha_visit_);
+                    nnode.weight = exp(nnode.value - lambda_ * nnode.cost + alpha_visit_);
                     nnode.n_visit = 0;
                     nnode.is_leaf = true;
                     nnode.parent = cur_idx;
@@ -548,7 +551,7 @@ class GlobalPlanner{
             tree_[cur_idx].value = (tree_[cur_idx].value * tree_[cur_idx].n_visit + tot_value) / (tree_[cur_idx].n_visit + 1);
             tree_[cur_idx].cvalue = (tree_[cur_idx].cvalue * tree_[cur_idx].n_visit + tot_cost) / (tree_[cur_idx].n_visit + 1);
             tree_[cur_idx].n_visit ++;
-            tree_[cur_idx].weight = exp(tree_[cur_idx].value + alpha_visit_ / tree_[cur_idx].n_visit);
+            tree_[cur_idx].weight = exp(tree_[cur_idx].value - tree_[cur_idx].cvalue * lambda_ + alpha_visit_ / tree_[cur_idx].n_visit);
 
             // update tree
             while(1){
@@ -568,7 +571,7 @@ class GlobalPlanner{
                 tree_[cur_idx].value = tree_[cur_idx].reward + gamma_ * n_value;
                 tree_[cur_idx].cvalue = tree_[cur_idx].cost + gamma_ * n_cost;
                 tree_[cur_idx].n_visit ++;
-                tree_[cur_idx].weight = exp(tree_[cur_idx].value + alpha_visit_ / tree_[cur_idx].n_visit);
+                tree_[cur_idx].weight = exp(tree_[cur_idx].value - lambda_ * tree_[cur_idx].cvalue + alpha_visit_ / tree_[cur_idx].n_visit);
             }
         }
 
