@@ -308,6 +308,7 @@ def pedestrian_controller(peds, goals, jackal=None):
     rt_v = {}
     c1 = 2.0 # for goal
     c2 = 0.2 # for social force
+    c3 = 0.01 # for fluctuation
     actor_name_ = peds.keys()
     for name in actor_name_:
         ped = peds[name]
@@ -362,7 +363,7 @@ def pedestrian_controller(peds, goals, jackal=None):
         # if norm_2d(dir) < 0.01:
         #     continue
         # dir = Point(ppos.x + v * dir.x / norm_2d(dir), ppos.y + v * dir.y / norm_2d(dir), 0.0)
-        dir = Point(r.x + f.x, r.y + f.y, 0.0)
+        dir = Point(r.x + f.x + random.uniform(-1.0,1.0)*c3, r.y + f.y + random.uniform(-1.0,1.0)*c3, 0.0)
         dir_norm = norm_2d(dir)
         dir = Point(dir.x / dir_norm, dir.y / dir_norm, 0.0)
         rt_v[name] = v
