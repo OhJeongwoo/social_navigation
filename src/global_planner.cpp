@@ -107,8 +107,8 @@ class GlobalPlanner{
         // set random seed
         srand(time(NULL));
         
-        mcts_mode_ = true;
-        const_vel_mode_ = true;
+        mcts_mode_ = false;
+        const_vel_mode_ = false;
         carrt_mode_ = true;
         mpc_mode_ = false;
 
@@ -144,7 +144,7 @@ class GlobalPlanner{
         has_local_goal_ = false;
         age_ = 0;
         cost_cut_threshold_ = 8.0;
-        lambda_ = 0.0;
+        lambda_ = 0.2;
 
         for(int i = 0; i < max_depth_ + 1; i++) time_array_.push_back(dt_ * i);
 
@@ -158,9 +158,17 @@ class GlobalPlanner{
         srv_pedestrian_ = nh_.serviceClient<social_navigation::TrajectoryPredict>("/trajectory_predict");
         
         cout << "initialize completed" << endl;
-        if(mcts_mode_) cout << "MCTS Mode" << endl;
-        else cout << "Not MCTS Mode" << endl;
-        if(const_vel_mode_) cout << "Constant Velocity Mode" << endl;
+        if(mpc_mode_) cout << "MPC Mode" << endl;
+        else{
+            if(mcts_mode_) {
+                if(const_vel_mode_) cout << "MCTS-CV Mode" << endl;
+                else cout << "SAN-MCTS Mode" << endl;
+            }
+            else{
+                if(carrt_mode_) cout << "CARRT-REP Mode" << endl;
+                else cout << "RRT-REP Mode" << endl;
+            }
+        }
     }
 
 
@@ -451,7 +459,7 @@ class GlobalPlanner{
                 nnode.cost = return_value.y;
                 nnode.value = nnode.reward;
                 nnode.cvalue = nnode.cost;
-                nnode.weight = exp(nnode.value - lambda_ * nnode.cost + alpha_visit_);
+                nnode.weight = exp(nnode.value - lambda_ * nnode.cost + alpha_visit_ * sqrt(log(n_actions_)));
                 nnode.n_visit = 0;
                 nnode.is_leaf = true;
                 nnode.parent = i;
@@ -494,7 +502,7 @@ class GlobalPlanner{
                     nnode.cost = return_value.y;
                     nnode.value = nnode.reward;
                     nnode.cvalue = nnode.cost;
-                    nnode.weight = exp(nnode.value - lambda_ * nnode.cost + alpha_visit_);
+                    nnode.weight = exp(nnode.value - lambda_ * nnode.cost + alpha_visit_ * sqrt(log(n_actions_)));
                     nnode.n_visit = 0;
                     nnode.is_leaf = true;
                     nnode.parent = cur_idx;
@@ -526,7 +534,7 @@ class GlobalPlanner{
                     pb simul_result = rrt.get_state_reward(robot + actions_[j], robot, goal, peds);
                     point return_value = simul_result.first;
                     bool done = simul_result.second;
-                    sample_list.push_back(return_value.x - return_value.y);
+                    sample_list.push_back(return_value.x - lambda_ * return_value.y);
                     value_list.push_back(return_value.x);
                     cost_list.push_back(return_value.y);
                     done_list.push_back(done);
@@ -551,27 +559,45 @@ class GlobalPlanner{
             tree_[cur_idx].value = (tree_[cur_idx].value * tree_[cur_idx].n_visit + tot_value) / (tree_[cur_idx].n_visit + 1);
             tree_[cur_idx].cvalue = (tree_[cur_idx].cvalue * tree_[cur_idx].n_visit + tot_cost) / (tree_[cur_idx].n_visit + 1);
             tree_[cur_idx].n_visit ++;
-            tree_[cur_idx].weight = exp(tree_[cur_idx].value - tree_[cur_idx].cvalue * lambda_ + alpha_visit_ / tree_[cur_idx].n_visit);
+            int par_idx = tree_[cur_idx].parent;
+            tree_[cur_idx].weight = exp(tree_[cur_idx].value - tree_[cur_idx].cvalue * lambda_ + alpha_visit_ * sqrt(log(tree_[par_idx].n_visit + n_actions_ + 1) / (tree_[cur_idx].n_visit + 1)));
+            // tree_[cur_idx].weight = exp(tree_[cur_idx].value - tree_[cur_idx].cvalue * lambda_ + alpha_visit_ / tree_[cur_idx].n_visit);
 
             // update tree
             while(1){
                 cur_idx = tree_[cur_idx].parent;
                 if(cur_idx == -1) break;
-                double n_value = 0.0;
-                double n_cost = 0.0;
-                double w_sum = 0.0;
+                int par_idx = tree_[cur_idx].parent;
+                // double n_value = 0.0;
+                // double n_cost = 0.0;
+                // double w_sum = 0.0;
+                // for(int i = 0; i < n_actions_; i++){
+                //     int idx = tree_[cur_idx].childs[i];
+                //     w_sum += tree_[idx].weight;
+                //     n_value += tree_[idx].value * tree_[idx].weight;
+                //     n_cost += tree_[idx].cvalue * tree_[idx].weight;
+                // }
+                // n_value /= w_sum;
+                // n_cost /= w_sum;
+                // tree_[cur_idx].value = tree_[cur_idx].reward + gamma_ * n_value;
+                // tree_[cur_idx].cvalue = tree_[cur_idx].cost + gamma_ * n_cost;
+                // tree_[cur_idx].n_visit ++;
+                // tree_[cur_idx].weight = exp(tree_[cur_idx].value - lambda_ * tree_[cur_idx].cvalue + alpha_visit_ / tree_[cur_idx].n_visit);
+                
+
+                double max_value = -1000.0;
+                double max_cost = 0.0;
                 for(int i = 0; i < n_actions_; i++){
                     int idx = tree_[cur_idx].childs[i];
-                    w_sum += tree_[idx].weight;
-                    n_value += tree_[idx].value * tree_[idx].weight;
-                    n_cost += tree_[idx].cvalue * tree_[idx].weight;
+                    if(tree_[idx].value > max_value){
+                        max_value = tree_[idx].value;
+                        max_cost = tree_[idx].cost;
+                    }
                 }
-                n_value /= w_sum;
-                n_cost /= w_sum;
-                tree_[cur_idx].value = tree_[cur_idx].reward + gamma_ * n_value;
-                tree_[cur_idx].cvalue = tree_[cur_idx].cost + gamma_ * n_cost;
+                tree_[cur_idx].value = tree_[cur_idx].reward + gamma_ * max_value;
+                tree_[cur_idx].cvalue = tree_[cur_idx].cost + gamma_ * max_cost;
                 tree_[cur_idx].n_visit ++;
-                tree_[cur_idx].weight = exp(tree_[cur_idx].value - lambda_ * tree_[cur_idx].cvalue + alpha_visit_ / tree_[cur_idx].n_visit);
+                if (par_idx != -1) tree_[cur_idx].weight = exp(tree_[cur_idx].value - lambda_ * tree_[cur_idx].cvalue + alpha_visit_ * sqrt(log(tree_[par_idx].n_visit + n_actions_ + 1) / (tree_[cur_idx].n_visit + 1)));
             }
         }
 
@@ -661,6 +687,7 @@ class GlobalPlanner{
         
     void mpc(int id, int seq){
         cout << "mpc mode" << endl;
+        clock_t  start_time = clock();
         record_num_ ++;
         // fetch current status (lidar point clouds, jackal position)
         // fetch global pedestrian trajectory (time: 0.0 sec ~ 2.0 sec, 0.1 sec interval)
@@ -814,6 +841,7 @@ class GlobalPlanner{
             has_local_goal_ = true;
             local_goal_ = candidates[best_cand];
         }
+        cout << double(clock() - start_time) / CLOCKS_PER_SEC << endl; 
 
         social_navigation::GlobalPlannerResponse rt;
         rt.id = id;
