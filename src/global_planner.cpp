@@ -459,7 +459,7 @@ class GlobalPlanner{
                 nnode.cost = return_value.y;
                 nnode.value = nnode.reward;
                 nnode.cvalue = nnode.cost;
-                nnode.weight = exp(nnode.value - lambda_ * nnode.cost + alpha_visit_ * sqrt(log(n_actions_)));
+                nnode.weight = exp(nnode.value - lambda_ * nnode.cost + alpha_visit_);
                 nnode.n_visit = 0;
                 nnode.is_leaf = true;
                 nnode.parent = i;
@@ -502,7 +502,7 @@ class GlobalPlanner{
                     nnode.cost = return_value.y;
                     nnode.value = nnode.reward;
                     nnode.cvalue = nnode.cost;
-                    nnode.weight = exp(nnode.value - lambda_ * nnode.cost + alpha_visit_ * sqrt(log(n_actions_)));
+                    nnode.weight = exp(nnode.value - lambda_ * nnode.cost + alpha_visit_);
                     nnode.n_visit = 0;
                     nnode.is_leaf = true;
                     nnode.parent = cur_idx;
@@ -559,45 +559,45 @@ class GlobalPlanner{
             tree_[cur_idx].value = (tree_[cur_idx].value * tree_[cur_idx].n_visit + tot_value) / (tree_[cur_idx].n_visit + 1);
             tree_[cur_idx].cvalue = (tree_[cur_idx].cvalue * tree_[cur_idx].n_visit + tot_cost) / (tree_[cur_idx].n_visit + 1);
             tree_[cur_idx].n_visit ++;
-            int par_idx = tree_[cur_idx].parent;
-            tree_[cur_idx].weight = exp(tree_[cur_idx].value - tree_[cur_idx].cvalue * lambda_ + alpha_visit_ * sqrt(log(tree_[par_idx].n_visit + n_actions_ + 1) / (tree_[cur_idx].n_visit + 1)));
-            // tree_[cur_idx].weight = exp(tree_[cur_idx].value - tree_[cur_idx].cvalue * lambda_ + alpha_visit_ / tree_[cur_idx].n_visit);
+            // int par_idx = tree_[cur_idx].parent;
+            // tree_[cur_idx].weight = exp(tree_[cur_idx].value - tree_[cur_idx].cvalue * lambda_ + alpha_visit_ * sqrt(log(tree_[par_idx].n_visit + n_actions_ + 1) / (tree_[cur_idx].n_visit + 1)));
+            tree_[cur_idx].weight = exp(tree_[cur_idx].value - tree_[cur_idx].cvalue * lambda_ + alpha_visit_ / tree_[cur_idx].n_visit);
 
             // update tree
             while(1){
                 cur_idx = tree_[cur_idx].parent;
                 if(cur_idx == -1) break;
-                int par_idx = tree_[cur_idx].parent;
-                // double n_value = 0.0;
-                // double n_cost = 0.0;
-                // double w_sum = 0.0;
-                // for(int i = 0; i < n_actions_; i++){
-                //     int idx = tree_[cur_idx].childs[i];
-                //     w_sum += tree_[idx].weight;
-                //     n_value += tree_[idx].value * tree_[idx].weight;
-                //     n_cost += tree_[idx].cvalue * tree_[idx].weight;
-                // }
-                // n_value /= w_sum;
-                // n_cost /= w_sum;
-                // tree_[cur_idx].value = tree_[cur_idx].reward + gamma_ * n_value;
-                // tree_[cur_idx].cvalue = tree_[cur_idx].cost + gamma_ * n_cost;
-                // tree_[cur_idx].n_visit ++;
-                // tree_[cur_idx].weight = exp(tree_[cur_idx].value - lambda_ * tree_[cur_idx].cvalue + alpha_visit_ / tree_[cur_idx].n_visit);
-                
-
-                double max_value = -1000.0;
-                double max_cost = 0.0;
+                // int par_idx = tree_[cur_idx].parent;
+                double n_value = 0.0;
+                double n_cost = 0.0;
+                double w_sum = 0.0;
                 for(int i = 0; i < n_actions_; i++){
                     int idx = tree_[cur_idx].childs[i];
-                    if(tree_[idx].value > max_value){
-                        max_value = tree_[idx].value;
-                        max_cost = tree_[idx].cost;
-                    }
+                    w_sum += tree_[idx].weight;
+                    n_value += tree_[idx].value * tree_[idx].weight;
+                    n_cost += tree_[idx].cvalue * tree_[idx].weight;
                 }
-                tree_[cur_idx].value = tree_[cur_idx].reward + gamma_ * max_value;
-                tree_[cur_idx].cvalue = tree_[cur_idx].cost + gamma_ * max_cost;
+                n_value /= w_sum;
+                n_cost /= w_sum;
+                tree_[cur_idx].value = tree_[cur_idx].reward + gamma_ * n_value;
+                tree_[cur_idx].cvalue = tree_[cur_idx].cost + gamma_ * n_cost;
                 tree_[cur_idx].n_visit ++;
-                if (par_idx != -1) tree_[cur_idx].weight = exp(tree_[cur_idx].value - lambda_ * tree_[cur_idx].cvalue + alpha_visit_ * sqrt(log(tree_[par_idx].n_visit + n_actions_ + 1) / (tree_[cur_idx].n_visit + 1)));
+                tree_[cur_idx].weight = exp(tree_[cur_idx].value - lambda_ * tree_[cur_idx].cvalue + alpha_visit_ / tree_[cur_idx].n_visit);
+                
+
+                // double max_value = -1000.0;
+                // double max_cost = 0.0;
+                // for(int i = 0; i < n_actions_; i++){
+                //     int idx = tree_[cur_idx].childs[i];
+                //     if(tree_[idx].value > max_value){
+                //         max_value = tree_[idx].value;
+                //         max_cost = tree_[idx].cost;
+                //     }
+                // }
+                // tree_[cur_idx].value = tree_[cur_idx].reward + gamma_ * max_value;
+                // tree_[cur_idx].cvalue = tree_[cur_idx].cost + gamma_ * max_cost;
+                // tree_[cur_idx].n_visit ++;
+                // if (par_idx != -1) tree_[cur_idx].weight = exp(tree_[cur_idx].value - lambda_ * tree_[cur_idx].cvalue + alpha_visit_ * sqrt(log(tree_[par_idx].n_visit + n_actions_ + 1) / (tree_[cur_idx].n_visit + 1)));
             }
         }
 
