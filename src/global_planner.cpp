@@ -101,6 +101,7 @@ class GlobalPlanner{
     double lambda_;
     double kappa_;
     double lr_;
+    double tau_;
 
     RRT rrt;
 
@@ -148,7 +149,8 @@ class GlobalPlanner{
         cost_cut_threshold_ = 8.0;
         lambda_ = 0.2;
         kappa_ = 0.5;
-        lr_ = 0.005;
+        lr_ = 0.0005;
+        tau_ = 2.0;
 
         for(int i = 0; i < max_depth_ + 1; i++) time_array_.push_back(dt_ * i);
 
@@ -253,7 +255,7 @@ class GlobalPlanner{
             N += tree_[c_idx].n_visit;
         }
         double v = sqrt(log(N+n_actions_)/(tree_[idx].n_visit+1));
-        return exp(q + kappa * v);
+        return exp((q + kappa * v) / tau_);
     }
 
     int rsample(int idx, double lambda){
@@ -282,11 +284,11 @@ class GlobalPlanner{
     int softmax_sample(const vector<double>& w){
         int N = w.size();
         double s = 0.0;
-        for(int i = 0; i < N; i++) s += exp(w[i]);
+        for(int i = 0; i < N; i++) s += exp(w[i]/tau_);
         double x = 1.0 * rand() / RAND_MAX;
         double y = 0.0;
         for(int i = 0; i < N; i++){
-            y += exp(w[i]) / s;
+            y += exp(w[i]/tau_) / s;
             if(x < y) return i;
         }
         return N-1;
@@ -443,7 +445,7 @@ class GlobalPlanner{
         }
         if(has_local_goal_) candidates.push_back(local_goal_);
         
-
+        // cout << "tree start" << endl;
         // generate tree root nodes
         int sz = 0;
         vector<double> lambda_list;
@@ -500,6 +502,7 @@ class GlobalPlanner{
         while(1){
             if(double(clock() - init_time) / CLOCKS_PER_SEC > time_limit_) break;
             steps++;
+            // cout << "steps:" <<steps<<endl;
             // select candidate uniformly
             int goal_index = rand() % n_cand_;
             double lambda = lambda_list[goal_index];
@@ -547,7 +550,9 @@ class GlobalPlanner{
             depth_maximum = max<int>(tree_[cur_idx].depth, depth_maximum);
             int cur_depth = tree_[cur_idx].depth;
             bool success = false;
+            // cout << "current depth:" <<cur_depth << endl;
             for(int i = tree_[cur_idx].depth; i < max_depth_; i++){
+                // cout << "depth: " << i << endl;
                 // calculate cost by each action
                 vector<double> sample_list;
                 vector<double> value_list;
@@ -610,8 +615,7 @@ class GlobalPlanner{
                 tree_[cur_idx].n_visit ++;
                 tree_[cur_idx].weight = exp(tree_[cur_idx].value - lambda_ * tree_[cur_idx].cvalue + alpha_visit_ / tree_[cur_idx].n_visit);
                 
-                lambda = lambda + (tree_[goal_index].cvalue - cost_cut_threshold_) * lr_;
-                lambda_list[goal_index] = lambda;
+                
 
                 // double max_value = -1000.0;
                 // double max_cost = 0.0;
@@ -627,8 +631,14 @@ class GlobalPlanner{
                 // tree_[cur_idx].n_visit ++;
                 // if (par_idx != -1) tree_[cur_idx].weight = exp(tree_[cur_idx].value - lambda_ * tree_[cur_idx].cvalue + alpha_visit_ * sqrt(log(tree_[par_idx].n_visit + n_actions_ + 1) / (tree_[cur_idx].n_visit + 1)));
             }
+            // cout << "before lambda" << lambda << endl;
+            // cout <<tree_[goal_index].cvalue - cost_cut_threshold_ << endl;
+            lambda = lambda + (tree_[goal_index].cvalue - cost_cut_threshold_) * lr_;
+            lambda_list[goal_index] = min(max(lambda,0.0),0.5);
+            // cout << "after lambda" << lambda << endl;
         }
 
+        // cout << "finish tree search" <<endl;
         // select the best candidate and publish
         double best_value = -INF;
         int best_cand = -1;
@@ -668,7 +678,7 @@ class GlobalPlanner{
                 best_cand = i;
             }
         }
-        
+        // cout << "select best" <<endl;
         bool estop = false;
         if(best_cand == -1) {
             estop = true;
