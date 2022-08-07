@@ -99,9 +99,6 @@ class GlobalPlanner{
     bool mpc_mode_;
     
     double lambda_;
-    double kappa_;
-    double lr_;
-    double tau_;
 
     RRT rrt;
 
@@ -148,9 +145,6 @@ class GlobalPlanner{
         age_ = 0;
         cost_cut_threshold_ = 8.0;
         lambda_ = 0.2;
-        kappa_ = 0.5;
-        lr_ = 0.0005;
-        tau_ = 2.0;
 
         for(int i = 0; i < max_depth_ + 1; i++) time_array_.push_back(dt_ * i);
 
@@ -245,33 +239,16 @@ class GlobalPlanner{
 
     }
 
-    double get_weight(int idx, double kappa, double lambda){
-        if(tree_[idx].parent == -1) return 0.0;
-        int par_idx = tree_[idx].parent;
-        double q = tree_[idx].value - lambda * tree_[idx].cvalue;
-        int N = 0;
-        for(int i =0;i<n_actions_;i++){
-            int c_idx = tree_[par_idx].childs[i];
-            N += tree_[c_idx].n_visit;
-        }
-        double v = sqrt(log(N+n_actions_)/(tree_[idx].n_visit+1));
-        return exp((q + kappa * v) / tau_);
-    }
-
-    int rsample(int idx, double lambda){
+    int rsample(int idx){
         double sum = 0.0;
-        vector<double> weight_list;
         for(int i : tree_[idx].childs){
-            // sum += tree_[i].weight;
-            double w =get_weight(i, kappa_, lambda); 
-            sum += w;
-            weight_list.push_back(w);
+            sum += tree_[i].weight;
         }
         double x = 1.0 * rand() / RAND_MAX;
         double y = 0.0;
         int rt = -1;
         for(int i = 0; i < tree_[idx].childs.size(); i++){
-            y += weight_list[i] / sum;
+            y += tree_[tree_[idx].childs[i]].weight / sum;
             if(x < y) {
                 rt = i;
                 break;
@@ -284,11 +261,11 @@ class GlobalPlanner{
     int softmax_sample(const vector<double>& w){
         int N = w.size();
         double s = 0.0;
-        for(int i = 0; i < N; i++) s += exp(w[i]/tau_);
+        for(int i = 0; i < N; i++) s += exp(w[i]);
         double x = 1.0 * rand() / RAND_MAX;
         double y = 0.0;
         for(int i = 0; i < N; i++){
-            y += exp(w[i]/tau_) / s;
+            y += exp(w[i]) / s;
             if(x < y) return i;
         }
         return N-1;
@@ -445,11 +422,9 @@ class GlobalPlanner{
         }
         if(has_local_goal_) candidates.push_back(local_goal_);
         
-        // cout << "tree start" << endl;
+
         // generate tree root nodes
         int sz = 0;
-        vector<double> lambda_list;
-        for(int i =0;i<n_cand_;i++) lambda_list.push_back(lambda_);
         for(int i = 0; i < n_cand_; i++){
             Tnode nnode = Tnode();
             nnode.jackal = jackal;
@@ -502,16 +477,14 @@ class GlobalPlanner{
         while(1){
             if(double(clock() - init_time) / CLOCKS_PER_SEC > time_limit_) break;
             steps++;
-            // cout << "steps:" <<steps<<endl;
             // select candidate uniformly
             int goal_index = rand() % n_cand_;
-            double lambda = lambda_list[goal_index];
             
             // traverse until leaf node
             int cur_idx = goal_index;
             while(1){
                 if(tree_[cur_idx].is_leaf) break;
-                cur_idx = tree_[cur_idx].childs[rsample(cur_idx, lambda)];
+                cur_idx = tree_[cur_idx].childs[rsample(cur_idx)];
             }
 
             // if the visit count is over threshold, expand tree and select leaf node
@@ -538,7 +511,7 @@ class GlobalPlanner{
                     sz++;
                 }
                 tree_[cur_idx].is_leaf = false;
-                cur_idx = tree_[cur_idx].childs[rsample(cur_idx, lambda)];
+                cur_idx = tree_[cur_idx].childs[rsample(cur_idx)];
             }
 
             double tot_value = tree_[cur_idx].reward;
@@ -550,9 +523,7 @@ class GlobalPlanner{
             depth_maximum = max<int>(tree_[cur_idx].depth, depth_maximum);
             int cur_depth = tree_[cur_idx].depth;
             bool success = false;
-            // cout << "current depth:" <<cur_depth << endl;
             for(int i = tree_[cur_idx].depth; i < max_depth_; i++){
-                // cout << "depth: " << i << endl;
                 // calculate cost by each action
                 vector<double> sample_list;
                 vector<double> value_list;
@@ -563,7 +534,7 @@ class GlobalPlanner{
                     pb simul_result = rrt.get_state_reward(robot + actions_[j], robot, goal, peds);
                     point return_value = simul_result.first;
                     bool done = simul_result.second;
-                    sample_list.push_back(return_value.x - lambda * return_value.y);
+                    sample_list.push_back(return_value.x - lambda_ * return_value.y);
                     value_list.push_back(return_value.x);
                     cost_list.push_back(return_value.y);
                     done_list.push_back(done);
@@ -602,11 +573,9 @@ class GlobalPlanner{
                 double w_sum = 0.0;
                 for(int i = 0; i < n_actions_; i++){
                     int idx = tree_[cur_idx].childs[i];
-                    // w_sum += tree_[idx].weight;
-                    double w = get_weight(idx, 0.0, lambda);
-                    w_sum += w;
-                    n_value += tree_[idx].value * w;
-                    n_cost += tree_[idx].cvalue * w;
+                    w_sum += tree_[idx].weight;
+                    n_value += tree_[idx].value * tree_[idx].weight;
+                    n_cost += tree_[idx].cvalue * tree_[idx].weight;
                 }
                 n_value /= w_sum;
                 n_cost /= w_sum;
@@ -614,7 +583,6 @@ class GlobalPlanner{
                 tree_[cur_idx].cvalue = tree_[cur_idx].cost + gamma_ * n_cost;
                 tree_[cur_idx].n_visit ++;
                 tree_[cur_idx].weight = exp(tree_[cur_idx].value - lambda_ * tree_[cur_idx].cvalue + alpha_visit_ / tree_[cur_idx].n_visit);
-                
                 
 
                 // double max_value = -1000.0;
@@ -631,14 +599,8 @@ class GlobalPlanner{
                 // tree_[cur_idx].n_visit ++;
                 // if (par_idx != -1) tree_[cur_idx].weight = exp(tree_[cur_idx].value - lambda_ * tree_[cur_idx].cvalue + alpha_visit_ * sqrt(log(tree_[par_idx].n_visit + n_actions_ + 1) / (tree_[cur_idx].n_visit + 1)));
             }
-            // cout << "before lambda" << lambda << endl;
-            // cout <<tree_[goal_index].cvalue - cost_cut_threshold_ << endl;
-            lambda = lambda + (tree_[goal_index].cvalue - cost_cut_threshold_) * lr_;
-            lambda_list[goal_index] = min(max(lambda,0.0),0.5);
-            // cout << "after lambda" << lambda << endl;
         }
 
-        // cout << "finish tree search" <<endl;
         // select the best candidate and publish
         double best_value = -INF;
         int best_cand = -1;
@@ -678,7 +640,7 @@ class GlobalPlanner{
                 best_cand = i;
             }
         }
-        // cout << "select best" <<endl;
+        
         bool estop = false;
         if(best_cand == -1) {
             estop = true;
