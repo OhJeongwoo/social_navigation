@@ -17,3 +17,11 @@ initial, scenario = joblib.load('scenario_x.gz')
 v = scenario['v']
 loc = scenario['loc']
 dx = scenario['dx']
+
+0 cross
+1 reverse
+2 follow
+3 overtake
+4 follow
+5 block
+6 wrapup
