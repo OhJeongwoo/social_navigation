@@ -1,9 +1,10 @@
 scenario_x.gz can be load with joblib
 joblib.load('scenario_x.gz')
 
-and is tuple (initial, scenario)
+and is tuple (initial, goal, scenario)
 
 initial is initial jackal [x, y] in world coordinate
+goal is jackal goal [x, y] in world coordinate
 
 scenario is list of actor (pedestrian),
 actor is dictionary
