@@ -14,14 +14,14 @@ import torch.nn
 from utils import *
 from replay_buffer import ReplayBuffer
 from gazebo_master_old import PedSim
-import wandb
+# import wandb
 
 PROJECT_PATH = os.path.abspath("..")
 POLICY_PATH = PROJECT_PATH + "/policy/"
 YAML_PATH = PROJECT_PATH + "/yaml/"
 
-wandb.init(project='starlab5')
-wandb.run.name = 'sac_medium'
+# wandb.init(project='starlab5')
+# wandb.run.name = 'sac_medium'
 
 if __name__ == "__main__":
     rospy.init_node("sac")
@@ -79,8 +79,9 @@ if __name__ == "__main__":
     # create model and replay buffer
     ac_ = SACCore(exp_obs_dim_, exp_act_dim_, hidden_layers_, learning_rate_, act_limit_, device_, options_).to(device_)
     ac_tar_ = deepcopy(ac_)
-    ac_weights = torch.load(POLICY_PATH + exp_name_ + "/sac_v4_072.pt")
-    ac_.load_state_dict(ac_weights.state_dict(), strict=False)
+    # ac_weights = torch.load(POLICY_PATH + exp_name_ + "/sac_v4_072.pt")
+    # ac_.load_state_dict(ac_weights.state_dict(), strict=False)
+
     replay_buffer_ = ReplayBuffer(exp_obs_dim_, exp_act_dim_, replay_size_, device_)
 
     # target network doesn't have gradient
@@ -222,7 +223,8 @@ if __name__ == "__main__":
             a = env_.get_random_action()
         # Step the env
         
-        o2, r, d, info = env_.step(a)
+        # o2, r, d, info = env_.step(a)
+        o2, r, d, info = env_.step([1.5, 0.0])
     
         ep_ret += r
         ep_cost += info['cost']['total']
@@ -254,9 +256,9 @@ if __name__ == "__main__":
             log_infos['time steps']  = t
             log_infos['reward'] = np.mean(score_logger[-3:])
             log_infos['cost'] = np.mean(cost_logger[-3:])
-            wandb.log(log_infos)
+            # wandb.log(log_infos)
             print('updated')
 
-        if (t+1) % steps_per_epoch_ == 0:
-            epoch = (t+1) // steps_per_epoch_
-            torch.save(ac_, POLICY_PATH + exp_name_ + "/sac_v4_" + str(epoch).zfill(3)+".pt")
+        # if (t+1) % steps_per_epoch_ == 0:
+        #     epoch = (t+1) // steps_per_epoch_
+        #     torch.save(ac_, POLICY_PATH + exp_name_ + "/sac_v4_" + str(epoch).zfill(3)+".pt")

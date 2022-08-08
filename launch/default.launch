@@ -47,4 +47,6 @@
 
     <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model jackal -x $(arg robot_x) -y $(arg robot_y) -z $(arg robot_z) -R 0 -P 0 -Y $(arg robot_yaw)" />
     <include file="$(find jackal_control)/launch/control.launch" />
+
+     <!--node pkg="social_navigation" type="global_planner" name="mcts" output="screen"/-->
 </launch>

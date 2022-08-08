@@ -9,6 +9,7 @@
 #include <queue>
 #include "Kernel.h"
 #include "Transform.h"
+#include "geometry_msgs/Point.h"
 
 #include "cv_bridge/cv_bridge.h"
 #include "opencv2/opencv.hpp"
@@ -42,6 +43,7 @@ class RRT{
     double lambda_ped_;
     double lambda_static_;
     double lambda_dist_;
+    double MAX_COST_;
 
     double slack_cost_;
 
@@ -72,12 +74,14 @@ class RRT{
     void make_local_map(const vector<point>& points);
     void drawing(const vector<node>& tree);
     void draw_diverse_path(const vector<vector<point>>& trees, int best_tree);
+    void draw_diverse_result(const vector<vector<point>>& trees);
     void draw_mcts_result(const vector<vector<point>>& trees, int best_tree, point global_goal, vector<vector<point>>& peds);
+    void draw_global_result(int seq, point jackal, point goal, int best_cand, const vector<point>& candidates, vector<vector<point>>& peds, vector<geometry_msgs::Point>& global_path, vector<vector<double>>& scores);
     bool is_collision(point p, point q);
     double get_cost(point p);
     double get_collision_cost(point p);
     double get_edge_cost(point p, point q);
-    double get_state_reward(point robot, point prev_robot, point goal, const vector<point>& peds);
+    pb get_state_reward(point robot, point prev_robot, point goal, const vector<point>& peds);
     vector<point> rrt(point root, point goal);
     vector<point> rrt_star(point root, point goal);
     vector<point> carrt(point root, point goal);

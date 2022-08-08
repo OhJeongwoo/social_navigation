@@ -1,5 +1,5 @@
 import os
-
+import rospkg
 import numpy as np
 from matplotlib.pyplot import get
 from lxml import etree
@@ -24,6 +24,42 @@ action_list = [[0.0, -1], [0.0, -0.5], [0.0, 0.0], [0.0, 0.5], [0.0, 1.0]
              , [0.5, -1], [0.5, -0.5], [0.5, 0.0], [0.5, 0.5], [0.5, 1.0]
              , [1.0, -1], [1.0, -0.5], [1.0, 0.0], [1.0, 0.5], [1.0, 1.0]]
 STOP = 2
+
+
+sx_ = 0.05
+sy_ = -0.05
+cx_ = -59.4
+cy_ = 30.0
+
+
+def xy2pixel(x,y):
+    px = int((y-cy_)/sy_)
+    py = int((x-cx_)/sx_)
+    return px, py
+
+
+# # load costmap
+COSTMAP_PATH = rospkg.RosPack().get_path("social_navigation") + "/config/costmap_301_1f.png"
+import imageio
+from PIL import Image
+
+COSTMAP = imageio.imread(COSTMAP_PATH)
+print(COSTMAP.shape)
+print(COSTMAP[1283][2555])
+def map_gradient(x, y):
+    px, py = xy2pixel(x,y)
+    g = COSTMAP[px][py] / 255.0
+    g1 = COSTMAP[px+2][py] / 255.0
+    g2 = COSTMAP[px-2][py] / 255.0
+    g3 = COSTMAP[px][py+2] / 255.0
+    g4 = COSTMAP[px][py-2] / 255.0
+    # print(g1, g2, g3, g4)
+    dCpx = (g1-g2)/4
+    dCx = dCpx / sy_ * math.exp(g)
+    dCpy = (g3-g4)/4
+    dCy = dCpy / sx_ * math.exp(g)
+    # print(dCx, dCy)
+    return [dCx, dCy]
 
 def check_path(path_name):
     if not os.path.exists(path_name):
@@ -272,6 +308,7 @@ def pedestrian_controller(peds, goals, jackal=None):
     rt_v = {}
     c1 = 2.0 # for goal
     c2 = 0.2 # for social force
+    c3 = 0.01 # for fluctuation
     actor_name_ = peds.keys()
     for name in actor_name_:
         ped = peds[name]
@@ -304,8 +341,8 @@ def pedestrian_controller(peds, goals, jackal=None):
             nu = norm_2d(u)
             if nu < 0.1:
                 continue
-            f.x += u.x / nu * c * c2
-            f.y += u.y / nu * c * c2
+            f.x += 3.0*u.x / nu * c * c2
+            f.y += 3.0*u.y / nu * c * c2
         d = L2dist(ppos, jackal)
         if d < 3.0:
             c = 3.0 - d
@@ -314,6 +351,10 @@ def pedestrian_controller(peds, goals, jackal=None):
             if nu > 0.01:
                 f.x += 3.0 * u.x / nu * c * c2
                 f.y += 3.0 * u.y / nu * c * c2
+        # map gradient
+        dg = map_gradient(ppos.x, ppos.y)
+        f.x += 1.0 * dg[0]
+        f.y += 1.0 * dg[1]
         if flag and (f.x > 0.1 or f.y > 0.1):
             v = 0.2
             f.x = 0.0
@@ -322,7 +363,7 @@ def pedestrian_controller(peds, goals, jackal=None):
         # if norm_2d(dir) < 0.01:
         #     continue
         # dir = Point(ppos.x + v * dir.x / norm_2d(dir), ppos.y + v * dir.y / norm_2d(dir), 0.0)
-        dir = Point(r.x + f.x, r.y + f.y, 0.0)
+        dir = Point(r.x + f.x + random.uniform(-1.0,1.0)*c3, r.y + f.y + random.uniform(-1.0,1.0)*c3, 0.0)
         dir_norm = norm_2d(dir)
         dir = Point(dir.x / dir_norm, dir.y / dir_norm, 0.0)
         rt_v[name] = v
