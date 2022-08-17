@@ -4,7 +4,9 @@ from model import YNet
 import rospy
 import bisect
 import math
-from geometry_msgs.msg import Point
+import tf2_ros
+import tf2_geometry_msgs
+from geometry_msgs.msg import PointStamped, Point
 from zed_interfaces.msg import ObjectsStamped, Object
 from social_navigation.msg import Trajectory
 from social_navigation.srv import TrajectoryPredict, TrajectoryPredictResponse
@@ -104,12 +106,13 @@ def trajectory_predict(req):
 
 
 def is_tracked(objects, pedestrian_id):
-    for id, object in enumerate(objects):
-        if object.label_id != 0:
+    for object in objects:
+        if object.label != "Person":
             continue
-        if id == pedestrian_id and object.tracking_state != 0:
+        if object.label_id == pedestrian_id and object.tracking_state != 0:
             return True
     return False
+
 
 def callback(msg):
     # msg : ObjectsStamped
@@ -117,16 +120,28 @@ def callback(msg):
     past_trajs = PAST_TRAJS.copy()
     # remove untracked trajectories
     past_trajs = [traj for traj in past_trajs if is_tracked(msg.objects, traj.pedestrian_id)]
-    for id, object in enumerate(msg.objects):
-        if object.label_id != 0:
+    frame_id = msg.header.frame_id
+    for object in msg.objects:
+        if object.label != "Person":
+            print("not Person")
             continue
         point = Point()
         point.x = object.position[0]
         point.y = object.position[1]
         point.z = object.position[2]
+        if frame_id[:3] == "zed":
+            try:
+                transform = tfBuffer.lookup_transform('map', frame_id, msg.header.stamp)
+            except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
+                print("[ynet] tf lookup exception")
+                return 0
+            point_stamped = PointStamped()
+            point_stamped.point = point
+            point_stamped = tf2_geometry_msgs.do_transform_point(point_stamped, transform)
+            point = point_stamped.point
         is_new = True
         for traj in past_trajs:
-            if traj.pedestrian_id == id and object.tracking_state != 0:
+            if traj.pedestrian_id == object.label_id and object.tracking_state != 0:
                 is_new = False
                 last_point = traj.trajectory[-1]
                 last_time = traj.times[-1]
@@ -139,7 +154,7 @@ def callback(msg):
                 break
         if is_new:
             traj = Trajectory()
-            traj.pedestrian_id = id
+            traj.pedestrian_id = object.label_id
             traj.times = [msg.header.stamp]
             traj.trajectory = [point]
             past_trajs.append(traj)
@@ -202,6 +217,8 @@ def loop():
 if __name__ == "__main__":
     rospy.init_node("ynet")
     rospy.Service('trajectory_predict', TrajectoryPredict, trajectory_predict)
-    rospy.Subscriber('objects', ObjectsStamped, callback, queue_size=2)
+    rospy.Subscriber('/zed2i/zed_node/obj_det/objects', ObjectsStamped, callback, queue_size=2)
+    tfBuffer = tf2_ros.Buffer()
+    tfListener = tf2_ros.TransformListener(tfBuffer)
     loop()
     rospy.spin()

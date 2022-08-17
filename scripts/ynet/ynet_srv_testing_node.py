@@ -18,6 +18,10 @@ if __name__ == "__main__":
             sp = rospy.ServiceProxy('trajectory_predict', TrajectoryPredict)
             res = sp(tp)
             print("Success", (rospy.Time.now()-t0).to_sec())
+            try:
+                print(res.trajectories)
+            except:
+                print("exception")
         except rospy.ServiceException as e:
             print("Service call failed: %s" % e)
         rate.sleep()

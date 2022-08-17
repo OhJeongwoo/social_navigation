@@ -25,12 +25,16 @@ find_package(catkin REQUIRED COMPONENTS
   tf2
 )
 # find_package(gazebo 11 REQUIRED)
-find_package(gazebo 9 REQUIRED)
+# find_package(gazebo 9 REQUIRED)
+find_package(gazebo REQUIRED)
 #find_package(ignition-msgs1 REQUIRED)
 # find_package(OpenCV 4 REQUIRED)
-find_package(OpenCV 3 REQUIRED)
+# find_package(OpenCV 3 REQUIRED)
+find_package(OpenCV REQUIRED)
 find_package(Eigen3)
 find_package(PCL 1.8 REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 
 add_message_files(
   DIRECTORY msg
