@@ -5,7 +5,6 @@ import rospy
 import bisect
 import math
 import tf2_ros
-import tf2_geometry_msgs
 from geometry_msgs.msg import PointStamped, Point
 from zed_interfaces.msg import ObjectsStamped, Object
 from social_navigation.msg import Trajectory
@@ -144,10 +143,17 @@ def callback(msg):
             except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
                 print("[ynet] tf lookup exception")
                 return 0
-            point_stamped = PointStamped()
-            point_stamped.point = point
-            point_stamped = tf2_geometry_msgs.do_transform_point(point_stamped, transform)
-            point = point_stamped.point
+            x0 = transform.transform.translation.x
+            y0 = transform.transform.translation.y
+            z0 = transform.transform.translation.z
+            qz = transform.transform.rotation.z
+            qw = transform.transform.rotation.w
+            yaw = math.atan2(2*qw*qz, 1-2*qz*qz)
+
+            x0 += point.x * math.cos(yaw) - point.y * math.sin(yaw)
+            y0 += point.x * math.sin(yaw) + point.y * math.cos(yaw)
+            z0 += point.z
+            point.x, point.y, point.z = x0, y0, z0
         is_new = True
         for traj in past_trajs:
             if traj.pedestrian_id == object.label_id and object.tracking_state != 0:
