@@ -10,6 +10,7 @@ from geometry_msgs.msg import PointStamped, Point
 from zed_interfaces.msg import ObjectsStamped, Object
 from social_navigation.msg import Trajectory
 from social_navigation.srv import TrajectoryPredict, TrajectoryPredictResponse
+import cv2
 
 CONFIG_FILE_PATH = 'config/sdd_trajnet.yaml'  # yaml config file containing all the hyperparameters
 DATA_FILE_PATH = 'data/ped_traj_sample.json'
@@ -102,6 +103,14 @@ def trajectory_predict(req):
     res.times = req.times
     res.velocity = [speed(traj.trajectory, new_ts) for traj in trajectories]
     res.trajectories = trajectories
+
+    # image = cv2.imread(IMAGE_FILE_PATH, cv2.IMREAD_COLOR)
+    # for traj in trajectories:
+    #     for point in traj.trajectory:
+    #         x = point.x / sx_ + 1278
+    #         y = point.y / sy_ + 642
+    #         cv2.circle(image, (int(x), int(y)), 2, (0, 0, 255), -1)
+    # cv2.imwrite('predicted.png', image)
     return res
 
 
