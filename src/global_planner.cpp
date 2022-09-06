@@ -143,7 +143,7 @@ class GlobalPlanner{
         record_num_ = 0;
         has_local_goal_ = false;
         age_ = 0;
-        cost_cut_threshold_ = 8.0;
+        cost_cut_threshold_ = 10.0;
         lambda_ = 0.2;
 
         for(int i = 0; i < max_depth_ + 1; i++) time_array_.push_back(dt_ * i);
@@ -553,8 +553,28 @@ class GlobalPlanner{
                     break;
                 }
             }
-            if(dist(robot, goal) > distance_threshold_) tot_value += -1.0 * dist(robot, goal) * discounted_factor;
-            if(!success && cur_depth < max_depth_) tot_cost += rrt.MAX_COST_ * discounted_factor;
+            if(!success){
+                cout << "failed" << endl;
+                if(cur_depth < max_depth_) tot_cost += rrt.MAX_COST_ * discounted_factor / (1.0 - gamma_);
+                else{
+                    double avg_d = (dist(jackal, goal) - dist(robot, goal)) / max_depth_;
+                    double avg_c = tot_cost / (1-discounted_factor) * (1-gamma_);
+                    if(avg_d > 0.1){
+                        double t_prime = dist(robot, goal) / avg_d;
+                        tot_value += avg_d * discounted_factor * (1.0 - pow(gamma_, t_prime)) / (1.0 - gamma_);
+                        tot_cost += avg_c * discounted_factor * (1.0 - pow(gamma_, t_prime)) / (1.0 - gamma_);
+                    }
+                    else{
+                        tot_value += avg_d * discounted_factor / (1.0 - gamma_);
+                        tot_cost += avg_c * discounted_factor / (1.0 - gamma_);
+                    }
+                }
+                cout << tot_value << endl;
+                cout << tot_cost << endl;
+            }
+            // previous version
+            // if(dist(robot, goal) > distance_threshold_) tot_value += -1.0 * dist(robot, goal) * discounted_factor;
+            // if(!success && cur_depth < max_depth_) tot_cost += rrt.MAX_COST_ * discounted_factor;
             // update leaf node info
             tree_[cur_idx].value = (tree_[cur_idx].value * tree_[cur_idx].n_visit + tot_value) / (tree_[cur_idx].n_visit + 1);
             tree_[cur_idx].cvalue = (tree_[cur_idx].cvalue * tree_[cur_idx].n_visit + tot_cost) / (tree_[cur_idx].n_visit + 1);
