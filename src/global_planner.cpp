@@ -143,7 +143,8 @@ class GlobalPlanner{
         record_num_ = 0;
         has_local_goal_ = false;
         age_ = 0;
-        cost_cut_threshold_ = 10.0;
+        cost_cut_threshold_ = 2.0;
+        cout << cost_cut_threshold_ << endl;
         lambda_ = 0.2;
 
         for(int i = 0; i < max_depth_ + 1; i++) time_array_.push_back(dt_ * i);
@@ -474,6 +475,7 @@ class GlobalPlanner{
         clock_t  init_time = clock();
         int steps = 0;
         int depth_maximum = 0;
+        // cout << "start tree search" << endl;
         while(1){
             if(double(clock() - init_time) / CLOCKS_PER_SEC > time_limit_) break;
             steps++;
@@ -554,7 +556,7 @@ class GlobalPlanner{
                 }
             }
             if(!success){
-                cout << "failed" << endl;
+                // cout << "failed" << endl;
                 if(cur_depth < max_depth_) tot_cost += rrt.MAX_COST_ * discounted_factor / (1.0 - gamma_);
                 else{
                     double avg_d = (dist(jackal, goal) - dist(robot, goal)) / max_depth_;
@@ -569,8 +571,8 @@ class GlobalPlanner{
                         tot_cost += avg_c * discounted_factor / (1.0 - gamma_);
                     }
                 }
-                cout << tot_value << endl;
-                cout << tot_cost << endl;
+                // cout << tot_value << endl;
+                // cout << tot_cost << endl;
             }
             // previous version
             // if(dist(robot, goal) > distance_threshold_) tot_value += -1.0 * dist(robot, goal) * discounted_factor;
@@ -620,7 +622,7 @@ class GlobalPlanner{
                 // if (par_idx != -1) tree_[cur_idx].weight = exp(tree_[cur_idx].value - lambda_ * tree_[cur_idx].cvalue + alpha_visit_ * sqrt(log(tree_[par_idx].n_visit + n_actions_ + 1) / (tree_[cur_idx].n_visit + 1)));
             }
         }
-
+        // cout << "tree search" << endl;
         // select the best candidate and publish
         double best_value = -INF;
         int best_cand = -1;
@@ -634,7 +636,7 @@ class GlobalPlanner{
             double global_value = 0.0;
             if (tree_cost > cost_cut_threshold_) is_dangerous = true;
             if (has_local_goal_) {
-                local_value = -0.2 * dist(tree_[i].goal, local_goal_);
+                local_value = -0.5 * dist(tree_[i].goal, local_goal_);
                 if(dist(tree_[i].goal, jackal) < 1.0) is_dangerous = true;
             }
             if (global_path.size() > 0){
@@ -660,7 +662,7 @@ class GlobalPlanner{
                 best_cand = i;
             }
         }
-        
+        // cout << "select candidate" << endl;
         bool estop = false;
         if(best_cand == -1) {
             estop = true;
@@ -676,7 +678,7 @@ class GlobalPlanner{
             has_local_goal_ = true;
             age_ = 0;
         }
-        // rrt.draw_global_result(record_num_, jackal, goal, best_cand, candidates, ped_goals, global_path, scores);
+        rrt.draw_global_result(record_num_, jackal, goal, best_cand, candidates, ped_goals, global_path, scores);
         
         social_navigation::GlobalPlannerResponse rt;
         rt.id = id;
