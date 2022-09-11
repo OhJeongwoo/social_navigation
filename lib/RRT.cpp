@@ -33,8 +33,8 @@ void RRT::initialize(){
     kernel_path_ = Kernel(M_path_, alpha_path_, kernel_path_half_);
     kernel_ped_ = Kernel(M_ped_, alpha_ped_, kernel_ped_half_);
     cost_path_ = 3.0;
-    lambda_ped_ = 3.0;
-    lambda_static_ = 0.5;
+    lambda_ped_ = 0.3;
+    lambda_static_ = 0.05;
     lambda_dist_ = 2.0;
     MAX_COST_ = lambda_ped_ + lambda_static_;
 
@@ -247,7 +247,7 @@ void RRT::draw_global_result(int seq, point jackal, point global_goal, int best_
     int idx = 0;
     for(int i = 0; i < candidates.size(); i++){
         pixel p = transform_.xy2pixel(candidates[i]);
-        if(i==best_cand) cv::circle(background,  Point(p.y, p.x), 5.0, Scalar(0,0,0), -1);
+        if(i==best_cand) cv::circle(background,  Point(p.y, p.x), 5.0, Scalar(255,255,0), -1);
         else cv::circle(background,  Point(p.y, p.x), 5.0, Scalar(0,255,255), -1);
         cv::putText(background, to_string(i+1), Point(p.y, p.x), cv::FONT_HERSHEY_DUPLEX, 0.3, CV_RGB(0,0,0), 1);
     }

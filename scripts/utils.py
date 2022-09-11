@@ -278,7 +278,7 @@ def get_similar_action(a):
 def make_group(N, max_n=3):
     rt = []
     while N > 0:
-        n = min(random.randint(1, max_n), N)
+        n = min(2, N)
         rt.append(n)
         N -= n
     return rt
@@ -386,4 +386,56 @@ def pedestrian_controller(peds, goals, jackal=None):
     #             continue
     #         d = L2dist(p_pos, q['pos'])
 
-
+def apply_social_force(cmd_list, jackal):
+    rt = []
+    c1 = 2.0 # for goal
+    c2 = 0.2 # for social force
+    c3 = 0.01 # for fluctuation
+    N = len(cmd_list)
+    for i in range(N):
+        cmd = cmd_list[i]
+        name = cmd['name']
+        pose = cmd['pose']
+        goal = cmd['goal']
+        v = cmd['speed']
+        r = Point(goal.x - pose.x, goal.y - pose.y, 0.0)
+        nr = norm_2d(r)
+        if nr < 0.1:
+            continue
+        flag = False
+        r = Point(r.x / nr * c1, r.y / nr * c1, 0.0)
+        v = max(min(v, nr), 0.3)
+        f = Point(0, 0, 0)
+        for j in range(N):
+            if i == j:
+                continue
+            cmd2 = cmd_list[j]
+            q = cmd2['pose']
+            d = L2dist(pose, q)
+            if d > 3.0:
+                continue
+            c = 3.0 - d
+            u = Point(pose.x - q.x, pose.y - q.y, 0.0)
+            nu = norm_2d(u)
+            if nu < 0.1:
+                continue
+            f.x += 3.0 * u.x / nu * c * c2
+            f.y += 3.0 * u.y / nu * c * c2
+            
+        d = L2dist(pose, jackal)
+        if d < 3.0:
+            c = 3.0 - d
+            u = Point(pose.x - jackal.x, pose.y - jackal.y, 0.0)
+            nu = norm_2d(u)
+            if nu > 0.01:
+                f.x += 3.0 * u.x / nu * c * c2
+                f.y += 3.0 * u.y / nu * c * c2
+        if flag and (f.x > 0.1 or f.y > 0.1):
+            v = 0.2
+            f.x = 0.0
+            f.y = 0.0
+        dir = Point(r.x + f.x + random.uniform(-1.0,1.0)*c3, r.y + f.y + random.uniform(-1.0,1.0)*c3, 0.0)
+        dir_norm = norm_2d(dir)
+        dir = Point(dir.x / dir_norm, dir.y / dir_norm, 0.0)
+        rt.append({'name':name, 'pose': pose, 'goal':Point(pose.x + dir.x * v, pose.y + dir.y * v, 0.0), 'speed':v})
+    return rt
