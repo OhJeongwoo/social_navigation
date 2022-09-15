@@ -48,6 +48,7 @@ void RRT::initialize(){
     goal_threshold_ = 1.0;
     slack_cost_ = 0.0;
     time_limit_ = 0.2;
+    n_simul_ = 0;
 }
 
 
@@ -56,6 +57,7 @@ void RRT::reset(){
     cost_map_ = imread(cost_map_file_, CV_8UC1);
     // local_map_ = imread(cost_map_file_, CV_8UC1);
     local_map_ = Mat(img_w_, img_h_, CV_8UC1, Scalar(0));
+    n_simul_ = 0;
     // Mat background = cost_map_;
     // Mat background2 = local_map_;
     // string save_path = "/home/jeongwoooh/catkin_social/src/social_navigation/test_costmap.png";

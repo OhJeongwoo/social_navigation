@@ -102,6 +102,13 @@ class GlobalPlanner{
 
     RRT rrt;
 
+    int depth_sum_;
+    int nn_depth_sum_;
+    int simul_sum_;
+    int nn_simul_sum_;
+    double inference_sum_;
+    int n_run_;
+
     public:
     GlobalPlanner(){
         // set random seed
@@ -143,9 +150,16 @@ class GlobalPlanner{
         record_num_ = 0;
         has_local_goal_ = false;
         age_ = 0;
-        cost_cut_threshold_ = 2.0;
+        cost_cut_threshold_ = 5.0;
         cout << cost_cut_threshold_ << endl;
         lambda_ = 0.2;
+
+        depth_sum_ = 0;
+        nn_depth_sum_ = 0;
+        simul_sum_ = 0;
+        nn_simul_sum_ = 0;
+        inference_sum_ = 0.0;
+        n_run_ = 0;
 
         for(int i = 0; i < max_depth_ + 1; i++) time_array_.push_back(dt_ * i);
 
@@ -472,7 +486,13 @@ class GlobalPlanner{
         }
 
 
-        clock_t  init_time = clock();
+        clock_t init_time = clock();
+        clock_t last_time = clock();
+        double nn_inference_time = 2.2 * 1e-4;
+        double virtual_time = 0.0;
+        double simul_inference_time = 0.0;
+        int nn_simul = 0;
+        int nn_depth_maximum = 0;
         int steps = 0;
         int depth_maximum = 0;
         // cout << "start tree search" << endl;
@@ -496,7 +516,16 @@ class GlobalPlanner{
                     nnode.jackal = tree_[cur_idx].jackal + actions_[i];
                     nnode.goal = tree_[cur_idx].goal;
                     nnode.depth = tree_[cur_idx].depth + 1;
+                    // virtual_time += nn_inference_time + double(clock() - last_time) / CLOCKS_PER_SEC;
+                    // if(virtual_time < time_limit_) {
+                    //     nn_simul ++;
+                    //     nn_depth_maximum = depth_maximum;
+                    // }
+                    // clock_t check_time = clock();
                     nnode.peds = get_next_pedestrians(jackal, ped_goals[nnode.depth - 1], ped_goals[nnode.depth], pedestrians.response.velocity, const_vel_mode_);
+                    // simul_inference_time += double(clock() - check_time) / CLOCKS_PER_SEC;
+                    // last_time = clock();
+                    // rrt.n_simul_ ++;
                     pb simul_result = rrt.get_state_reward(nnode.jackal, tree_[cur_idx].jackal, nnode.goal, nnode.peds);
                     point return_value = simul_result.first;
                     bool done = simul_result.second;
@@ -531,7 +560,16 @@ class GlobalPlanner{
                 vector<double> value_list;
                 vector<double> cost_list;
                 vector<double> done_list;
+                // virtual_time += nn_inference_time + double(clock() - last_time) / CLOCKS_PER_SEC;
+                // if(virtual_time < time_limit_) {
+                //     nn_simul ++;
+                //     nn_depth_maximum = depth_maximum;
+                // }
+                // clock_t check_time = clock();
                 peds = get_next_pedestrians(robot, peds, ped_goals[i], pedestrians.response.velocity, const_vel_mode_);
+                // simul_inference_time += double(clock() - check_time) / CLOCKS_PER_SEC;
+                // last_time = clock();
+                // rrt.n_simul_ ++;
                 for(int j = 0; j < n_actions_; j++){
                     pb simul_result = rrt.get_state_reward(robot + actions_[j], robot, goal, peds);
                     point return_value = simul_result.first;
@@ -622,7 +660,24 @@ class GlobalPlanner{
                 // if (par_idx != -1) tree_[cur_idx].weight = exp(tree_[cur_idx].value - lambda_ * tree_[cur_idx].cvalue + alpha_visit_ * sqrt(log(tree_[par_idx].n_visit + n_actions_ + 1) / (tree_[cur_idx].n_visit + 1)));
             }
         }
-        // cout << "tree search" << endl;
+        
+        // cout << "[SCAN] max depth: " << depth_maximum << ", # of simulation: " << rrt.n_simul_ << ", inference time: " << simul_inference_time / rrt.n_simul_ << endl;
+        // cout << "[NNET] max depth: " << nn_depth_maximum << ", # of simulation: " << nn_simul << endl;
+
+        // depth_sum_ += depth_maximum;
+        // nn_depth_sum_ += nn_depth_maximum;
+        // simul_sum_ += rrt.n_simul_;
+        // nn_simul_sum_ += nn_simul;
+        // inference_sum_ += simul_inference_time;
+        // n_run_ ++;
+
+        // if(n_run_ % 100 == 0) {
+        //     cout << "*******************************************************************" << endl;
+        //     cout << "["<< n_run_ <<"]" << endl;
+        //     cout << "[SCAN] max depth: " << 1.0 * depth_sum_ / n_run_ << ", # of simulation: " << 1.0 * simul_sum_ / n_run_ << ", inference time: " << inference_sum_ / simul_sum_ << endl;
+        //     cout << "[NNET] max depth: " << 1.0 * nn_depth_sum_ / n_run_ << ", # of simulation: " << 1.0 * nn_simul_sum_ / n_run_ << endl;
+        //     cout << "*******************************************************************" << endl;
+        // }
         // select the best candidate and publish
         double best_value = -INF;
         int best_cand = -1;
@@ -828,6 +883,7 @@ class GlobalPlanner{
             for(int i = cur_depth; i < max_depth_; i++){
                 // calculate cost by each action
                 peds = get_next_pedestrians(robot, peds, ped_goals[i], pedestrians.response.velocity, true);
+                rrt.n_simul_ ++;
                 double x = V_ * 2.0 * (rand() / RAND_MAX - 0.5);
                 double y = V_ * 2.0 * (rand() / RAND_MAX - 0.5);
                 point action = point(x,y);
