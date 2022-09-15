@@ -443,7 +443,7 @@ void HumanPlugin::ResetActor()
   this->dataPtr->lastUpdate = 0;
 
   this->dataPtr->status_ = WAIT;
-  this->dataPtr->goal_ = ignition::math::Vector3d(this->dataPtr->init_pose.x,this->dataPtr->init_pose.y,1.2138);
+  this->dataPtr->goal_ = ignition::math::Vector3d(this->dataPtr->init_pose.x,this->dataPtr->init_pose.y,1.0138);
 
   auto skelAnims = this->dataPtr->actor->SkeletonAnimations();
   if (skelAnims.find(WALKING_ANIMATION) == skelAnims.end())
@@ -468,7 +468,7 @@ void HumanPlugin::CallbackCmd(const social_navigation::Command::ConstPtr& msg){
   //   return;
   // }
   this->dataPtr->status_ = msg->status;
-  this->dataPtr->goal_ = ignition::math::Vector3d(msg->goal.position.x, msg->goal.position.y, 1.2138);
+  this->dataPtr->goal_ = ignition::math::Vector3d(msg->goal.position.x, msg->goal.position.y, 1.0138);
   this->dataPtr->tar_vel_ = msg->velocity;
   return;
 }

@@ -63,6 +63,7 @@ class RRT{
     int kernel_size_;
     int kernel_path_size_;
     int kernel_ped_size_;
+    int n_simul_;
 
     RRT();
     RRT(string cost_map_file);
