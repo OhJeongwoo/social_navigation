@@ -221,8 +221,8 @@ void RRT::draw_global_result(int seq, point jackal, point global_goal, int best_
     Mat background;
     cvtColor(cost_map_, background, CV_GRAY2RGB);
 
-    //string save_path = "/home/jeongwoooh/catkin_social/src/social_navigation/result/"+to_string(seq)+".png";
-    string save_path = "/home/jay/catkin_social/src/social_navigation/test.png";
+    string save_path = "/home/brain5/catkin_ws/src/social_navigation/result/"+to_string(seq)+".png";
+    
     for(int i = 0; i < global_path.size(); i++){
         pixel p = transform_.xy2pixel(point(global_path[i].x, global_path[i].y));
         cv::circle(background, Point(p.y, p.x), 1.0, Scalar(100, 100, 100), -1);
@@ -231,6 +231,7 @@ void RRT::draw_global_result(int seq, point jackal, point global_goal, int best_
     int T = peds.size();
     for(int t=0;t<T;t++){
         int P = peds[t].size();
+        cout << "# of ped: " << P << endl;
         for(int i =0;i<P;i++){
             pixel p = transform_.xy2pixel(peds[t][i]);
             cv::circle(background,  Point(p.y, p.x), 5.0*(t+1)/T, Scalar(0,255,0), -1);
@@ -489,6 +490,7 @@ vector<point> RRT::carrt(point root, point goal){
     int leaf_index = 0;
     double rrt_sum = 0.0;
     clock_t init_time = clock();
+    cout << "begin carrt" << endl;
     while(1){
         step += 1;
         if(step > max_step_) break;
@@ -508,7 +510,7 @@ vector<point> RRT::carrt(point root, point goal){
         else{
             ce_path = rrt(x_nearest.p, x_new);
             reverse(ce_path.begin(), ce_path.end());
-            if(ce_path.size() == 1) continue;
+            if(ce_path.size() <= 1) continue;
             x_new = ce_path[1];
         }
 
@@ -643,14 +645,15 @@ vector<point> RRT::carrt(point root, point goal){
 
         if(sz > max_samples_ || goal_dist < goal_threshold_) break;
     }
-
+    cout << "build tree" << endl;
     vector<point> path;
     while(leaf_index != -1){
         path.push_back(tree[leaf_index].p);
         tree[leaf_index].is_path = true;
         leaf_index = tree[leaf_index].parent;
     }
-    // drawing(tree);
+    cout << "make path" << endl;
+    
     clock_t end_time = clock();
     // cout << "elapsed time: " << double(end_time - init_time) / CLOCKS_PER_SEC << endl;
     // cout << "# of sampels: " << sz << endl;
@@ -662,9 +665,12 @@ vector<point> RRT::carrt(point root, point goal){
 vector<vector<point>> RRT::diverse_rrt(point root, point goal, int K){
     vector<vector<point>> rt;
     int n = 0;
+    cout << "# of paths: " << K << endl;
     for(int k = 0; k < K; k++){
         vector<point> path = carrt(root, goal);
+        cout << k << "-th path: " << path.size() <<  endl;
         update_path_cost_map(path);
+        cout << "update cost map" << endl;
         rt.push_back(path);
         n += path.size();
     }

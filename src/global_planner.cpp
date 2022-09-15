@@ -301,6 +301,7 @@ class GlobalPlanner{
     }
 
     void mcts(int id, int seq){
+        cout << "start mcts" << endl;
         record_num_ ++;
         // fetch current status (lidar point clouds, jackal position)
         // fetch global pedestrian trajectory (time: 0.0 sec ~ 2.0 sec, 0.1 sec interval)
@@ -318,7 +319,7 @@ class GlobalPlanner{
             cout << "error" << endl;
             success = false;
         }
-        
+        cout << "call service" << endl;
 
         // generate cost map
         // remove point clouds which are near to pedestrians
@@ -364,10 +365,11 @@ class GlobalPlanner{
             }
             if(check) static_points.push_back(p);
         }
+        cout << "complete preparation" << endl;
         rrt.reset();
         rrt.set_pedestrians(ped_goals[0]);
         rrt.make_local_map(static_points);
-
+        cout << "rrt initialize" << endl;
 
         // generate local goal candidate
         vector<point> candidates;
@@ -436,7 +438,7 @@ class GlobalPlanner{
             if(check) candidates.push_back(path[0]);
         }
         if(has_local_goal_) candidates.push_back(local_goal_);
-        
+        cout << "generate candidate" << endl;
 
         // generate tree root nodes
         int sz = 0;
@@ -758,8 +760,10 @@ class GlobalPlanner{
         req_goal.y = goal.y;
         req.goal = req_goal;
         pub_path_.publish(req);
+        cout << "pub result" << endl;
 
         tree_.clear();
+        cout << "clear" << endl;
     }
         
     void mpc(int id, int seq){
